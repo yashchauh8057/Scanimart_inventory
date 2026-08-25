@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customers | Scanimart</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/customers.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<!-- ================= Sidebar ================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <i class="fa-solid fa-box"></i>
+
+        <span>Scanimart</span>
+
+    </div>
+
+    <ul class="menu">
+
+        <li>
+
+            <a href="dashboard.html">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="products.html">
+
+                <i class="fa-solid fa-boxes-stacked"></i>
+
+                <span>Products</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="categories.html">
+
+                <i class="fa-solid fa-layer-group"></i>
+
+                <span>Categories</span>
+
+            </a>
+
+        </li>
+
+        <li class="active">
+
+            <a href="customers.html">
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>Customers</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="suppliers.html">
+
+                <i class="fa-solid fa-truck"></i>
+
+                <span>Suppliers</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="purchase.html">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                <span>Purchases</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="sales.html">
+
+                <i class="fa-solid fa-file-invoice"></i>
+
+                <span>Sales</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="stock.html">
+
+                <i class="fa-solid fa-warehouse"></i>
+
+                <span>Stock</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="users.html">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+                <span>Users</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="reports.html">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <span>Reports</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="expenses.html">
+
+                <i class="fa-solid fa-money-bill-wave"></i>
+
+                <span>Expenses</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="settings.html">
+
+                <i class="fa-solid fa-gear"></i>
+
+                <span>Settings</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="activity.html">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                <span>Activity Logs</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="login.html">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>Logout</span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</aside>
+
+<!-- ================= Main ================= -->
+
+<div class="main"><!-- ================= Top Navigation ================= -->
+
+    <header class="topbar">
+    
+        <div class="left">
+    
+            <button id="menuBtn">
+    
+                <i class="fa-solid fa-bars"></i>
+    
+            </button>
+    
+            <h2>Customers</h2>
+    
+        </div>
+    
+        <div class="center">
+    
+            <div class="search-box">
+    
+                <i class="fa-solid fa-magnifying-glass"></i>
+    
+                <input
+                    type="text"
+                    placeholder="Search customers...">
+    
+            </div>
+    
+        </div>
+    
+        <div class="right">
+    
+            <button class="icon">
+    
+                <i class="fa-regular fa-bell"></i>
+    
+            </button>
+    
+            <button class="icon">
+    
+                <i class="fa-regular fa-envelope"></i>
+    
+            </button>
+    
+            <button class="icon">
+    
+                <i class="fa-regular fa-moon"></i>
+    
+            </button>
+    
+            <div class="profile">
+    
+                <img src="../assets/images/user.png" alt="Admin">
+    
+                <div>
+    
+                    <h4>Administrator</h4>
+    
+                    <small>Inventory Manager</small>
+    
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    </header>
+    
+    <!-- ================= Content ================= -->
+    
+    <section class="content">
+    
+    <div class="page-header">
+    
+        <div>
+    
+            <h1>Customer Management</h1>
+    
+            <p>
+    
+                Manage all customers, profiles, purchase history and contact information.
+    
+            </p>
+    
+        </div>
+    
+        <div class="header-buttons">
+    
+            <button class="secondary-btn">
+    
+                <i class="fa-solid fa-download"></i>
+    
+                Export CSV
+    
+            </button>
+    
+            <button class="secondary-btn">
+    
+                <i class="fa-solid fa-print"></i>
+    
+                Print
+    
+            </button>
+    
+            <button class="primary-btn" id="addCustomerBtn">
+    
+                <i class="fa-solid fa-user-plus"></i>
+    
+                Add Customer
+    
+            </button>
+    
+        </div>
+    
+    </div>
+    
+    <!-- ================= Statistics ================= -->
+    
+    <div class="cards">
+    
+        <div class="card">
+    
+            <div class="card-top">
+    
+                <div>
+    
+                    <p>Total Customers</p>
+    
+                    <h2>1,284</h2>
+    
+                </div>
+    
+                <div class="card-icon blue">
+    
+                    <i class="fa-solid fa-users"></i>
+    
+                </div>
+    
+            </div>
+    
+            <div class="card-bottom">
+    
+                <span class="success">
+    
+                    <i class="fa-solid fa-arrow-up"></i>
+    
+                    15%
+    
+                </span>
+    
+                <small>This Month</small>
+    
+            </div>
+    
+        </div>
+    
+        <div class="card">
+    
+            <div class="card-top">
+    
+                <div>
+    
+                    <p>New Customers</p>
+    
+                    <h2>86</h2>
+    
+                </div>
+    
+                <div class="card-icon green">
+    
+                    <i class="fa-solid fa-user-plus"></i>
+    
+                </div>
+    
+            </div>
+    
+            <div class="card-bottom">
+    
+                <span class="success">
+    
+                    <i class="fa-solid fa-arrow-up"></i>
+    
+                    9%
+    
+                </span>
+    
+                <small>Last 30 Days</small>
+    
+            </div>
+    
+        </div>
+    
+        <div class="card">
+    
+            <div class="card-top">
+    
+                <div>
+    
+                    <p>Active Customers</p>
+    
+                    <h2>1,136</h2>
+    
+                </div>
+    
+                <div class="card-icon orange">
+    
+                    <i class="fa-solid fa-user-check"></i>
+    
+                </div>
+    
+            </div>
+    
+            <div class="card-bottom">
+    
+                <span class="success">
+    
+                    <i class="fa-solid fa-arrow-up"></i>
+    
+                    5%
+    
+                </span>
+    
+                <small>Currently Active</small>
+    
+            </div>
+    
+        </div>
+    
+        <div class="card">
+    
+            <div class="card-top">
+    
+                <div>
+    
+                    <p>Premium Members</p>
+    
+                    <h2>148</h2>
+    
+                </div>
+    
+                <div class="card-icon red">
+    
+                    <i class="fa-solid fa-crown"></i>
+    
+                </div>
+    
+            </div>
+    
+            <div class="card-bottom">
+    
+                <span class="success">
+    
+                    <i class="fa-solid fa-arrow-up"></i>
+    
+                    11%
+    
+                </span>
+    
+                <small>Loyal Customers</small>
+    
+            </div>
+    
+        </div>
+    
+    </div>
+    <!-- ================= Filters ================= -->
+
+<div class="filter-container">
+
+    <div class="search-box">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+            type="text"
+            placeholder="Search by customer name, email or phone">
+
+    </div>
+
+    <select>
+
+        <option>All Status</option>
+
+        <option>Active</option>
+
+        <option>Inactive</option>
+
+        <option>Blocked</option>
+
+    </select>
+
+    <select>
+
+        <option>All Membership</option>
+
+        <option>Premium</option>
+
+        <option>Gold</option>
+
+        <option>Silver</option>
+
+        <option>Regular</option>
+
+    </select>
+
+    <select>
+
+        <option>Sort By</option>
+
+        <option>Name</option>
+
+        <option>Recent Orders</option>
+
+        <option>Total Purchase</option>
+
+        <option>Newest</option>
+
+    </select>
+
+</div>
+
+<!-- ================= Customer Table ================= -->
+
+<div class="table-card">
+
+<div class="table-header">
+
+    <h3>
+
+        Customer List
+
+    </h3>
+
+    <button class="primary-btn">
+
+        <i class="fa-solid fa-file-export"></i>
+
+        Export
+
+    </button>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+
+<input type="checkbox">
+
+</th>
+
+<th>Customer</th>
+
+<th>Email</th>
+
+<th>Phone</th>
+
+<th>Membership</th>
+
+<th>Total Orders</th>
+
+<th>Total Purchase</th>
+
+<th>Status</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>
+
+<input type="checkbox">
+
+</td>
+
+<td>
+
+<div class="user-cell">
+
+<img src="../assets/images/user1.jpg" class="avatar">
+
+<div>
+
+<h4>Rahul Sharma</h4>
+
+<small>CUS1001</small>
+
+</div>
+
+</div>
+
+</td>
+
+<td>rahul@email.com</td>
+
+<td>9876543210</td>
+
+<td>
+
+<span class="badge premium">
+
+Premium
+
+</span>
+
+</td>
+
+<td>25</td>
+
+<td>₹1,25,800</td>
+
+<td>
+
+<span class="badge success">
+
+Active
+
+</span>
+
+</td>
+
+<td>
+
+<button class="action-btn view">
+
+<i class="fa-solid fa-eye"></i>
+
+</button>
+
+<button class="action-btn edit">
+
+<i class="fa-solid fa-pen"></i>
+
+</button>
+
+<button class="action-btn delete">
+
+<i class="fa-solid fa-trash"></i>
+
+</button>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<input type="checkbox">
+
+</td>
+
+<td>
+
+<div class="user-cell">
+
+<img src="../assets/images/user2.jpg" class="avatar">
+
+<div>
+
+<h4>Priya Singh</h4>
+
+<small>CUS1002</small>
+
+</div>
+
+</div>
+
+</td>
+
+<td>priya@email.com</td>
+
+<td>9812345678</td>
+
+<td>
+
+<span class="badge gold">
+
+Gold
+
+</span>
+
+</td>
+
+<td>18</td>
+
+<td>₹86,500</td>
+
+<td>
+
+<span class="badge success">
+
+Active
+
+</span>
+
+</td>
+
+<td>
+
+<button class="action-btn view">
+
+<i class="fa-solid fa-eye"></i>
+
+</button>
+
+<button class="action-btn edit">
+
+<i class="fa-solid fa-pen"></i>
+
+</button>
+
+<button class="action-btn delete">
+
+<i class="fa-solid fa-trash"></i>
+
+</button>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<input type="checkbox">
+
+</td>
+
+<td>
+
+<div class="user-cell">
+
+<img src="../assets/images/user3.jpg" class="avatar">
+
+<div>
+
+<h4>Aman Verma</h4>
+
+<small>CUS1003</small>
+
+</div>
+
+</div>
+
+</td>
+
+<td>aman@email.com</td>
+
+<td>9898989898</td>
+
+<td>
+
+<span class="badge silver">
+
+Silver
+
+</span>
+
+</td>
+
+<td>9</td>
+
+<td>₹32,450</td>
+
+<td>
+
+<span class="badge warning">
+
+Inactive
+
+</span>
+
+</td>
+
+<td>
+
+<button class="action-btn view">
+
+<i class="fa-solid fa-eye"></i>
+
+</button>
+
+<button class="action-btn edit">
+
+<i class="fa-solid fa-pen"></i>
+
+</button>
+
+<button class="action-btn delete">
+
+<i class="fa-solid fa-trash"></i>
+
+</button>
+
+</td>
+
+</tr><tr>
+    <td><input type="checkbox"></td>
+    <td><div class="user-cell"><img src="../assets/images/user4.jpg" class="avatar"><div><h4>Neha Gupta</h4><small>CUS1004</small></div></div></td>
+    <td>neha@email.com</td>
+    <td>9871234567</td>
+    <td><span class="badge premium">Premium</span></td>
+    <td>31</td>
+    <td>₹2,10,500</td>
+    <td><span class="badge success">Active</span></td>
+    <td>
+    <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    </td>
+    </tr>
+    
+    <tr>
+    <td><input type="checkbox"></td>
+    <td><div class="user-cell"><img src="../assets/images/user5.jpg" class="avatar"><div><h4>Rohit Kumar</h4><small>CUS1005</small></div></div></td>
+    <td>rohit@email.com</td>
+    <td>9988776655</td>
+    <td><span class="badge gold">Gold</span></td>
+    <td>16</td>
+    <td>₹78,900</td>
+    <td><span class="badge success">Active</span></td>
+    <td>
+    <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    </td>
+    </tr>
+    
+    <tr>
+    <td><input type="checkbox"></td>
+    <td><div class="user-cell"><img src="../assets/images/user6.jpg" class="avatar"><div><h4>Simran Kaur</h4><small>CUS1006</small></div></div></td>
+    <td>simran@email.com</td>
+    <td>9765432101</td>
+    <td><span class="badge silver">Silver</span></td>
+    <td>7</td>
+    <td>₹22,350</td>
+    <td><span class="badge warning">Inactive</span></td>
+    <td>
+    <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    </td>
+    </tr>
+    
+    <tr>
+    <td><input type="checkbox"></td>
+    <td><div class="user-cell"><img src="../assets/images/user7.jpg" class="avatar"><div><h4>Arjun Patel</h4><small>CUS1007</small></div></div></td>
+    <td>arjun@email.com</td>
+    <td>9012345678</td>
+    <td><span class="badge gold">Gold</span></td>
+    <td>20</td>
+    <td>₹1,15,600</td>
+    <td><span class="badge success">Active</span></td>
+    <td>
+    <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    </td>
+    </tr>
+    
+    <tr>
+    <td><input type="checkbox"></td>
+    <td><div class="user-cell"><img src="../assets/images/user8.jpg" class="avatar"><div><h4>Karan Mehta</h4><small>CUS1008</small></div></div></td>
+    <td>karan@email.com</td>
+    <td>9090909090</td>
+    <td><span class="badge regular">Regular</span></td>
+    <td>3</td>
+    <td>₹8,250</td>
+    <td><span class="badge danger">Blocked</span></td>
+    <td>
+    <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    </td>
+    </tr>
+    
+    </tbody>
+    </table>
+    </div>
+    
+    <div class="pagination">
+    <button class="page-btn"><i class="fa-solid fa-angle-left"></i></button>
+    <button class="page-btn active">1</button>
+    <button class="page-btn">2</button>
+    <button class="page-btn">3</button>
+    <button class="page-btn"><i class="fa-solid fa-angle-right"></i></button>
+    </div>
+<!-- Add Customer Modal -->
+<div class="modal" id="addCustomerModal">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h2>Add Customer</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <form>
+    
+    <div class="form-grid">
+    
+    <div class="form-group">
+    <label>Name</label>
+    <input type="text" placeholder="Customer Name">
+    </div>
+    
+    <div class="form-group">
+    <label>Email</label>
+    <input type="email" placeholder="Email">
+    </div>
+    
+    <div class="form-group">
+    <label>Phone</label>
+    <input type="text" placeholder="Phone Number">
+    </div>
+    
+    <div class="form-group">
+    <label>Membership</label>
+    <select>
+    <option>Regular</option>
+    <option>Silver</option>
+    <option>Gold</option>
+    <option>Premium</option>
+    </select>
+    </div>
+    
+    <div class="form-group full">
+    <label>Address</label>
+    <textarea rows="3"></textarea>
+    </div>
+    
+    </div>
+    
+    <div class="modal-footer">
+    <button type="reset" class="secondary-btn">Cancel</button>
+    <button type="submit" class="primary-btn">Save Customer</button>
+    </div>
+    
+    </form>
+    
+    </div>
+    </div>
+    
+    <!-- Edit Customer Modal -->
+    <div class="modal" id="editCustomerModal">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h2>Edit Customer</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <form>
+    
+    <div class="form-grid">
+    
+    <div class="form-group">
+    <label>Name</label>
+    <input type="text" value="Rahul Sharma">
+    </div>
+    
+    <div class="form-group">
+    <label>Email</label>
+    <input type="email" value="rahul@email.com">
+    </div>
+    
+    <div class="form-group">
+    <label>Phone</label>
+    <input type="text" value="9876543210">
+    </div>
+    
+    <div class="form-group">
+    <label>Status</label>
+    <select>
+    <option selected>Active</option>
+    <option>Inactive</option>
+    <option>Blocked</option>
+    </select>
+    </div>
+    
+    </div>
+    
+    <div class="modal-footer">
+    <button class="secondary-btn" type="button">Cancel</button>
+    <button class="primary-btn" type="submit">Update</button>
+    </div>
+    
+    </form>
+    
+    </div>
+    </div>
+    
+    <!-- Customer Details -->
+    <div class="modal" id="customerModal">
+    <div class="modal-content">
+    
+    <div class="modal-header">
+    <h2>Customer Details</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <div class="customer-profile">
+    
+    <img src="../assets/images/user1.jpg" class="profile-image">
+    
+    <h3>Rahul Sharma</h3>
+    
+    <p>rahul@email.com</p>
+    
+    <p>9876543210</p>
+    
+    <p>Total Orders : 25</p>
+    
+    <p>Total Purchase : ₹1,25,800</p>
+    
+    <p>Membership : Premium</p>
+    
+    </div>
+    
+    </div>
+    </div>
+    
+    <!-- Delete Modal -->
+    <div class="modal" id="deleteModal">
+    
+    <div class="modal-content small">
+    
+    <h2>Delete Customer</h2>
+    
+    <p>Delete this customer permanently?</p>
+    
+    <div class="modal-footer">
+    <button class="secondary-btn">Cancel</button>
+    <button class="danger-btn">Delete</button>
+    </div>
+    
+    </div>
+    
+    </div>
+    
+    </section>
+    
+    <footer class="footer">
+    <p>© 2026 Scanimart. All Rights Reserved.</p>
+    </footer>
+    
+    </div>
+    </div>
+    
+    <script src="../js/api.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/customers.js"></script>
+    
+    </body>
+    </html>

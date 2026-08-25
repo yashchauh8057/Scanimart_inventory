@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Expenses | Scanimart</title>
+
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/sidebar.css">
+<link rel="stylesheet" href="../css/expenses.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<aside class="sidebar">
+
+<div class="logo">
+<i class="fa-solid fa-box"></i>
+<span>Scanimart</span>
+</div>
+
+<ul class="menu">
+<li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+<li><a href="products.html"><i class="fa-solid fa-boxes-stacked"></i><span>Products</span></a></li>
+<li><a href="categories.html"><i class="fa-solid fa-layer-group"></i><span>Categories</span></a></li>
+<li><a href="customers.html"><i class="fa-solid fa-users"></i><span>Customers</span></a></li>
+<li><a href="suppliers.html"><i class="fa-solid fa-truck"></i><span>Suppliers</span></a></li>
+<li><a href="purchase.html"><i class="fa-solid fa-cart-shopping"></i><span>Purchases</span></a></li>
+<li><a href="sales.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Sales</span></a></li>
+<li><a href="stock.html"><i class="fa-solid fa-warehouse"></i><span>Stock</span></a></li>
+<li><a href="reports.html"><i class="fa-solid fa-chart-column"></i><span>Reports</span></a></li>
+<li class="active"><a href="expenses.html"><i class="fa-solid fa-wallet"></i><span>Expenses</span></a></li>
+<li><a href="users.html"><i class="fa-solid fa-user-shield"></i><span>Users</span></a></li>
+<li><a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+<li><a href="login.html"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a></li>
+</ul>
+
+</aside>
+
+<div class="main">
+
+<header class="topbar">
+
+<div class="left">
+<button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+<h2>Expenses</h2>
+</div>
+
+<div class="right">
+
+<button class="icon"><i class="fa-regular fa-bell"></i></button>
+
+<button class="icon"><i class="fa-regular fa-moon"></i></button>
+
+<div class="profile">
+<img src="../assets/images/user.png">
+<div>
+<h4>Administrator</h4>
+<small>Finance Manager</small>
+</div>
+</div>
+
+</div>
+
+</header>
+
+<section class="content">
+
+<div class="page-header">
+
+<div>
+<h1>Expense Management</h1>
+<p>Track and manage all business expenses.</p>
+</div>
+
+<button class="primary-btn">
+<i class="fa-solid fa-plus"></i>
+Add Expense
+</button>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+<div class="card-top">
+<div><p>Total Expenses</p><h2>₹9.45L</h2></div>
+<div class="card-icon red"><i class="fa-solid fa-wallet"></i></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div><p>Today</p><h2>₹18,250</h2></div>
+<div class="card-icon blue"><i class="fa-solid fa-calendar-day"></i></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div><p>This Month</p><h2>₹2.18L</h2></div>
+<div class="card-icon orange"><i class="fa-solid fa-chart-column"></i></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div><p>Pending Bills</p><h2>12</h2></div>
+<div class="card-icon green"><i class="fa-solid fa-file-circle-exclamation"></i></div>
+</div>
+</div>
+
+</div>
+
+<div class="filter-container">
+
+<div class="search-box">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input type="text" placeholder="Search Expense">
+</div>
+
+<select>
+<option>All Categories</option>
+<option>Rent</option>
+<option>Electricity</option>
+<option>Salary</option>
+<option>Transport</option>
+<option>Maintenance</option>
+<option>Marketing</option>
+</select>
+
+<select>
+<option>All Status</option>
+<option>Paid</option>
+<option>Pending</option>
+</select>
+
+<button class="secondary-btn">
+<i class="fa-solid fa-file-pdf"></i>
+PDF
+</button>
+
+<button class="secondary-btn">
+<i class="fa-solid fa-file-excel"></i>
+Excel
+</button>
+
+</div>
+
+<div class="table-card">
+
+<table>
+
+<thead>
+
+<tr>
+<th>ID</th>
+<th>Category</th>
+<th>Description</th>
+<th>Amount</th>
+<th>Date</th>
+<th>Method</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody>
+    <tr><td>EXP001</td><td>Rent</td><td>Office Rent</td><td>₹45,000</td><td>30 Jul 2026</td><td>Bank Transfer</td><td><span class="badge success">Paid</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>EXP002</td><td>Salary</td><td>Employee Salary</td><td>₹1,25,000</td><td>29 Jul 2026</td><td>Bank Transfer</td><td><span class="badge success">Paid</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>EXP003</td><td>Electricity</td><td>Electric Bill</td><td>₹18,600</td><td>28 Jul 2026</td><td>UPI</td><td><span class="badge warning">Pending</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>EXP004</td><td>Transport</td><td>Delivery Charges</td><td>₹9,850</td><td>27 Jul 2026</td><td>Cash</td><td><span class="badge success">Paid</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>EXP005</td><td>Marketing</td><td>Social Media Ads</td><td>₹32,500</td><td>26 Jul 2026</td><td>Card</td><td><span class="badge success">Paid</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>EXP006</td><td>Maintenance</td><td>System Maintenance</td><td>₹14,200</td><td>25 Jul 2026</td><td>UPI</td><td><span class="badge warning">Pending</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>EXP007</td><td>Internet</td><td>Broadband Bill</td><td>₹2,100</td><td>24 Jul 2026</td><td>UPI</td><td><span class="badge success">Paid</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>EXP008</td><td>Office Supplies</td><td>Stationery Purchase</td><td>₹6,750</td><td>23 Jul 2026</td><td>Cash</td><td><span class="badge success">Paid</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="pagination">
+<button class="page-btn"><i class="fa-solid fa-angle-left"></i></button>
+<button class="page-btn active">1</button>
+<button class="page-btn">2</button>
+<button class="page-btn">3</button>
+<button class="page-btn">4</button>
+<button class="page-btn"><i class="fa-solid fa-angle-right"></i></button>
+</div>
+<!-- Add Expense Modal -->
+<div class="modal" id="expenseModal">
+    <div class="modal-content">
+    
+    <div class="modal-header">
+    <h2>Add Expense</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <form>
+    
+    <div class="form-grid">
+    
+    <div class="form-group">
+    <label>Category</label>
+    <select>
+    <option>Rent</option>
+    <option>Salary</option>
+    <option>Electricity</option>
+    <option>Transport</option>
+    <option>Marketing</option>
+    <option>Maintenance</option>
+    <option>Office Supplies</option>
+    </select>
+    </div>
+    
+    <div class="form-group">
+    <label>Amount</label>
+    <input type="number" placeholder="Enter Amount">
+    </div>
+    
+    <div class="form-group">
+    <label>Date</label>
+    <input type="date">
+    </div>
+    
+    <div class="form-group">
+    <label>Payment Method</label>
+    <select>
+    <option>Cash</option>
+    <option>UPI</option>
+    <option>Card</option>
+    <option>Bank Transfer</option>
+    </select>
+    </div>
+    
+    <div class="form-group full">
+    <label>Description</label>
+    <textarea rows="4" placeholder="Expense Description"></textarea>
+    </div>
+    
+    </div>
+    
+    <div class="modal-footer">
+    <button type="reset" class="secondary-btn">Cancel</button>
+    <button type="submit" class="primary-btn">Save Expense</button>
+    </div>
+    
+    </form>
+    
+    </div>
+    </div>
+    
+    <!-- Expense Details -->
+    
+    <div class="modal" id="viewExpenseModal">
+    <div class="modal-content">
+    
+    <div class="modal-header">
+    <h2>Expense Details</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <p><strong>ID :</strong> EXP001</p>
+    <p><strong>Category :</strong> Rent</p>
+    <p><strong>Description :</strong> Office Rent</p>
+    <p><strong>Amount :</strong> ₹45,000</p>
+    <p><strong>Date :</strong> 30 Jul 2026</p>
+    <p><strong>Payment :</strong> Bank Transfer</p>
+    <p><strong>Status :</strong> Paid</p>
+    
+    <div class="modal-footer">
+    <button class="primary-btn">Close</button>
+    </div>
+    
+    </div>
+    </div>
+    
+    <!-- Delete Modal -->
+    
+    <div class="modal" id="deleteExpenseModal">
+    <div class="modal-content small">
+    
+    <h2>Delete Expense</h2>
+    
+    <p>Are you sure you want to delete this expense?</p>
+    
+    <div class="modal-footer">
+    <button class="secondary-btn">Cancel</button>
+    <button class="danger-btn">Delete</button>
+    </div>
+    
+    </div>
+    </div>
+    
+    </section>
+    
+    <footer class="footer">
+    <p>© 2026 Scanimart. All Rights Reserved.</p>
+    </footer>
+    
+    </div>
+    
+    </div>
+    
+    <script src="../js/api.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/expenses.js"></script>
+    
+    </body>
+    </html>

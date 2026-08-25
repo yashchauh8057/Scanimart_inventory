@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanimart | Exit Check</title>
+
+    <link rel="stylesheet" href="../css/store.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<header class="store-header">
+    <div class="brand"><i class="fa-solid fa-shield-halved"></i> Security</div>
+    <div class="user">
+        <span id="userName">Security</span>
+        <button class="icon-btn danger" id="logoutBtn" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+</header>
+
+<div class="store-container">
+
+    <div class="card">
+        <h2>Exit Verification</h2>
+        <p class="muted">Scan the customer's final security QR before exit.</p>
+
+        <div class="scanner-box" style="margin-top:12px;">
+            <div id="qrReader"></div>
+            <div class="scanner-note">Point camera at the customer's exit QR</div>
+        </div>
+
+        <div class="code-entry">
+            <input type="text" id="codeInput" placeholder="Or enter receipt ID (e.g. RCPT0001)">
+            <button class="btn secondary" id="lookupBtn">Verify</button>
+        </div>
+    </div>
+
+    <!-- Allowed state -->
+    <div class="result-badge ok" id="allowedState" hidden>
+        <i class="fa-solid fa-circle-check"></i>
+        <h2>Exit Allowed</h2>
+        <p>Payment verified for receipt <span id="allowedReceiptId"></span>.</p>
+        <button class="btn success" id="nextBtn" style="margin-top:8px;">Next Customer</button>
+    </div>
+
+    <!-- Blocked state -->
+    <div class="result-badge blocked" id="blockedState" hidden>
+        <i class="fa-solid fa-circle-xmark"></i>
+        <h2>Exit Blocked</h2>
+        <p id="blockedReason">This customer has not paid. Escort to the cash counter.</p>
+        <button class="btn" id="nextBtn2" style="margin-top:8px;">Next Customer</button>
+    </div>
+
+</div>
+
+<script src="../libraries/html5-qrcode.min.js"></script>
+<script src="../js/app-config.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/scanner.js"></script>
+<script src="../js/exit-check.js"></script>
+
+</body>
+
+</html>

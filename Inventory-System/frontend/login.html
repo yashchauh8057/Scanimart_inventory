@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanimart | Login</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/store.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-left">
+
+        <div class="brand">
+
+            <div class="logo">
+                <i class="fa-solid fa-box"></i>
+            </div>
+
+            <h1>Scanimart</h1>
+
+            <p>
+                Smart Store – Scan, Pay &amp; Go
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="login-right">
+
+        <div class="login-card">
+
+            <h2>Welcome</h2>
+
+            <p>Sign in to your panel</p>
+
+            <div id="signedInBar" class="signed-in-bar" hidden>
+
+                <p>Signed in as <strong id="signedInName"></strong></p>
+
+                <div class="signed-in-actions">
+                    <button type="button" class="login-btn" id="continueBtn">Continue</button>
+                    <button type="button" class="login-btn ghost-btn" id="signOutBtn">Sign out</button>
+                </div>
+
+            </div>
+
+            <form id="loginForm" novalidate>
+
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <div class="input-box">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="loginEmail" name="email" placeholder="you@example.com"
+                            autocomplete="username" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="input-box">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="loginPassword" name="password" placeholder="Enter your password"
+                            autocomplete="current-password" required>
+                    </div>
+                </div>
+
+                <button class="login-btn" type="submit" id="signInBtn">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Sign In
+                </button>
+
+                <p id="loginError" class="login-error" hidden></p>
+
+            </form>
+
+            <div class="cred-hint">
+
+                <p class="cred-title">Demo credentials</p>
+
+                <ul>
+                    <li><span>Admin</span> admin@scanimart.com / admin123</li>
+                    <li><span>Customer</span> user@scanimart.com / user123</li>
+                    <li><span>Cash Counter</span> staff@scanimart.com / staff123</li>
+                    <li><span>Security</span> security@scanimart.com / security123</li>
+                </ul>
+
+            </div>
+
+            <div class="bottom-text">
+
+                <p>
+
+                    Scanimart Store System
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="../js/app-config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('loginForm');
+  const emailInput = document.getElementById('loginEmail');
+  const passwordInput = document.getElementById('loginPassword');
+  const button = document.getElementById('signInBtn');
+  const errorBox = document.getElementById('loginError');
+  const signedInBar = document.getElementById('signedInBar');
+  const signedInName = document.getElementById('signedInName');
+  const continueBtn = document.getElementById('continueBtn');
+  const signOutBtn = document.getElementById('signOutBtn');
+
+  const existing = window.AppAuth.getSession();
+  if (existing) {
+    signedInName.textContent = `${existing.user} (${existing.role})`;
+    signedInBar.hidden = false;
+  }
+
+  continueBtn.addEventListener('click', () => {
+    window.location.href = window.AppAuth.roleHome(existing.role);
+  });
+
+  signOutBtn.addEventListener('click', () => {
+    window.AppAuth.clearSession();
+    signedInBar.hidden = true;
+    form.reset();
+  });
+
+  const resetButton = () => {
+    button.disabled = false;
+    button.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+  };
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    errorBox.hidden = true;
+    button.disabled = true;
+    button.textContent = 'Signing in...';
+    try {
+      const session = await window.AppAuth.signInWithPassword(emailInput.value, passwordInput.value);
+      window.location.href = window.AppAuth.roleHome(session.role);
+    } catch (error) {
+      errorBox.textContent = error.message || 'Sign-in failed.';
+      errorBox.hidden = false;
+      resetButton();
+    }
+  });
+});
+</script>
+
+</body>
+
+</html>

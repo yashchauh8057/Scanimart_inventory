@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sales | Scanimart</title>
+
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/sidebar.css">
+<link rel="stylesheet" href="../css/sales.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<aside class="sidebar">
+
+<div class="logo"><i class="fa-solid fa-box"></i><span>Scanimart</span></div>
+
+<ul class="menu">
+
+<li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+
+<li><a href="products.html"><i class="fa-solid fa-boxes-stacked"></i><span>Products</span></a></li>
+
+<li><a href="categories.html"><i class="fa-solid fa-layer-group"></i><span>Categories</span></a></li>
+
+<li><a href="customers.html"><i class="fa-solid fa-users"></i><span>Customers</span></a></li>
+
+<li><a href="suppliers.html"><i class="fa-solid fa-truck"></i><span>Suppliers</span></a></li>
+
+<li><a href="purchase.html"><i class="fa-solid fa-cart-shopping"></i><span>Purchases</span></a></li>
+
+<li class="active"><a href="sales.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Sales</span></a></li>
+
+<li><a href="stock.html"><i class="fa-solid fa-warehouse"></i><span>Stock</span></a></li>
+
+<li><a href="reports.html"><i class="fa-solid fa-chart-column"></i><span>Reports</span></a></li>
+
+<li><a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+
+<li><a href="login.html"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a></li>
+
+</ul>
+
+</aside>
+
+<div class="main">
+
+<header class="topbar">
+
+<div class="left">
+<button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+<h2>Sales</h2>
+</div>
+
+<div class="right">
+<button class="icon"><i class="fa-regular fa-bell"></i></button>
+<button class="icon"><i class="fa-regular fa-moon"></i></button>
+
+<div class="profile">
+<img src="../assets/images/user.png">
+<div>
+<h4>Administrator</h4>
+<small>Inventory Manager</small>
+</div>
+</div>
+
+</div>
+
+</header>
+
+<section class="content">
+
+<div class="page-header">
+
+<div>
+<h1>Sales Management</h1>
+<p>Manage invoices, customer sales and payments.</p>
+</div>
+
+<button class="primary-btn">
+<i class="fa-solid fa-plus"></i>
+New Sale
+</button>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+<div class="card-top">
+<div><p>Today's Sales</p><h2>₹58,420</h2></div>
+<div class="card-icon blue"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div><p>Invoices</p><h2>145</h2></div>
+<div class="card-icon green"><i class="fa-solid fa-file-invoice"></i></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div><p>Customers</p><h2>89</h2></div>
+<div class="card-icon orange"><i class="fa-solid fa-users"></i></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div><p>Revenue</p><h2>₹12.6L</h2></div>
+<div class="card-icon red"><i class="fa-solid fa-chart-line"></i></div>
+</div>
+</div>
+
+</div>
+
+<div class="filter-container">
+
+<div class="search-box">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input type="text" placeholder="Search Invoice">
+</div>
+
+<select>
+<option>All Status</option>
+<option>Paid</option>
+<option>Pending</option>
+</select>
+
+<select>
+<option>Today</option>
+<option>This Week</option>
+<option>This Month</option>
+</select>
+
+</div>
+
+<div class="table-card">
+
+<table>
+
+<thead>
+
+<tr>
+<th>#</th>
+<th>Invoice</th>
+<th>Customer</th>
+<th>Date</th>
+<th>Items</th>
+<th>Total</th>
+<th>Payment</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody>
+    <tr><td>1</td><td>INV1001</td><td>Rahul Sharma</td><td>30 Jul 2026</td><td>5</td><td>₹12,850</td><td><span class="badge success">Paid</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>2</td><td>INV1002</td><td>Priya Singh</td><td>30 Jul 2026</td><td>3</td><td>₹8,450</td><td><span class="badge warning">Pending</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>3</td><td>INV1003</td><td>Aman Verma</td><td>29 Jul 2026</td><td>8</td><td>₹24,600</td><td><span class="badge success">Paid</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>4</td><td>INV1004</td><td>Neha Gupta</td><td>29 Jul 2026</td><td>2</td><td>₹5,980</td><td><span class="badge danger">Failed</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>5</td><td>INV1005</td><td>Arjun Patel</td><td>28 Jul 2026</td><td>11</td><td>₹38,750</td><td><span class="badge success">Paid</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="pagination">
+<button class="page-btn"><i class="fa-solid fa-angle-left"></i></button>
+<button class="page-btn active">1</button>
+<button class="page-btn">2</button>
+<button class="page-btn">3</button>
+<button class="page-btn"><i class="fa-solid fa-angle-right"></i></button>
+</div>
+<!-- New Sale Modal -->
+<div class="modal" id="saleModal">
+    <div class="modal-content">
+    
+    <div class="modal-header">
+    <h2>New Sale</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <form>
+    
+    <div class="form-grid">
+    
+    <div class="form-group">
+    <label>Invoice No</label>
+    <input type="text" value="INV1006">
+    </div>
+    
+    <div class="form-group">
+    <label>Customer</label>
+    <select>
+    <option>Rahul Sharma</option>
+    <option>Priya Singh</option>
+    <option>Aman Verma</option>
+    </select>
+    </div>
+    
+    <div class="form-group">
+    <label>Date</label>
+    <input type="date">
+    </div>
+    
+    <div class="form-group">
+    <label>Payment</label>
+    <select>
+    <option>Cash</option>
+    <option>Card</option>
+    <option>UPI</option>
+    </select>
+    </div>
+    
+    <div class="form-group full">
+    <label>Remarks</label>
+    <textarea rows="3"></textarea>
+    </div>
+    
+    </div>
+    
+    <div class="modal-footer">
+    <button type="reset" class="secondary-btn">Cancel</button>
+    <button type="submit" class="primary-btn">Save Sale</button>
+    </div>
+    
+    </form>
+    
+    </div>
+    </div>
+    
+    <!-- Invoice Preview -->
+    <div class="modal" id="invoiceModal">
+    <div class="modal-content">
+    
+    <div class="modal-header">
+    <h2>Invoice Preview</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <div class="invoice-box">
+    
+    <p><strong>Invoice:</strong> INV1001</p>
+    <p><strong>Customer:</strong> Rahul Sharma</p>
+    <p><strong>Date:</strong> 30 Jul 2026</p>
+    <p><strong>Total:</strong> ₹12,850</p>
+    <p><strong>Status:</strong> Paid</p>
+    
+    </div>
+    
+    <div class="modal-footer">
+    <button class="secondary-btn">Print</button>
+    <button class="primary-btn">Download PDF</button>
+    </div>
+    
+    </div>
+    </div>
+    
+    <!-- Delete Modal -->
+    <div class="modal" id="deleteSaleModal">
+    <div class="modal-content small">
+    <h2>Delete Sale</h2>
+    <p>Delete this sales record?</p>
+    <div class="modal-footer">
+    <button class="secondary-btn">Cancel</button>
+    <button class="danger-btn">Delete</button>
+    </div>
+    </div>
+    </div>
+    
+    </section>
+    
+    <footer class="footer">
+    <p>© 2026 Scanimart. All Rights Reserved.</p>
+    </footer>
+    
+    </div>
+    </div>
+    
+    <script src="../js/api.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/sales.js"></script>
+    
+    </body>
+    </html>

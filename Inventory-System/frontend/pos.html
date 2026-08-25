@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanimart | Self Checkout</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/store.css">
+    <link rel="stylesheet" href="../css/pos.css">
+</head>
+
+<body>
+
+    <div class="bg-blobs" aria-hidden="true">
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+        <div class="blob b3"></div>
+    </div>
+
+    <div class="pos-shell">
+
+        <!-- ============ HEADER ============ -->
+        <header class="pos-header">
+            <div class="logo">
+                <div class="logo-ic"><i class="fa-solid fa-qrcode"></i></div>
+                Scanimart
+            </div>
+            <div class="header-right">
+                <span class="session-dot"><span class="pulse"></span><span class="lbl">Session Active</span></span>
+                <div style="position:relative;">
+                    <button class="icon-btn" id="notifBtn" title="Notifications"><i class="fa-regular fa-bell"></i><span class="badge-dot"></span></button>
+                    <div class="notif-drop" id="notifDrop" hidden>
+                        <div class="n-title">Notifications</div>
+                        <div class="notif-item"><i class="fa-solid fa-tag"></i><div>Flat 10% off on Amul Butter today!<small>Just now</small></div></div>
+                        <div class="notif-item"><i class="fa-solid fa-truck"></i><div>Self-checkout lanes are open on Floor 2<small>1 hour ago</small></div></div>
+                    </div>
+                </div>
+                <div class="avatar-pill">
+                    <span class="av-name" id="userName">Customer</span>
+                    <span class="av-ic"><i class="fa-solid fa-user"></i></span>
+                    <button class="av-logout" id="logoutBtn" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
+        </header>
+
+        <!-- ============ TAB BAR ============ -->
+        <nav class="tab-bar">
+            <button class="tab active" data-tab="cart"><span class="tab-num">1</span> Scan &amp; Cart</button>
+            <button class="tab" data-tab="payment"><span class="tab-num">2</span> Payment</button>
+            <button class="tab" data-tab="exit"><span class="tab-num">3</span> Exit QR</button>
+        </nav>
+
+        <!-- ============ TAB 1: SCAN & CART ============ -->
+        <section id="tabCart" class="tab-panel">
+
+            <div class="glass">
+                <div class="search-row">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="search" id="searchInput" placeholder="Search products..." autocomplete="off">
+                        <div class="search-drop" id="searchDrop" hidden></div>
+                    </div>
+                    <button class="scan-btn" id="scanBtn" title="Scan barcode"><i class="fa-solid fa-camera"></i><span class="scan-ring"></span></button>
+                </div>
+
+                <p class="muted" style="margin-bottom:6px;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;">Quick Add</p>
+                <div class="chip-row" id="chipRow"></div>
+            </div>
+
+            <div class="glass">
+                <div class="section-head">
+                    <h2><i class="fa-solid fa-cart-shopping" style="color:var(--primary);margin-right:6px;"></i>Your Cart</h2>
+                    <span class="muted" id="cartCount"></span>
+                </div>
+                <ul class="cart-list" id="cartList"></ul>
+            </div>
+
+            <div class="glass">
+                <div class="summary">
+                    <div class="s-row"><span>Subtotal</span><span id="sumSubtotal">₹0</span></div>
+                    <div class="s-row savings"><span>You save</span><span id="sumSavings">₹0</span></div>
+                    <div class="s-row"><span>GST 5%</span><span id="sumGst">₹0</span></div>
+                    <div class="s-row total"><span>Total</span><span id="sumTotal">₹0</span></div>
+                </div>
+                <div class="savings-bar" id="savingsBar" hidden>
+                    <i class="fa-solid fa-tags"></i><span id="savingsText">You save ₹0 today!</span>
+                </div>
+                <button class="btn btn-lg btn-cta" id="checkoutBtn" style="margin-top:14px;" disabled>
+                    <i class="fa-solid fa-arrow-right"></i>Proceed to Payment
+                </button>
+            </div>
+
+        </section>
+
+        <!-- ============ TAB 2: PAYMENT ============ -->
+        <section id="tabPayment" class="tab-panel" hidden>
+
+            <div class="glass">
+                <div class="section-head">
+                    <h2><i class="fa-solid fa-receipt" style="color:var(--primary);margin-right:6px;"></i>Order Summary</h2>
+                    <span class="muted" id="payCount"></span>
+                </div>
+                <ul class="cart-list" id="payItems" style="margin-bottom:12px;"></ul>
+                <div class="summary">
+                    <div class="s-row"><span>Subtotal</span><span id="paySubtotal">₹0</span></div>
+                    <div class="s-row savings"><span>You save</span><span id="paySavings">₹0</span></div>
+                    <div class="s-row"><span>GST 5%</span><span id="payGst">₹0</span></div>
+                    <div class="s-row total"><span>Total Payable</span><span id="payTotal">₹0</span></div>
+                </div>
+            </div>
+
+            <div class="glass" id="methodSection">
+                <h2 style="margin-bottom:12px;">Choose Payment Method</h2>
+
+                <div class="pay-grid">
+                    <button class="pay-card selected" data-method="upi">
+                        <span class="pc-check"><i class="fa-solid fa-check"></i></span>
+                        <div class="pc-ic"><i class="fa-solid fa-q"></i></div>
+                        <div class="pc-name">UPI</div>
+                        <div class="pc-sub">PhonePe · GPay · Paytm</div>
+                    </button>
+                    <button class="pay-card" data-method="card">
+                        <span class="pc-check"><i class="fa-solid fa-check"></i></span>
+                        <div class="pc-ic"><i class="fa-solid fa-credit-card"></i></div>
+                        <div class="pc-name">Card</div>
+                        <div class="pc-sub">Visa · Mastercard · RuPay</div>
+                    </button>
+                    <button class="pay-card" data-method="cash">
+                        <span class="pc-check"><i class="fa-solid fa-check"></i></span>
+                        <div class="pc-ic"><i class="fa-solid fa-money-bill-wave"></i></div>
+                        <div class="pc-name">Cash</div>
+                        <div class="pc-sub">Pay at the counter</div>
+                    </button>
+                    <button class="pay-card" data-method="wallet">
+                        <span class="pc-check"><i class="fa-solid fa-check"></i></span>
+                        <div class="pc-ic"><i class="fa-solid fa-wallet"></i></div>
+                        <div class="pc-name">Wallet</div>
+                        <div class="pc-sub">Amazon Pay · Mobikwik</div>
+                    </button>
+                </div>
+
+                <!-- method detail panels -->
+                <div class="method-detail" id="detailUpi">
+                    <div class="field-label">Enter UPI ID</div>
+                    <input class="text-input" id="upiId" placeholder="yourname@upi" autocomplete="off">
+                    <div class="app-row">
+                        <button class="app-chip active" data-app="PhonePe"><span class="app-em">💠</span>PhonePe</button>
+                        <button class="app-chip" data-app="Google Pay"><span class="app-em">🟢</span>GPay</button>
+                        <button class="app-chip" data-app="Paytm"><span class="app-em">🔷</span>Paytm</button>
+                    </div>
+                </div>
+
+                <div class="method-detail" id="detailCard" hidden>
+                    <div class="card-fields">
+                        <div>
+                            <div class="field-label">Card Number</div>
+                            <input class="text-input" id="cardNo" placeholder="4111 1111 1111 1111" maxlength="19" inputmode="numeric" autocomplete="off">
+                        </div>
+                        <div class="cf-row">
+                            <div>
+                                <div class="field-label">Expiry</div>
+                                <input class="text-input" id="cardExp" placeholder="MM/YY" maxlength="5" autocomplete="off">
+                            </div>
+                            <div>
+                                <div class="field-label">CVV</div>
+                                <input class="text-input" id="cardCvv" placeholder="•••" maxlength="4" type="password" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-detail" id="detailCash" hidden>
+                    <div class="cash-banner">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <div>Pay with cash at the self-checkout counter. A staff member will confirm your payment and you'll get your Exit QR.</div>
+                    </div>
+                    <div class="cash-wait" id="cashWait" hidden>
+                        <p class="field-label" style="text-align:center;">Scan this at the cash counter</p>
+                        <div class="qr-frame"><div id="cashQr"></div></div>
+                        <div class="cw-status"><span class="pulse"></span><span id="cashStatus">Waiting for staff confirmation...</span></div>
+                    </div>
+                </div>
+
+                <div class="method-detail" id="detailWallet" hidden>
+                    <div class="field-label">Select Wallet</div>
+                    <div class="wallet-grid">
+                        <button class="wallet-item" data-wallet="PhonePe"><span class="w-em">💠</span>PhonePe</button>
+                        <button class="wallet-item" data-wallet="Google Pay"><span class="w-em">🟢</span>GPay</button>
+                        <button class="wallet-item active" data-wallet="Paytm"><span class="w-em">🔷</span>Paytm</button>
+                        <button class="wallet-item" data-wallet="Amazon Pay"><span class="w-em">🛒</span>Amazon</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-lg btn-green" id="payBtn" style="margin-top:16px;">
+                    <i class="fa-solid fa-lock"></i>Pay <span id="payBtnAmount">₹0</span> Securely
+                </button>
+            </div>
+
+            <!-- success screen -->
+            <div class="glass" id="successScreen" hidden>
+                <div class="success-wrap">
+                    <div class="check-ring"><i class="fa-solid fa-check"></i></div>
+                    <h2>Payment Successful!</h2>
+                    <p class="su-sub">Your order is confirmed. Head to the exit when ready.</p>
+                    <span class="txn-chip"><i class="fa-solid fa-circle-check"></i>Transaction&nbsp;ID:&nbsp;<span id="txnId">—</span></span>
+                    <button class="btn btn-lg btn-cta" id="getExitBtn" style="margin-top:18px;">
+                        <i class="fa-solid fa-qrcode"></i>Get Exit QR
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ============ TAB 3: EXIT QR ============ -->
+        <section id="tabExit" class="tab-panel" hidden>
+
+            <div class="glass">
+                <div class="exit-hero">
+                    <div class="qr-frame">
+                        <div id="exitQr"></div>
+                        <div class="qr-brand"><i class="fa-solid fa-box"></i></div>
+                    </div>
+                    <h2>Cleared to Exit</h2>
+                    <p class="muted">Show this QR to the security guard at the exit.</p>
+                    <div class="exit-user">
+                        <span class="au"><i class="fa-solid fa-user"></i></span>
+                        <span id="exitName">—</span>
+                    </div>
+                    <div class="clear-badge"><i class="fa-solid fa-circle-check"></i>Cleared to Exit</div>
+                    <p class="muted" id="exitSession" style="margin-top:8px;font-size:11.5px;"></p>
+                </div>
+                <div class="thanks-strip"><i class="fa-solid fa-heart"></i>Thank you for shopping with Scanimart. Have a great day!</div>
+                <button class="btn btn-lg btn-ghost" id="newSessionBtn" style="margin-top:14px;">
+                    <i class="fa-solid fa-rotate"></i>Start New Session
+                </button>
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- Scanner overlay -->
+    <div class="scanner-overlay" id="scanOverlay" hidden>
+        <div class="card" style="margin:0;background:#fff;border-radius:20px;">
+            <div class="store-header" style="position:static;border:none;padding:0 0 10px;">
+                <h2 style="font-size:16px;">Scan Product Barcode</h2>
+                <button class="icon-btn" id="closeScanBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="scanner-box">
+                <div id="qrReader"></div>
+                <div class="scanner-note">Point camera at a product barcode</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../libraries/qrcode.min.js"></script>
+    <script src="../libraries/html5-qrcode.min.js"></script>
+    <script src="../js/app-config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/scanner.js"></script>
+    <script src="../js/pos.js"></script>
+
+</body>
+
+</html>

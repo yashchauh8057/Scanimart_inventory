@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Settings | Scanimart</title>
+
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/sidebar.css">
+<link rel="stylesheet" href="../css/settings.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<aside class="sidebar">
+
+<div class="logo">
+<i class="fa-solid fa-box"></i>
+<span>Scanimart</span>
+</div>
+
+<ul class="menu">
+<li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+<li><a href="products.html"><i class="fa-solid fa-boxes-stacked"></i><span>Products</span></a></li>
+<li><a href="categories.html"><i class="fa-solid fa-layer-group"></i><span>Categories</span></a></li>
+<li><a href="customers.html"><i class="fa-solid fa-users"></i><span>Customers</span></a></li>
+<li><a href="suppliers.html"><i class="fa-solid fa-truck"></i><span>Suppliers</span></a></li>
+<li><a href="purchase.html"><i class="fa-solid fa-cart-shopping"></i><span>Purchases</span></a></li>
+<li><a href="sales.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Sales</span></a></li>
+<li><a href="stock.html"><i class="fa-solid fa-warehouse"></i><span>Stock</span></a></li>
+<li><a href="reports.html"><i class="fa-solid fa-chart-column"></i><span>Reports</span></a></li>
+<li><a href="users.html"><i class="fa-solid fa-user-shield"></i><span>Users</span></a></li>
+<li class="active"><a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+<li><a href="login.html"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a></li>
+</ul>
+
+</aside>
+
+<div class="main">
+
+<header class="topbar">
+
+<div class="left">
+<button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+<h2>Settings</h2>
+</div>
+
+<div class="right">
+
+<button class="icon"><i class="fa-regular fa-bell"></i></button>
+
+<button class="icon"><i class="fa-regular fa-moon"></i></button>
+
+<div class="profile">
+<img src="../assets/images/user.png">
+<div>
+<h4>Administrator</h4>
+<small>Super Admin</small>
+</div>
+</div>
+
+</div>
+
+</header>
+
+<section class="content">
+
+<div class="page-header">
+
+<div>
+<h1>System Settings</h1>
+<p>Manage company, security and application settings.</p>
+</div>
+
+<button class="primary-btn">
+<i class="fa-solid fa-floppy-disk"></i>
+Save Changes
+</button>
+
+</div>
+
+<div class="settings-grid">
+
+<div class="settings-card">
+
+<h3><i class="fa-solid fa-building"></i> Company</h3>
+
+<div class="form-group">
+<label>Company Name</label>
+<input type="text" value="Scanimart Pvt Ltd">
+</div>
+
+<div class="form-group">
+<label>Email</label>
+<input type="email" value="admin@scanimart.com">
+</div>
+
+<div class="form-group">
+<label>Phone</label>
+<input type="text" value="+91 9876543210">
+</div>
+
+<div class="form-group">
+<label>Address</label>
+<textarea rows="3">New Delhi, India</textarea>
+</div>
+
+</div>
+
+<div class="settings-card">
+
+<h3><i class="fa-solid fa-sliders"></i> Preferences</h3>
+
+<div class="form-group">
+<label>Currency</label>
+<select>
+<option selected>Indian Rupee (₹)</option>
+<option>US Dollar ($)</option>
+<option>Euro (€)</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Language</label>
+<select>
+<option selected>English</option>
+<option>Hindi</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Theme</label>
+<select>
+<option>Light</option>
+<option selected>Dark</option>
+<option>System</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Timezone</label>
+<select>
+<option selected>Asia/Kolkata</option>
+</select>
+</div>
+
+</div>
+
+<div class="settings-card">
+
+<h3><i class="fa-solid fa-shield-halved"></i> Security</h3>
+
+<label><input type="checkbox" checked> Two Factor Authentication</label><br><br>
+
+<label><input type="checkbox" checked> Email Notifications</label><br><br>
+
+<label><input type="checkbox"> SMS Alerts</label><br><br>
+
+<label><input type="checkbox" checked> Automatic Backup</label>
+
+</div>
+
+</div>
+<div class="settings-grid">
+
+    <div class="settings-card">
+    
+    <h3><i class="fa-solid fa-receipt"></i> Tax Settings</h3>
+    
+    <div class="form-group">
+    <label>GST (%)</label>
+    <input type="number" value="18">
+    </div>
+    
+    <div class="form-group">
+    <label>CGST (%)</label>
+    <input type="number" value="9">
+    </div>
+    
+    <div class="form-group">
+    <label>SGST (%)</label>
+    <input type="number" value="9">
+    </div>
+    
+    <div class="form-group">
+    <label>Invoice Prefix</label>
+    <input type="text" value="INV">
+    </div>
+    
+    </div>
+    
+    <div class="settings-card">
+    
+    <h3><i class="fa-solid fa-file-invoice"></i> Invoice</h3>
+    
+    <label><input type="checkbox" checked> Show Company Logo</label><br><br>
+    
+    <label><input type="checkbox" checked> Print GST Number</label><br><br>
+    
+    <label><input type="checkbox" checked> Auto Invoice Number</label><br><br>
+    
+    <label><input type="checkbox"> Customer Signature</label>
+    
+    </div>
+    
+    <div class="settings-card">
+    
+    <h3><i class="fa-solid fa-database"></i> Backup</h3>
+    
+    <p>Last Backup</p>
+    
+    <h4>30 Jul 2026 09:30 AM</h4>
+    
+    <br>
+    
+    <button class="primary-btn">
+    <i class="fa-solid fa-cloud-arrow-up"></i>
+    Backup Now
+    </button>
+    
+    <button class="secondary-btn">
+    <i class="fa-solid fa-cloud-arrow-down"></i>
+    Restore
+    </button>
+    
+    </div>
+    
+    <div class="settings-card">
+    
+    <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+    
+    <label><input type="checkbox" checked> Low Stock Alerts</label><br><br>
+    
+    <label><input type="checkbox" checked> Purchase Alerts</label><br><br>
+    
+    <label><input type="checkbox" checked> Sales Reports</label><br><br>
+    
+    <label><input type="checkbox"> Promotional Emails</label>
+    
+    </div>
+    
+    </div>
+    
+    <div class="form-actions">
+    
+    <button class="secondary-btn">
+    <i class="fa-solid fa-rotate-left"></i>
+    Reset
+    </button>
+    
+    <button class="primary-btn">
+    <i class="fa-solid fa-floppy-disk"></i>
+    Save Settings
+    </button>
+    
+    </div>
+    <!-- Change Password Modal -->
+<div class="modal" id="passwordModal">
+    <div class="modal-content">
+    
+    <div class="modal-header">
+    <h2>Change Password</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <form>
+    
+    <div class="form-group">
+    <label>Current Password</label>
+    <input type="password">
+    </div>
+    
+    <div class="form-group">
+    <label>New Password</label>
+    <input type="password">
+    </div>
+    
+    <div class="form-group">
+    <label>Confirm Password</label>
+    <input type="password">
+    </div>
+    
+    <div class="modal-footer">
+    <button type="reset" class="secondary-btn">Cancel</button>
+    <button type="submit" class="primary-btn">Update Password</button>
+    </div>
+    
+    </form>
+    
+    </div>
+    </div>
+    
+    <!-- Backup Modal -->
+    <div class="modal" id="backupModal">
+    <div class="modal-content small">
+    
+    <h2>Database Backup</h2>
+    
+    <p>Create a complete backup of your inventory database.</p>
+    
+    <div class="modal-footer">
+    <button class="secondary-btn">Cancel</button>
+    <button class="primary-btn">Start Backup</button>
+    </div>
+    
+    </div>
+    </div>
+    
+    <!-- Logo Upload Modal -->
+    <div class="modal" id="logoModal">
+    <div class="modal-content">
+    
+    <div class="modal-header">
+    <h2>Upload Company Logo</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <div class="form-group">
+    <label>Select Logo</label>
+    <input type="file" accept="image/*">
+    </div>
+    
+    <div class="modal-footer">
+    <button class="secondary-btn">Cancel</button>
+    <button class="primary-btn">Upload</button>
+    </div>
+    
+    </div>
+    </div>
+    
+    </section>
+    
+    <footer class="footer">
+    <p>© 2026 Scanimart. All Rights Reserved.</p>
+    </footer>
+    
+    </div>
+    </div>
+    
+    <script src="../js/app.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/settings.js"></script>
+    
+    </body>
+    </html>

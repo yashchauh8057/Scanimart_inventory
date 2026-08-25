@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stock | Scanimart</title>
+
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/sidebar.css">
+<link rel="stylesheet" href="../css/stock.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<aside class="sidebar">
+
+<div class="logo"><i class="fa-solid fa-box"></i><span>Scanimart</span></div>
+
+<ul class="menu">
+<li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+<li><a href="products.html"><i class="fa-solid fa-boxes-stacked"></i><span>Products</span></a></li>
+<li><a href="categories.html"><i class="fa-solid fa-layer-group"></i><span>Categories</span></a></li>
+<li><a href="customers.html"><i class="fa-solid fa-users"></i><span>Customers</span></a></li>
+<li><a href="suppliers.html"><i class="fa-solid fa-truck"></i><span>Suppliers</span></a></li>
+<li><a href="purchase.html"><i class="fa-solid fa-cart-shopping"></i><span>Purchases</span></a></li>
+<li><a href="sales.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Sales</span></a></li>
+<li class="active"><a href="stock.html"><i class="fa-solid fa-warehouse"></i><span>Stock</span></a></li>
+<li><a href="reports.html"><i class="fa-solid fa-chart-column"></i><span>Reports</span></a></li>
+<li><a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+<li><a href="login.html"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a></li>
+</ul>
+
+</aside>
+
+<div class="main">
+
+<header class="topbar">
+
+<div class="left">
+<button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+<h2>Stock</h2>
+</div>
+
+<div class="right">
+<button class="icon"><i class="fa-regular fa-bell"></i></button>
+<button class="icon"><i class="fa-regular fa-moon"></i></button>
+<div class="profile">
+<img src="../assets/images/user.png">
+<div><h4>Administrator</h4><small>Inventory Manager</small></div>
+</div>
+</div>
+
+</header>
+
+<section class="content">
+
+<div class="page-header">
+<div>
+<h1>Stock Management</h1>
+<p>Monitor inventory, warehouse stock and low stock alerts.</p>
+</div>
+
+<button class="primary-btn">
+<i class="fa-solid fa-plus"></i>
+Stock Adjustment
+</button>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+<div class="card-top">
+<div><p>Total Products</p><h2>1,248</h2></div>
+<div class="card-icon blue"><i class="fa-solid fa-boxes-stacked"></i></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div><p>Available Stock</p><h2>18,540</h2></div>
+<div class="card-icon green"><i class="fa-solid fa-warehouse"></i></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div><p>Low Stock</p><h2>34</h2></div>
+<div class="card-icon orange"><i class="fa-solid fa-triangle-exclamation"></i></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div><p>Out Of Stock</p><h2>8</h2></div>
+<div class="card-icon red"><i class="fa-solid fa-circle-xmark"></i></div>
+</div>
+</div>
+
+</div>
+
+<div class="filter-container">
+
+<div class="search-box">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input type="text" placeholder="Search Product">
+</div>
+
+<select>
+<option>All Categories</option>
+<option>Electronics</option>
+<option>Accessories</option>
+<option>Furniture</option>
+</select>
+
+<select>
+<option>All Status</option>
+<option>In Stock</option>
+<option>Low Stock</option>
+<option>Out Of Stock</option>
+</select>
+
+</div>
+
+<div class="table-card">
+
+<table>
+
+<thead>
+
+<tr>
+<th>ID</th>
+<th>Product</th>
+<th>Category</th>
+<th>Available</th>
+<th>Minimum</th>
+<th>Warehouse</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody>
+    <tr><td>P001</td><td>Wireless Mouse</td><td>Accessories</td><td>120</td><td>20</td><td>W1</td><td><span class="badge success">In Stock</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button></td></tr>
+
+    <tr><td>P002</td><td>Mechanical Keyboard</td><td>Accessories</td><td>15</td><td>20</td><td>W1</td><td><span class="badge warning">Low Stock</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button></td></tr>
+    
+    <tr><td>P003</td><td>27 Inch Monitor</td><td>Electronics</td><td>45</td><td>10</td><td>W2</td><td><span class="badge success">In Stock</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button></td></tr>
+    
+    <tr><td>P004</td><td>USB Cable</td><td>Accessories</td><td>0</td><td>25</td><td>W3</td><td><span class="badge danger">Out Of Stock</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button></td></tr>
+    
+    <tr><td>P005</td><td>Laptop Stand</td><td>Furniture</td><td>32</td><td>8</td><td>W2</td><td><span class="badge success">In Stock</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button></td></tr>
+    
+    <tr><td>P006</td><td>External SSD</td><td>Storage</td><td>9</td><td>10</td><td>W1</td><td><span class="badge warning">Low Stock</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button></td></tr>
+    
+    </tbody>
+    
+    </table>
+    
+    </div>
+    
+    <div class="pagination">
+    <button class="page-btn"><i class="fa-solid fa-angle-left"></i></button>
+    <button class="page-btn active">1</button>
+    <button class="page-btn">2</button>
+    <button class="page-btn">3</button>
+    <button class="page-btn"><i class="fa-solid fa-angle-right"></i></button>
+    </div>
+<!-- Stock Adjustment Modal -->
+<div class="modal" id="stockModal">
+    <div class="modal-content">
+    
+    <div class="modal-header">
+    <h2>Stock Adjustment</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <form>
+    
+    <div class="form-grid">
+    
+    <div class="form-group">
+    <label>Product</label>
+    <select>
+    <option>Wireless Mouse</option>
+    <option>Keyboard</option>
+    <option>Monitor</option>
+    </select>
+    </div>
+    
+    <div class="form-group">
+    <label>Adjustment Type</label>
+    <select>
+    <option>Add Stock</option>
+    <option>Remove Stock</option>
+    </select>
+    </div>
+    
+    <div class="form-group">
+    <label>Quantity</label>
+    <input type="number" placeholder="0">
+    </div>
+    
+    <div class="form-group">
+    <label>Warehouse</label>
+    <select>
+    <option>W1</option>
+    <option>W2</option>
+    <option>W3</option>
+    </select>
+    </div>
+    
+    <div class="form-group full">
+    <label>Reason</label>
+    <textarea rows="3"></textarea>
+    </div>
+    
+    </div>
+    
+    <div class="modal-footer">
+    <button type="reset" class="secondary-btn">Cancel</button>
+    <button type="submit" class="primary-btn">Save</button>
+    </div>
+    
+    </form>
+    
+    </div>
+    </div>
+    
+    <!-- Product Details -->
+    <div class="modal" id="productModal">
+    <div class="modal-content">
+    
+    <div class="modal-header">
+    <h2>Stock Details</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <p><strong>Product:</strong> Wireless Mouse</p>
+    <p><strong>Category:</strong> Accessories</p>
+    <p><strong>Available:</strong> 120</p>
+    <p><strong>Minimum:</strong> 20</p>
+    <p><strong>Warehouse:</strong> W1</p>
+    <p><strong>Status:</strong> In Stock</p>
+    
+    <div class="modal-footer">
+    <button class="primary-btn">Close</button>
+    </div>
+    
+    </div>
+    </div>
+    
+    <!-- Delete Modal -->
+    <div class="modal" id="deleteStockModal">
+    <div class="modal-content small">
+    <h2>Delete Product</h2>
+    <p>Delete this stock record?</p>
+    <div class="modal-footer">
+    <button class="secondary-btn">Cancel</button>
+    <button class="danger-btn">Delete</button>
+    </div>
+    </div>
+    </div>
+    
+    </section>
+    
+    <footer class="footer">
+    <p>© 2026 Scanimart. All Rights Reserved.</p>
+    </footer>
+    
+    </div>
+    </div>
+    
+    <script src="../js/api.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/stock.js"></script>
+    
+    </body>
+    </html>

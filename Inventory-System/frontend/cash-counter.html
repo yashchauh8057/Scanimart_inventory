@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanimart | Cash Counter</title>
+
+    <link rel="stylesheet" href="../css/store.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<header class="store-header">
+    <div class="brand"><i class="fa-solid fa-cash-register"></i> Cash Counter</div>
+    <div class="user">
+        <span id="userName">Staff</span>
+        <button class="icon-btn danger" id="logoutBtn" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+</header>
+
+<div class="store-container">
+
+    <div class="card">
+        <h2>Scan Customer QR</h2>
+        <p class="muted">Scan the cash payment QR shown on the customer's phone.</p>
+
+        <div class="scanner-box" style="margin-top:12px;">
+            <div id="qrReader"></div>
+            <div class="scanner-note">Point camera at the customer's QR</div>
+        </div>
+
+        <div class="code-entry">
+            <input type="text" id="codeInput" placeholder="Or enter receipt ID (e.g. RCPT0001)">
+            <button class="btn secondary" id="lookupBtn">Look Up</button>
+        </div>
+    </div>
+
+    <!-- Receipt details -->
+    <div class="card" id="receiptCard" hidden>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <h2>Receipt <span id="receiptId">RCPT0001</span></h2>
+            <span class="qr-status" id="receiptStatus">Pending</span>
+        </div>
+        <p class="receipt-meta" id="receiptCustomer"></p>
+        <p class="receipt-meta" id="receiptDate"></p>
+
+        <ul class="receipt-list" id="receiptItems" style="margin-top:10px;"></ul>
+
+        <div class="total-row" style="margin-top:8px;"><span>Subtotal</span><span id="receiptSubtotal">₹0</span></div>
+        <div class="total-row"><span>Tax</span><span id="receiptTax">₹0</span></div>
+        <div class="total-row grand"><span>Total</span><span id="receiptTotal">₹0</span></div>
+
+        <button class="btn success" id="confirmBtn" style="margin-top:14px;"><i class="fa-solid fa-money-bill-wave"></i> Collect Cash &amp; Confirm</button>
+    </div>
+
+    <!-- Success state -->
+    <div class="result-badge ok" id="successState" hidden>
+        <i class="fa-solid fa-circle-check"></i>
+        <h2>Payment Done</h2>
+        <p>Receipt <span id="successReceiptId"></span> marked as paid. Customer may now exit.</p>
+        <button class="btn" id="nextBtn" style="margin-top:8px;">Scan Next</button>
+    </div>
+
+</div>
+
+<script src="../libraries/html5-qrcode.min.js"></script>
+<script src="../js/app-config.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/scanner.js"></script>
+<script src="../js/cash-counter.js"></script>
+
+</body>
+
+</html>

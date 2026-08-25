@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Purchase | Scanimart</title>
+
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/sidebar.css">
+<link rel="stylesheet" href="../css/purchase.css">
+<link rel="stylesheet" href="../css/responsive.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<aside class="sidebar">
+
+<div class="logo">
+<i class="fa-solid fa-box"></i>
+<span>Scanimart</span>
+</div>
+
+<ul class="menu">
+
+<li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+
+<li><a href="products.html"><i class="fa-solid fa-boxes-stacked"></i><span>Products</span></a></li>
+
+<li><a href="categories.html"><i class="fa-solid fa-layer-group"></i><span>Categories</span></a></li>
+
+<li><a href="customers.html"><i class="fa-solid fa-users"></i><span>Customers</span></a></li>
+
+<li><a href="suppliers.html"><i class="fa-solid fa-truck"></i><span>Suppliers</span></a></li>
+
+<li class="active"><a href="purchase.html"><i class="fa-solid fa-cart-shopping"></i><span>Purchases</span></a></li>
+
+<li><a href="sales.html"><i class="fa-solid fa-file-invoice"></i><span>Sales</span></a></li>
+
+<li><a href="stock.html"><i class="fa-solid fa-warehouse"></i><span>Stock</span></a></li>
+
+<li><a href="reports.html"><i class="fa-solid fa-chart-column"></i><span>Reports</span></a></li>
+
+<li><a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+
+<li><a href="login.html"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a></li>
+
+</ul>
+
+</aside>
+
+<div class="main">
+
+<header class="topbar">
+
+<div class="left">
+<button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+<h2>Purchases</h2>
+</div>
+
+<div class="right">
+
+<button class="icon"><i class="fa-regular fa-bell"></i></button>
+
+<button class="icon"><i class="fa-regular fa-moon"></i></button>
+
+<div class="profile">
+
+<img src="../assets/images/user.png">
+
+<div>
+
+<h4>Administrator</h4>
+
+<small>Inventory Manager</small>
+
+</div>
+
+</div>
+
+</div>
+
+</header>
+
+<section class="content">
+
+<div class="page-header">
+
+<div>
+
+<h1>Purchase Management</h1>
+
+<p>Create purchase orders and manage supplier purchases.</p>
+
+</div>
+
+<button class="primary-btn" id="newPurchaseBtn">
+
+<i class="fa-solid fa-plus"></i>
+
+New Purchase
+
+</button>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+<div class="card-top">
+<div>
+<p>Total Purchases</p>
+<h2>₹18,75,000</h2>
+</div>
+<div class="card-icon blue">
+<i class="fa-solid fa-cart-shopping"></i>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div>
+<p>Pending Orders</p>
+<h2>12</h2>
+</div>
+<div class="card-icon orange">
+<i class="fa-solid fa-clock"></i>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div>
+<p>Completed</p>
+<h2>324</h2>
+</div>
+<div class="card-icon green">
+<i class="fa-solid fa-circle-check"></i>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div>
+<p>Suppliers</p>
+<h2>128</h2>
+</div>
+<div class="card-icon red">
+<i class="fa-solid fa-truck"></i>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="filter-container">
+
+<div class="search-box">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input type="text" placeholder="Search Purchase">
+</div>
+
+<select>
+<option>All Suppliers</option>
+<option>TechWorld</option>
+<option>Metro Traders</option>
+<option>Prime Supplies</option>
+</select>
+
+<select>
+<option>Payment Status</option>
+<option>Paid</option>
+<option>Pending</option>
+</select>
+
+</div>
+
+<div class="table-card">
+
+<div class="table-header">
+
+<h3>Purchase Orders</h3>
+
+<button class="primary-btn">
+
+<i class="fa-solid fa-download"></i>
+
+Export
+
+</button>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Invoice</th>
+
+<th>Supplier</th>
+
+<th>Date</th>
+
+<th>Items</th>
+
+<th>Total</th>
+
+<th>Payment</th>
+
+<th>Status</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+    <tr><td>1</td><td>PO1001</td><td>TechWorld</td><td>29 Jul 2026</td><td>12</td><td>₹85,000</td><td><span class="badge success">Paid</span></td><td><span class="badge success">Received</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button></td></tr>
+
+<tr><td>2</td><td>PO1002</td><td>Metro Traders</td><td>28 Jul 2026</td><td>8</td><td>₹42,500</td><td><span class="badge warning">Pending</span></td><td><span class="badge warning">Processing</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button></td></tr>
+
+<tr><td>3</td><td>PO1003</td><td>Prime Supplies</td><td>27 Jul 2026</td><td>15</td><td>₹1,12,000</td><td><span class="badge success">Paid</span></td><td><span class="badge success">Received</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button></td></tr>
+
+<tr><td>4</td><td>PO1004</td><td>NextGen</td><td>26 Jul 2026</td><td>6</td><td>₹26,700</td><td><span class="badge danger">Overdue</span></td><td><span class="badge warning">Pending</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button></td></tr>
+
+<tr><td>5</td><td>PO1005</td><td>Universal</td><td>25 Jul 2026</td><td>10</td><td>₹63,500</td><td><span class="badge success">Paid</span></td><td><span class="badge success">Received</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button></td></tr>
+
+</tbody>
+</table>
+</div>
+
+<div class="pagination">
+<button class="page-btn"><i class="fa-solid fa-angle-left"></i></button>
+<button class="page-btn active">1</button>
+<button class="page-btn">2</button>
+<button class="page-btn"><i class="fa-solid fa-angle-right"></i></button>
+</div>
+<!-- Purchase Modal -->
+<div class="modal" id="purchaseModal">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h2>New Purchase</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <form>
+    <div class="form-grid">
+    <div class="form-group"><label>Invoice</label><input type="text" value="PO1006"></div>
+    <div class="form-group"><label>Supplier</label><select><option>TechWorld</option><option>Metro Traders</option><option>Prime Supplies</option></select></div>
+    <div class="form-group"><label>Date</label><input type="date"></div>
+    <div class="form-group"><label>Payment</label><select><option>Paid</option><option>Pending</option></select></div>
+    <div class="form-group full"><label>Remarks</label><textarea rows="3"></textarea></div>
+    </div>
+    
+    <div class="modal-footer">
+    <button type="reset" class="secondary-btn">Cancel</button>
+    <button type="submit" class="primary-btn">Save Purchase</button>
+    </div>
+    </form>
+    
+    </div>
+    </div>
+    
+    <footer class="footer">
+    <p>© 2026 Scanimart. All Rights Reserved.</p>
+    </footer>
+    
+    </section>
+    
+    </div>
+    </div>
+    
+    <script src="../js/api.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/purchase.js"></script>
+    
+    </body>
+    </html>

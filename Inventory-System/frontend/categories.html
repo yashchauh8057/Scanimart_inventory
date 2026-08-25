@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Categories | Scanimart</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/products.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <i class="fa-solid fa-box"></i>
+
+        <span>Scanimart</span>
+
+    </div>
+
+    <ul class="menu">
+
+        <li>
+            <a href="dashboard.html">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="products.html">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <span>Products</span>
+            </a>
+        </li>
+
+        <li class="active">
+            <a href="categories.html">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>Categories</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="customers.html">
+                <i class="fa-solid fa-users"></i>
+                <span>Customers</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="suppliers.html">
+                <i class="fa-solid fa-truck"></i>
+                <span>Suppliers</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="purchase.html">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span>Purchases</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="sales.html">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="stock.html">
+                <i class="fa-solid fa-warehouse"></i>
+                <span>Stock</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="reports.html">
+                <i class="fa-solid fa-chart-column"></i>
+                <span>Reports</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="settings.html">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="login.html">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+
+    </ul>
+
+</aside>
+
+<div class="main">
+
+<header class="topbar">
+
+    <div class="left">
+
+        <button id="menuBtn">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+        <h2>Categories</h2>
+
+    </div>
+
+    <div class="right">
+
+        <button class="icon">
+
+            <i class="fa-regular fa-bell"></i>
+
+        </button>
+
+        <button class="icon">
+
+            <i class="fa-regular fa-moon"></i>
+
+        </button>
+
+        <div class="profile">
+
+            <img src="../assets/images/user.png" alt="Admin">
+
+            <div>
+
+                <h4>Admin</h4>
+
+                <small>Administrator</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+<section class="content">
+
+<div class="page-header">
+
+    <div>
+
+        <h1>Category Management</h1>
+
+        <p>Create and manage product categories.</p>
+
+    </div>
+
+    <button class="primary-btn">
+
+        <i class="fa-solid fa-plus"></i>
+
+        Add Category
+
+    </button>
+
+</div>
+
+<div class="filter-container">
+
+    <div class="search-box">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input type="text" placeholder="Search category">
+
+    </div>
+
+</div>
+
+<div class="table-card">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>Category Name</th>
+
+<th>Description</th>
+
+<th>Total Products</th>
+
+<th>Status</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+    <tr>
+
+        <td>CAT001</td>
+    
+        <td>Electronics</td>
+    
+        <td>Electronic devices and gadgets</td>
+    
+        <td>125</td>
+    
+        <td>
+    
+            <span class="badge success">
+    
+                Active
+    
+            </span>
+    
+        </td>
+    
+        <td>
+    
+            <button class="action-btn view">
+    
+                <i class="fa-solid fa-eye"></i>
+    
+            </button>
+    
+            <button class="action-btn edit">
+    
+                <i class="fa-solid fa-pen"></i>
+    
+            </button>
+    
+            <button class="action-btn delete">
+    
+                <i class="fa-solid fa-trash"></i>
+    
+            </button>
+    
+        </td>
+    
+    </tr>
+    
+    <tr>
+    
+        <td>CAT002</td>
+    
+        <td>Accessories</td>
+    
+        <td>Computer accessories</td>
+    
+        <td>82</td>
+    
+        <td><span class="badge success">Active</span></td>
+    
+        <td>
+    
+            <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    
+            <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    
+            <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    
+        </td>
+    
+    </tr>
+    
+    <tr>
+    
+        <td>CAT003</td>
+    
+        <td>Networking</td>
+    
+        <td>Routers and switches</td>
+    
+        <td>24</td>
+    
+        <td><span class="badge success">Active</span></td>
+    
+        <td>
+    
+            <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    
+            <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    
+            <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    
+        </td>
+    
+    </tr>
+    
+    <tr>
+    
+        <td>CAT004</td>
+    
+        <td>Furniture</td>
+    
+        <td>Office furniture</td>
+    
+        <td>15</td>
+    
+        <td><span class="badge warning">Inactive</span></td>
+    
+        <td>
+    
+            <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    
+            <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    
+            <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    
+        </td>
+    
+    </tr>
+    
+    <tr>
+    
+        <td>CAT005</td>
+    
+        <td>Audio</td>
+    
+        <td>Speakers and headphones</td>
+    
+        <td>31</td>
+    
+        <td><span class="badge success">Active</span></td>
+    
+        <td>
+    
+            <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    
+            <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    
+            <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    
+        </td>
+    
+    </tr>
+    
+    <tr>
+    
+        <td>CAT006</td>
+    
+        <td>Storage</td>
+    
+        <td>Hard drives and SSDs</td>
+    
+        <td>19</td>
+    
+        <td><span class="badge success">Active</span></td>
+    
+        <td>
+    
+            <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    
+            <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    
+            <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    
+        </td>
+    
+    </tr>
+    
+    <tr>
+    
+        <td>CAT007</td>
+    
+        <td>Printers</td>
+    
+        <td>Office printers</td>
+    
+        <td>11</td>
+    
+        <td><span class="badge warning">Inactive</span></td>
+    
+        <td>
+    
+            <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    
+            <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    
+            <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    
+        </td>
+    
+    </tr>
+    
+    <tr>
+    
+        <td>CAT008</td>
+    
+        <td>Security</td>
+    
+        <td>CCTV and security products</td>
+    
+        <td>28</td>
+    
+        <td><span class="badge success">Active</span></td>
+    
+        <td>
+    
+            <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    
+            <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    
+            <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    
+        </td>
+    
+    </tr>
+    
+    <tr>
+    
+        <td>CAT009</td>
+    
+        <td>Cables</td>
+    
+        <td>Power and data cables</td>
+    
+        <td>47</td>
+    
+        <td><span class="badge success">Active</span></td>
+    
+        <td>
+    
+            <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    
+            <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    
+            <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    
+        </td>
+    
+    </tr>
+    
+    <tr>
+    
+        <td>CAT010</td>
+    
+        <td>Office Supplies</td>
+    
+        <td>Stationery and office essentials</td>
+    
+        <td>39</td>
+    
+        <td><span class="badge success">Active</span></td>
+    
+        <td>
+    
+            <button class="action-btn view"><i class="fa-solid fa-eye"></i></button>
+    
+            <button class="action-btn edit"><i class="fa-solid fa-pen"></i></button>
+    
+            <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+    
+        </td>
+    
+    </tr>
+    
+    </tbody>
+    
+    </table>
+    
+    </div>
+    
+    <div class="pagination">
+    
+        <button class="page-btn">
+    
+            <i class="fa-solid fa-angle-left"></i>
+    
+        </button>
+    
+        <button class="page-btn active">1</button>
+    
+        <button class="page-btn">2</button>
+    
+        <button class="page-btn">3</button>
+    
+        <button class="page-btn">
+    
+            <i class="fa-solid fa-angle-right"></i>
+    
+        </button>
+    
+    </div>
+    <!-- ================= Add Category Modal ================= -->
+
+<div class="modal" id="addCategoryModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Add Category</h2>
+
+            <button class="close">&times;</button>
+
+        </div>
+
+        <form>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Category Name</label>
+
+                    <input
+                        type="text"
+                        placeholder="Enter category name"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Status</label>
+
+                    <select>
+
+                        <option>Active</option>
+
+                        <option>Inactive</option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group full">
+
+                    <label>Description</label>
+
+                    <textarea
+                        rows="5"
+                        placeholder="Enter category description"></textarea>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="reset"
+                    class="secondary-btn">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn">
+
+                    Save Category
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- ================= Edit Category Modal ================= -->
+
+<div class="modal" id="editCategoryModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Edit Category</h2>
+
+            <button class="close">&times;</button>
+
+        </div>
+
+        <form>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Category Name</label>
+
+                    <input
+                        type="text"
+                        value="Electronics">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Status</label>
+
+                    <select>
+
+                        <option selected>
+
+                            Active
+
+                        </option>
+
+                        <option>
+
+                            Inactive
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group full">
+
+                    <label>Description</label>
+
+                    <textarea rows="5">
+
+Electronic devices and gadgets
+
+                    </textarea>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="secondary-btn">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn">
+
+                    Update Category
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- ================= Delete Modal ================= -->
+
+<div class="modal" id="deleteCategoryModal">
+
+    <div class="modal-content small">
+
+        <div class="modal-header">
+
+            <h2>Delete Category</h2>
+
+        </div>
+
+        <p>
+
+            Are you sure you want to delete this category?
+
+        </p>
+
+        <div class="modal-footer">
+
+            <button class="secondary-btn">
+
+                Cancel
+
+            </button>
+
+            <button class="danger-btn">
+
+                Delete
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+<footer class="footer">
+
+    <p>
+
+        © 2026 Scanimart. All Rights Reserved.
+
+    </p>
+
+</footer>
+
+</div>
+
+</div>
+
+<script src="../js/api.js"></script>
+    <script src="../js/app.js"></script>
+
+<script src="../js/sidebar.js"></script>
+
+<script src="../js/category.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suppliers | Scanimart</title>
+
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/sidebar.css">
+<link rel="stylesheet" href="../css/suppliers.css">
+<link rel="stylesheet" href="../css/responsive.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<aside class="sidebar">
+
+<div class="logo">
+<i class="fa-solid fa-box"></i>
+<span>Scanimart</span>
+</div>
+
+<ul class="menu">
+
+<li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+
+<li><a href="products.html"><i class="fa-solid fa-boxes-stacked"></i><span>Products</span></a></li>
+
+<li><a href="categories.html"><i class="fa-solid fa-layer-group"></i><span>Categories</span></a></li>
+
+<li><a href="customers.html"><i class="fa-solid fa-users"></i><span>Customers</span></a></li>
+
+<li class="active"><a href="suppliers.html"><i class="fa-solid fa-truck"></i><span>Suppliers</span></a></li>
+
+<li><a href="purchase.html"><i class="fa-solid fa-cart-shopping"></i><span>Purchases</span></a></li>
+
+<li><a href="sales.html"><i class="fa-solid fa-file-invoice"></i><span>Sales</span></a></li>
+
+<li><a href="stock.html"><i class="fa-solid fa-warehouse"></i><span>Stock</span></a></li>
+
+<li><a href="reports.html"><i class="fa-solid fa-chart-column"></i><span>Reports</span></a></li>
+
+<li><a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+
+<li><a href="login.html"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a></li>
+
+</ul>
+
+</aside>
+
+<div class="main">
+
+<header class="topbar">
+
+<div class="left">
+<button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+<h2>Suppliers</h2>
+</div>
+
+<div class="right">
+<button class="icon"><i class="fa-regular fa-bell"></i></button>
+<button class="icon"><i class="fa-regular fa-moon"></i></button>
+
+<div class="profile">
+<img src="../assets/images/user.png" alt="Admin">
+<div>
+<h4>Administrator</h4>
+<small>Inventory Manager</small>
+</div>
+</div>
+
+</div>
+
+</header>
+
+<section class="content">
+
+<div class="page-header">
+
+<div>
+<h1>Supplier Management</h1>
+<p>Manage all suppliers, companies and purchase partners.</p>
+</div>
+
+<div class="header-buttons">
+
+<button class="secondary-btn">
+<i class="fa-solid fa-download"></i>
+Export
+</button>
+
+<button class="secondary-btn">
+<i class="fa-solid fa-print"></i>
+Print
+</button>
+
+<button class="primary-btn" id="addSupplierBtn">
+<i class="fa-solid fa-plus"></i>
+Add Supplier
+</button>
+
+</div>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+<div class="card-top">
+<div>
+<p>Total Suppliers</p>
+<h2>128</h2>
+</div>
+<div class="card-icon blue">
+<i class="fa-solid fa-truck"></i>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div>
+<p>Active Suppliers</p>
+<h2>110</h2>
+</div>
+<div class="card-icon green">
+<i class="fa-solid fa-circle-check"></i>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div>
+<p>Pending Payments</p>
+<h2>24</h2>
+</div>
+<div class="card-icon orange">
+<i class="fa-solid fa-wallet"></i>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div>
+<p>Monthly Orders</p>
+<h2>356</h2>
+</div>
+<div class="card-icon red">
+<i class="fa-solid fa-cart-shopping"></i>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="filter-container">
+
+<div class="search-box">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input type="text" placeholder="Search supplier...">
+</div>
+
+<select>
+<option>All Status</option>
+<option>Active</option>
+<option>Inactive</option>
+</select>
+
+<select>
+<option>All Cities</option>
+<option>Delhi</option>
+<option>Mumbai</option>
+<option>Bengaluru</option>
+<option>Lucknow</option>
+</select>
+
+</div>
+
+<div class="table-card">
+
+<div class="table-header">
+
+<h3>Supplier List</h3>
+
+<button class="primary-btn">
+<i class="fa-solid fa-file-export"></i>
+Export
+</button>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th><input type="checkbox"></th>
+<th>Supplier</th>
+<th>Company</th>
+<th>Email</th>
+<th>Phone</th>
+<th>City</th>
+<th>Orders</th>
+<th>Status</th>
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+    <tr><td><input type="checkbox"></td><td>Rahul Sharma</td><td>TechWorld Pvt Ltd</td><td>rahul@techworld.com</td><td>9876543210</td><td>Delhi</td><td>54</td><td><span class="badge success">Active</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+    <tr><td><input type="checkbox"></td><td>Priya Singh</td><td>Global Electronics</td><td>priya@global.com</td><td>9812345678</td><td>Mumbai</td><td>38</td><td><span class="badge success">Active</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+    
+    <tr><td><input type="checkbox"></td><td>Amit Verma</td><td>Prime Supplies</td><td>amit@prime.com</td><td>9898989898</td><td>Lucknow</td><td>25</td><td><span class="badge warning">Inactive</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+    
+    <tr><td><input type="checkbox"></td><td>Neha Gupta</td><td>NextGen Traders</td><td>neha@nextgen.com</td><td>9765432101</td><td>Bengaluru</td><td>62</td><td><span class="badge success">Active</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+    
+    <tr><td><input type="checkbox"></td><td>Karan Mehta</td><td>Universal Distributors</td><td>karan@universal.com</td><td>9123456789</td><td>Pune</td><td>19</td><td><span class="badge success">Active</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+    
+    <tr><td><input type="checkbox"></td><td>Simran Kaur</td><td>Metro Traders</td><td>simran@metro.com</td><td>9988776655</td><td>Chandigarh</td><td>41</td><td><span class="badge success">Active</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+    
+    <tr><td><input type="checkbox"></td><td>Rohit Kumar</td><td>Smart Wholesale</td><td>rohit@smart.com</td><td>9090909090</td><td>Jaipur</td><td>14</td><td><span class="badge danger">Blocked</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+    
+    <tr><td><input type="checkbox"></td><td>Arjun Patel</td><td>Bright Solutions</td><td>arjun@bright.com</td><td>9000011111</td><td>Ahmedabad</td><td>47</td><td><span class="badge success">Active</span></td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+    
+    </tbody>
+    </table>
+    </div>
+    
+    <div class="pagination">
+    <button class="page-btn"><i class="fa-solid fa-angle-left"></i></button>
+    <button class="page-btn active">1</button>
+    <button class="page-btn">2</button>
+    <button class="page-btn">3</button>
+    <button class="page-btn"><i class="fa-solid fa-angle-right"></i></button>
+    </div>
+<!-- Add Supplier Modal -->
+<div class="modal" id="addSupplierModal">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h2>Add Supplier</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <form>
+    
+    <div class="form-grid">
+    
+    <div class="form-group">
+    <label>Supplier Name</label>
+    <input type="text" placeholder="Supplier Name">
+    </div>
+    
+    <div class="form-group">
+    <label>Company</label>
+    <input type="text" placeholder="Company Name">
+    </div>
+    
+    <div class="form-group">
+    <label>Email</label>
+    <input type="email" placeholder="Email">
+    </div>
+    
+    <div class="form-group">
+    <label>Phone</label>
+    <input type="text" placeholder="Phone">
+    </div>
+    
+    <div class="form-group">
+    <label>City</label>
+    <input type="text" placeholder="City">
+    </div>
+    
+    <div class="form-group">
+    <label>Status</label>
+    <select>
+    <option>Active</option>
+    <option>Inactive</option>
+    </select>
+    </div>
+    
+    <div class="form-group full">
+    <label>Address</label>
+    <textarea rows="3"></textarea>
+    </div>
+    
+    </div>
+    
+    <div class="modal-footer">
+    <button type="reset" class="secondary-btn">Cancel</button>
+    <button type="submit" class="primary-btn">Save Supplier</button>
+    </div>
+    
+    </form>
+    
+    </div>
+    </div>
+    
+    <!-- Edit Supplier Modal -->
+    <div class="modal" id="editSupplierModal">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h2>Edit Supplier</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <form>
+    
+    <div class="form-grid">
+    
+    <div class="form-group">
+    <label>Supplier</label>
+    <input type="text" value="Rahul Sharma">
+    </div>
+    
+    <div class="form-group">
+    <label>Company</label>
+    <input type="text" value="TechWorld Pvt Ltd">
+    </div>
+    
+    <div class="form-group">
+    <label>Email</label>
+    <input type="email" value="rahul@techworld.com">
+    </div>
+    
+    <div class="form-group">
+    <label>Phone</label>
+    <input type="text" value="9876543210">
+    </div>
+    
+    </div>
+    
+    <div class="modal-footer">
+    <button class="secondary-btn">Cancel</button>
+    <button class="primary-btn">Update</button>
+    </div>
+    
+    </form>
+    
+    </div>
+    </div>
+    
+    <!-- Supplier Details -->
+    <div class="modal" id="supplierModal">
+    <div class="modal-content">
+    
+    <div class="modal-header">
+    <h2>Supplier Details</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <div class="customer-profile">
+    
+    <img src="../assets/images/user.png" class="profile-image">
+    
+    <h3>Rahul Sharma</h3>
+    
+    <p>TechWorld Pvt Ltd</p>
+    
+    <p>rahul@techworld.com</p>
+    
+    <p>9876543210</p>
+    
+    <p>Delhi</p>
+    
+    <p>Total Orders : 54</p>
+    
+    <p>Status : Active</p>
+    
+    </div>
+    
+    </div>
+    </div>
+    
+    <!-- Delete Modal -->
+    <div class="modal" id="deleteSupplierModal">
+    <div class="modal-content small">
+    
+    <h2>Delete Supplier</h2>
+    
+    <p>Are you sure you want to delete this supplier?</p>
+    
+    <div class="modal-footer">
+    <button class="secondary-btn">Cancel</button>
+    <button class="danger-btn">Delete</button>
+    </div>
+    
+    </div>
+    </div>
+    
+    </section>
+    
+    <footer class="footer">
+    <p>© 2026 Scanimart. All Rights Reserved.</p>
+    </footer>
+    
+    </div>
+    </div>
+    
+    <script src="../js/api.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/suppliers.js"></script>
+    
+    </body>
+    </html>

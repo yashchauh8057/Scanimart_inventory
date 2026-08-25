@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Users | Scanimart</title>
+
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/sidebar.css">
+<link rel="stylesheet" href="../css/users.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<aside class="sidebar">
+
+<div class="logo">
+<i class="fa-solid fa-box"></i>
+<span>Scanimart</span>
+</div>
+
+<ul class="menu">
+<li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+<li><a href="products.html"><i class="fa-solid fa-boxes-stacked"></i><span>Products</span></a></li>
+<li><a href="categories.html"><i class="fa-solid fa-layer-group"></i><span>Categories</span></a></li>
+<li><a href="customers.html"><i class="fa-solid fa-users"></i><span>Customers</span></a></li>
+<li><a href="suppliers.html"><i class="fa-solid fa-truck"></i><span>Suppliers</span></a></li>
+<li><a href="purchase.html"><i class="fa-solid fa-cart-shopping"></i><span>Purchases</span></a></li>
+<li><a href="sales.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Sales</span></a></li>
+<li><a href="stock.html"><i class="fa-solid fa-warehouse"></i><span>Stock</span></a></li>
+<li><a href="reports.html"><i class="fa-solid fa-chart-column"></i><span>Reports</span></a></li>
+<li class="active"><a href="users.html"><i class="fa-solid fa-user-shield"></i><span>Users</span></a></li>
+<li><a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+<li><a href="login.html"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a></li>
+</ul>
+
+</aside>
+
+<div class="main">
+
+<header class="topbar">
+
+<div class="left">
+<button id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+<h2>Users</h2>
+</div>
+
+<div class="right">
+<button class="icon"><i class="fa-regular fa-bell"></i></button>
+<button class="icon"><i class="fa-regular fa-moon"></i></button>
+
+<div class="profile">
+<img src="../assets/images/user.png">
+<div>
+<h4>Administrator</h4>
+<small>Super Admin</small>
+</div>
+</div>
+
+</div>
+
+</header>
+
+<section class="content">
+
+<div class="page-header">
+
+<div>
+<h1>User Management</h1>
+<p>Manage administrators, managers and cashiers.</p>
+</div>
+
+<button class="primary-btn">
+<i class="fa-solid fa-user-plus"></i>
+Add User
+</button>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+<div class="card-top">
+<div><p>Total Users</p><h2>52</h2></div>
+<div class="card-icon blue"><i class="fa-solid fa-users"></i></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div><p>Admins</p><h2>4</h2></div>
+<div class="card-icon red"><i class="fa-solid fa-user-shield"></i></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div><p>Managers</p><h2>12</h2></div>
+<div class="card-icon green"><i class="fa-solid fa-user-tie"></i></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-top">
+<div><p>Cashiers</p><h2>36</h2></div>
+<div class="card-icon orange"><i class="fa-solid fa-cash-register"></i></div>
+</div>
+</div>
+
+</div>
+
+<div class="filter-container">
+
+<div class="search-box">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input type="text" placeholder="Search User">
+</div>
+
+<select>
+<option>All Roles</option>
+<option>Admin</option>
+<option>Manager</option>
+<option>Cashier</option>
+</select>
+
+<select>
+<option>All Status</option>
+<option>Active</option>
+<option>Inactive</option>
+</select>
+
+</div>
+
+<div class="table-card">
+
+<table>
+
+<thead>
+
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Role</th>
+<th>Status</th>
+<th>Last Login</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody>
+    <tr><td>U001</td><td>Yash Chauhan</td><td>admin@inventory.com</td><td><span class="badge primary">Admin</span></td><td><span class="badge success">Active</span></td><td>Today 10:25 AM</td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>U002</td><td>Rahul Sharma</td><td>rahul@email.com</td><td><span class="badge info">Manager</span></td><td><span class="badge success">Active</span></td><td>Today 09:10 AM</td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>U003</td><td>Priya Singh</td><td>priya@email.com</td><td><span class="badge warning">Cashier</span></td><td><span class="badge success">Active</span></td><td>Yesterday</td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>U004</td><td>Amit Verma</td><td>amit@email.com</td><td><span class="badge warning">Cashier</span></td><td><span class="badge danger">Inactive</span></td><td>2 Days Ago</td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>U005</td><td>Neha Gupta</td><td>neha@email.com</td><td><span class="badge info">Manager</span></td><td><span class="badge success">Active</span></td><td>30 Jul 2026</td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+<tr><td>U006</td><td>Arjun Patel</td><td>arjun@email.com</td><td><span class="badge warning">Cashier</span></td><td><span class="badge success">Active</span></td><td>29 Jul 2026</td><td><button class="action-btn view"><i class="fa-solid fa-eye"></i></button><button class="action-btn edit"><i class="fa-solid fa-pen"></i></button><button class="action-btn delete"><i class="fa-solid fa-trash"></i></button></td></tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="pagination">
+<button class="page-btn"><i class="fa-solid fa-angle-left"></i></button>
+<button class="page-btn active">1</button>
+<button class="page-btn">2</button>
+<button class="page-btn">3</button>
+<button class="page-btn"><i class="fa-solid fa-angle-right"></i></button>
+</div>
+<!-- Add User Modal -->
+<div class="modal" id="addUserModal">
+    <div class="modal-content">
+    
+    <div class="modal-header">
+    <h2>Add User</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <form>
+    
+    <div class="form-grid">
+    
+    <div class="form-group">
+    <label>Full Name</label>
+    <input type="text" placeholder="Enter Name">
+    </div>
+    
+    <div class="form-group">
+    <label>Email</label>
+    <input type="email" placeholder="Enter Email">
+    </div>
+    
+    <div class="form-group">
+    <label>Phone</label>
+    <input type="text" placeholder="Phone Number">
+    </div>
+    
+    <div class="form-group">
+    <label>Role</label>
+    <select>
+    <option>Admin</option>
+    <option>Manager</option>
+    <option>Cashier</option>
+    </select>
+    </div>
+    
+    <div class="form-group">
+    <label>Password</label>
+    <input type="password">
+    </div>
+    
+    <div class="form-group">
+    <label>Status</label>
+    <select>
+    <option>Active</option>
+    <option>Inactive</option>
+    </select>
+    </div>
+    
+    </div>
+    
+    <div class="modal-footer">
+    <button type="reset" class="secondary-btn">Cancel</button>
+    <button type="submit" class="primary-btn">Save User</button>
+    </div>
+    
+    </form>
+    
+    </div>
+    </div>
+    
+    <!-- User Details -->
+    <div class="modal" id="userModal">
+    <div class="modal-content">
+    
+    <div class="modal-header">
+    <h2>User Details</h2>
+    <button class="close">&times;</button>
+    </div>
+    
+    <div class="customer-profile">
+    <img src="../assets/images/user.png" class="profile-image">
+    <h3>Yash Chauhan</h3>
+    <p>admin@inventory.com</p>
+    <p>Role : Administrator</p>
+    <p>Status : Active</p>
+    <p>Last Login : Today 10:25 AM</p>
+    </div>
+    
+    <div class="modal-footer">
+    <button class="primary-btn">Close</button>
+    </div>
+    
+    </div>
+    </div>
+    
+    <!-- Delete Modal -->
+    <div class="modal" id="deleteUserModal">
+    <div class="modal-content small">
+    
+    <h2>Delete User</h2>
+    
+    <p>Delete this user permanently?</p>
+    
+    <div class="modal-footer">
+    <button class="secondary-btn">Cancel</button>
+    <button class="danger-btn">Delete</button>
+    </div>
+    
+    </div>
+    </div>
+    
+    </section>
+    
+    <footer class="footer">
+    <p>© 2026 Scanimart. All Rights Reserved.</p>
+    </footer>
+    
+    </div>
+    </div>
+    
+    <script src="../js/api.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/users.js"></script>
+    
+    </body>
+    </html>

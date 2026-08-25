@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Scanimart Dashboard</title>
+
+    <link rel="stylesheet" href="../css/style.css?v=20260806-3">
+
+    <link rel="stylesheet" href="../css/sidebar.css">
+
+    <link rel="stylesheet" href="../css/dashboard.css?v=20260806-3">
+
+    <link rel="stylesheet" href="../css/responsive.css?v=20260806-3">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<!-- ================= Sidebar ================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <i class="fa-solid fa-box"></i>
+
+        <span>Scanimart</span>
+
+    </div>
+
+    <ul class="menu">
+
+        <li class="active">
+
+            <a href="dashboard.html">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="products.html">
+
+                <i class="fa-solid fa-boxes-stacked"></i>
+
+                <span>Products</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="categories.html">
+
+                <i class="fa-solid fa-layer-group"></i>
+
+                <span>Categories</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="customers.html">
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>Customers</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="suppliers.html">
+
+                <i class="fa-solid fa-truck"></i>
+
+                <span>Suppliers</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="purchase.html">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                <span>Purchases</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="sales.html">
+
+                <i class="fa-solid fa-receipt"></i>
+
+                <span>Sales</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="stock.html">
+
+                <i class="fa-solid fa-warehouse"></i>
+
+                <span>Stock</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="users.html">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+                <span>Users</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="reports.html">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <span>Reports</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="expenses.html">
+
+                <i class="fa-solid fa-money-bill-wave"></i>
+
+                <span>Expenses</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="settings.html">
+
+                <i class="fa-solid fa-gear"></i>
+
+                <span>Settings</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="activity.html">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                <span>Activity Logs</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="login.html">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>Logout</span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</aside>
+
+<!-- ================= Main Content ================= -->
+
+<div class="main">
+
+<!-- ================= Top Navbar ================= -->
+
+<header class="topbar">
+
+    <div class="left">
+
+        <button id="menuBtn">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+        <h2>Dashboard</h2>
+
+    </div>
+
+    <div class="center">
+
+        <div class="search-box">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                placeholder="Search products, orders, customers...">
+
+        </div>
+
+    </div>
+
+    <div class="right">
+
+        <button class="icon">
+
+            <i class="fa-regular fa-bell"></i>
+
+        </button>
+
+        <button class="icon">
+
+            <i class="fa-regular fa-envelope"></i>
+
+        </button>
+
+        <button class="icon">
+
+            <i class="fa-regular fa-moon"></i>
+
+        </button>
+
+        <div class="profile">
+
+            <img src="../assets/images/user.png" alt="User">
+
+            <div>
+
+                <h4>Admin</h4>
+
+                <small>Administrator</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+<!-- ================= Dashboard Content ================= -->
+
+<section class="content">
+
+<div class="page-title">
+
+    <div>
+
+        <h1>Scanimart Dashboard</h1>
+
+        <p>Welcome back. Here is today's overview.</p>
+
+    </div>
+
+    <div>
+
+        <button class="primary-btn">
+
+            <i class="fa-solid fa-download"></i>
+
+            Export Report
+
+        </button>
+    </div>
+
+</div>
+
+<!-- Statistics Cards start below -->
+
+<div class="cards">
+        <!-- Total Products -->
+
+        <div class="card">
+
+            <div class="card-top">
+    
+                <div>
+    
+                    <p>Total Products</p>
+    
+                    <h2 id="totalProducts">2,540</h2>
+    
+                </div>
+    
+                <div class="card-icon blue">
+    
+                    <i class="fa-solid fa-box"></i>
+    
+                </div>
+    
+            </div>
+    
+            <div class="card-bottom">
+    
+                <span class="success">
+    
+                    <i class="fa-solid fa-arrow-up"></i>
+    
+                    12%
+    
+                </span>
+    
+                <small>Compared to last month</small>
+    
+            </div>
+    
+        </div>
+    
+    
+        <!-- Orders -->
+    
+        <div class="card">
+    
+            <div class="card-top">
+    
+                <div>
+    
+                    <p>Total Orders</p>
+    
+                    <h2 id="orders">1,324</h2>
+    
+                </div>
+    
+                <div class="card-icon green">
+    
+                    <i class="fa-solid fa-cart-shopping"></i>
+    
+                </div>
+    
+            </div>
+    
+            <div class="card-bottom">
+    
+                <span class="success">
+    
+                    <i class="fa-solid fa-arrow-up"></i>
+    
+                    18%
+    
+                </span>
+    
+                <small>Compared to last month</small>
+    
+            </div>
+    
+        </div>
+    
+    
+        <!-- Customers -->
+    
+        <div class="card">
+    
+            <div class="card-top">
+    
+                <div>
+    
+                    <p>Total Customers</p>
+    
+                    <h2 id="customers">840</h2>
+    
+                </div>
+    
+                <div class="card-icon orange">
+    
+                    <i class="fa-solid fa-users"></i>
+    
+                </div>
+    
+            </div>
+    
+            <div class="card-bottom">
+    
+                <span class="success">
+    
+                    <i class="fa-solid fa-arrow-up"></i>
+    
+                    7%
+    
+                </span>
+    
+                <small>Compared to last month</small>
+    
+            </div>
+    
+        </div>
+    
+    
+        <!-- Revenue -->
+    
+        <div class="card">
+    
+            <div class="card-top">
+    
+                <div>
+    
+                    <p>Total Revenue</p>
+    
+                    <h2 id="totalRevenue">₹0</h2>
+    
+                </div>
+    
+                <div class="card-icon red">
+    
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+    
+                </div>
+    
+            </div>
+    
+            <div class="card-bottom">
+    
+                <span class="success">
+    
+                    <i class="fa-solid fa-arrow-up"></i>
+    
+                    21%
+    
+                </span>
+    
+                <small>Compared to last month</small>
+    
+            </div>
+    
+        </div>
+    
+    </div>
+    
+    <!-- Charts -->
+    
+    <div class="dashboard-grid">
+    
+        <div class="chart-card monthly-sales-card">
+    
+            <div class="card-header">
+    
+                <h3>Monthly Sales</h3>
+    
+                <button>
+    
+                    This Year
+    
+                    <i class="fa-solid fa-chevron-down"></i>
+    
+                </button>
+    
+            </div>
+    
+            <div class="dashboard-chart">
+                <canvas id="salesChart"></canvas>
+            </div>
+    
+        </div>
+    
+        <div class="chart-card">
+    
+            <div class="card-header">
+    
+                <h3>Revenue Sources</h3>
+    
+            </div>
+    
+            <div class="dashboard-chart">
+                <canvas id="pieChart"></canvas>
+            </div>
+    
+        </div>
+    
+    </div>
+    
+    <!-- Second Row -->
+    
+    <div class="dashboard-grid">
+    
+        <div class="table-card">
+    
+            <div class="card-header">
+    
+                <h3>Recent Orders</h3>
+    
+                <button class="primary-btn">
+    
+                    View All
+    
+                </button>
+    
+            </div>
+    
+            <table>
+    
+                <thead>
+    
+                    <tr>
+    
+                        <th>Order ID</th>
+    
+                        <th>Customer</th>
+    
+                        <th>Product</th>
+    
+                        <th>Status</th>
+    
+                        <th>Total</th>
+    
+                    </tr>
+    
+                </thead>
+    
+                <tbody id="recentOrdersBody">
+    
+                    <tr>
+    
+                        <td>#1001</td>
+    
+                        <td>Rahul Sharma</td>
+    
+                        <td>Laptop</td>
+    
+                        <td><span class="badge success">Delivered</span></td>
+    
+                        <td>₹55,000</td>
+    
+                    </tr>
+    
+                    <tr>
+    
+                        <td>#1002</td>
+    
+                        <td>Priya Singh</td>
+    
+                        <td>Headphones</td>
+    
+                        <td><span class="badge warning">Pending</span></td>
+    
+                        <td>₹2,800</td>
+    
+                    </tr>
+    
+                    <tr>
+    
+                        <td>#1003</td>
+    
+                        <td>Aman Verma</td>
+    
+                        <td>Keyboard</td>
+    
+                        <td><span class="badge success">Delivered</span></td>
+    
+                        <td>₹1,750</td>
+    
+                    </tr>
+    
+                    <tr>
+    
+                        <td>#1004</td>
+    
+                        <td>Neha Gupta</td>
+    
+                        <td>Monitor</td>
+    
+                        <td><span class="badge danger">Cancelled</span></td>
+    
+                        <td>₹11,999</td>
+    
+                    </tr>
+    
+                </tbody>
+    
+            </table>
+    
+        </div>
+        <div class="table-card">
+
+            <div class="card-header">
+    
+                <h3>Low Stock Products</h3>
+    
+                <button class="primary-btn">
+    
+                    Restock
+    
+                </button>
+    
+            </div>
+    
+            <table>
+    
+                <thead>
+    
+                    <tr>
+    
+                        <th>Product</th>
+    
+                        <th>SKU</th>
+    
+                        <th>Stock</th>
+    
+                        <th>Status</th>
+    
+                    </tr>
+    
+                </thead>
+    
+                <tbody id="lowStockBody">
+    
+                    <tr>
+    
+                        <td>Wireless Mouse</td>
+    
+                        <td>PRD101</td>
+    
+                        <td>5</td>
+    
+                        <td>
+    
+                            <span class="badge danger">
+    
+                                Low Stock
+    
+                            </span>
+    
+                        </td>
+    
+                    </tr>
+    
+                    <tr>
+    
+                        <td>Gaming Keyboard</td>
+    
+                        <td>PRD102</td>
+    
+                        <td>3</td>
+    
+                        <td>
+    
+                            <span class="badge danger">
+    
+                                Low Stock
+    
+                            </span>
+    
+                        </td>
+    
+                    </tr>
+    
+                    <tr>
+    
+                        <td>USB Cable</td>
+    
+                        <td>PRD103</td>
+    
+                        <td>8</td>
+    
+                        <td>
+    
+                            <span class="badge warning">
+    
+                                Limited
+    
+                            </span>
+    
+                        </td>
+    
+                    </tr>
+    
+                    <tr>
+    
+                        <td>Monitor Stand</td>
+    
+                        <td>PRD104</td>
+    
+                        <td>2</td>
+    
+                        <td>
+    
+                            <span class="badge danger">
+    
+                                Critical
+    
+                            </span>
+    
+                        </td>
+    
+                    </tr>
+    
+                </tbody>
+    
+            </table>
+    
+        </div>
+    
+    </div>
+    
+    <!-- ================= Customers & Activities ================= -->
+    
+    <div class="dashboard-grid">
+    
+        <div class="table-card">
+    
+            <div class="card-header">
+    
+                <h3>Latest Customers</h3>
+    
+            </div>
+    
+            <table>
+    
+                <thead>
+    
+                    <tr>
+    
+                        <th>Name</th>
+    
+                        <th>Email</th>
+    
+                        <th>Orders</th>
+    
+                    </tr>
+    
+                </thead>
+    
+                <tbody id="latestCustomersBody">
+    
+                    <tr>
+    
+                        <td>Rahul Sharma</td>
+    
+                        <td>rahul@email.com</td>
+    
+                        <td>12</td>
+    
+                    </tr>
+    
+                    <tr>
+    
+                        <td>Priya Singh</td>
+    
+                        <td>priya@email.com</td>
+    
+                        <td>8</td>
+    
+                    </tr>
+    
+                    <tr>
+    
+                        <td>Neha Gupta</td>
+    
+                        <td>neha@email.com</td>
+    
+                        <td>5</td>
+    
+                    </tr>
+    
+                    <tr>
+    
+                        <td>Aman Verma</td>
+    
+                        <td>aman@email.com</td>
+    
+                        <td>4</td>
+    
+                    </tr>
+    
+                </tbody>
+    
+            </table>
+    
+        </div>
+    
+        <div class="table-card">
+    
+            <div class="card-header">
+    
+                <h3>Recent Activities</h3>
+    
+            </div>
+    
+            <ul class="activity-list" id="activityList">
+    
+                <li>
+    
+                    <i class="fa-solid fa-circle-check"></i>
+    
+                    New order placed by Rahul Sharma
+    
+                    <span>2 min ago</span>
+    
+                </li>
+    
+                <li>
+    
+                    <i class="fa-solid fa-box"></i>
+    
+                    Product Laptop updated
+    
+                    <span>12 min ago</span>
+    
+                </li>
+    
+                <li>
+    
+                    <i class="fa-solid fa-user-plus"></i>
+    
+                    New customer registered
+    
+                    <span>18 min ago</span>
+    
+                </li>
+    
+                <li>
+    
+                    <i class="fa-solid fa-truck"></i>
+    
+                    Supplier shipment received
+    
+                    <span>35 min ago</span>
+    
+                </li>
+    
+                <li>
+    
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+    
+                    Wireless Mouse stock is low
+    
+                    <span>1 hour ago</span>
+    
+                </li>
+    
+            </ul>
+    
+        </div>
+    
+    </div>
+    
+    <!-- ================= Quick Actions ================= -->
+    
+    <div class="quick-actions">
+    
+        <button>
+    
+            <i class="fa-solid fa-plus"></i>
+    
+            Add Product
+    
+        </button>
+    
+        <button>
+    
+            <i class="fa-solid fa-cart-plus"></i>
+    
+            New Purchase
+    
+        </button>
+    
+        <button>
+    
+            <i class="fa-solid fa-file-invoice"></i>
+    
+            Create Invoice
+    
+        </button>
+    
+        <button>
+    
+            <i class="fa-solid fa-qrcode"></i>
+    
+            Generate QR
+    
+        </button>
+    
+        <button>
+    
+            <i class="fa-solid fa-download"></i>
+    
+            Export Report
+    
+        </button>
+    
+    </div>
+    
+    </section>
+    
+    <footer class="footer">
+    
+        <p>
+    
+            © 2026 Scanimart. All Rights Reserved.
+    
+        </p>
+    
+    </footer>
+    
+    </div>
+    
+    </div>
+    
+    <script src="../js/app.js"></script>
+    
+    <script src="../js/sidebar.js"></script>
+    
+    <script src="../js/dashboard.js?v=20260806-1"></script>
+    
+    </body>
+    
+    </html>

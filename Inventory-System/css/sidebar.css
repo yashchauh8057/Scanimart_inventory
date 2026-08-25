@@ -1,0 +1,256 @@
+.sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:260px;
+    height:100vh;
+    background:#111827;
+    color:#fff;
+    overflow-y:auto;
+    transition:.3s;
+    z-index:1000;
+    box-shadow:4px 0 20px rgba(0,0,0,.15);
+    }
+    
+    .sidebar::-webkit-scrollbar{
+    width:6px;
+    }
+    
+    .sidebar::-webkit-scrollbar-thumb{
+    background:#4f46e5;
+    border-radius:20px;
+    }
+    
+    .sidebar.collapsed{
+    width:80px;
+    }
+    
+    .sidebar.collapsed .logo span,
+    .sidebar.collapsed .menu span,
+    .sidebar.collapsed .menu-title{
+    display:none;
+    }
+    
+    .sidebar.collapsed .menu a{
+    justify-content:center;
+    }
+    
+    .sidebar.collapsed .menu a i{
+    margin:0;
+    }
+    
+    .sidebar .logo{
+    height:80px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    font-size:24px;
+    font-weight:700;
+    color:#fff;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    
+    .sidebar .logo i{
+    font-size:30px;
+    color:#4f46e5;
+    }
+    
+    .menu{
+    padding:20px 15px;
+    }
+    
+    .menu-title{
+    font-size:12px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#94a3b8;
+    padding:18px 12px 10px;
+    }
+    
+    .menu ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+    }
+    
+    .menu li{
+    margin-bottom:6px;
+    }
+    
+    .menu li a{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:14px 16px;
+    border-radius:12px;
+    color:#cbd5e1;
+    font-size:15px;
+    font-weight:500;
+    transition:.3s;
+    text-decoration:none;
+    position:relative;
+    }
+    
+    .menu li a i{
+    width:22px;
+    text-align:center;
+    font-size:18px;
+    }
+    
+    .menu li a:hover{
+    background:#4f46e5;
+    color:#fff;
+    transform:translateX(5px);
+    }
+    
+    .menu li.active a{
+    background:#4f46e5;
+    color:#fff;
+    box-shadow:0 10px 25px rgba(79,70,229,.35);
+    }
+    
+    .menu li.active a::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:10%;
+    width:4px;
+    height:80%;
+    background:#fff;
+    border-radius:0 5px 5px 0;
+    }
+    
+    .sidebar-footer{
+    position:absolute;
+    bottom:20px;
+    left:15px;
+    right:15px;
+    padding-top:20px;
+    border-top:1px solid rgba(255,255,255,.08);
+    }
+    
+    .user-box{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px;
+    border-radius:12px;
+    background:rgba(255,255,255,.05);
+    }
+    
+    .user-box img{
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    object-fit:cover;
+    }
+    
+    .user-box h4{
+    font-size:15px;
+    margin-bottom:4px;
+    }
+    
+    .user-box p{
+    font-size:12px;
+    color:#94a3b8;
+    }
+    
+    .logout-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-top:15px;
+    padding:12px;
+    border-radius:10px;
+    background:#ef4444;
+    color:#fff;
+    font-weight:600;
+    text-decoration:none;
+    transition:.3s;
+    }
+    
+    .logout-btn:hover{
+    background:#dc2626;
+    }
+    
+    .sidebar-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.45);
+    opacity:0;
+    visibility:hidden;
+    transition:.3s;
+    z-index:999;
+    }
+    
+    .sidebar-overlay.show{
+    opacity:1;
+    visibility:visible;
+    }
+    
+    @media(max-width:992px){
+    
+    .sidebar{
+    left:-260px;
+    }
+    
+    .sidebar.show{
+    left:0;
+    }
+    
+    .sidebar.collapsed{
+    width:260px;
+    }
+    
+    .sidebar.collapsed .logo span,
+    .sidebar.collapsed .menu span,
+    .sidebar.collapsed .menu-title{
+    display:inline;
+    }
+    
+    .sidebar.collapsed .menu a{
+    justify-content:flex-start;
+    }
+    
+    .sidebar.collapsed .menu a i{
+    margin-right:0;
+    }
+    
+    }
+    
+    @media(max-width:576px){
+    
+    .sidebar{
+    width:240px;
+    left:-240px;
+    }
+    
+    .sidebar.show{
+    left:0;
+    }
+    
+    .sidebar .logo{
+    font-size:20px;
+    }
+    
+    .menu li a{
+    padding:12px;
+    font-size:14px;
+    }
+    
+    .user-box{
+    padding:10px;
+    }
+    
+    .logout-btn{
+    padding:10px;
+    font-size:14px;
+    }
+    
+    }
