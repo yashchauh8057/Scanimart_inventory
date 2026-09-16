@@ -263,7 +263,20 @@
       const order = await API.razorpayOrder(newReceipt);
       const Razorpay = await loadRazorpay();
       return new Promise((resolve, reject) => {
-        const instance = new Razorpay(razorpayOptions(key, order, newReceipt.total));
+        const options = razorpayOptions(key, order, newReceipt.total);
+        options.handler = async response => {
+          try {
+            const verified = await API.razorpayVerify({
+              receiptId: newReceipt.id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            });
+            resolve(verified);
+          } catch (error) { reject(error); }
+        };
+        options.modal = { ondismiss: () => resolve(null) };
+        const instance = new Razorpay(options);
         instance.on('payment.failed', () => reject(new Error('Payment failed. Please try again.')));
         instance.open();
       });

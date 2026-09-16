@@ -49,7 +49,7 @@ app.get('/api/dashboard/stream', (request, response) => {
 
 app.use((error, _, response, __) => {
   console.error(error);
-  response.status(500).json({ error: 'Unable to load dashboard data.', detail: error.message });
+  response.status(500).json({ error: error.message || 'Unable to process the request.' });
 });
 
 if (require.main === module) {
