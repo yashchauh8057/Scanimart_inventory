@@ -260,7 +260,7 @@
     const startRazorpayFlow = async newReceipt => {
       const key = window.APP_CONFIG && window.APP_CONFIG.razorpay.key;
       if (!key) throw new Error('Razorpay is not configured. Add your Razorpay Key ID in js/app-config.js');
-      const order = await API.razorpayOrder(newReceipt);
+      const order = await API.razorpayOrder(newReceipt.id);
       const Razorpay = await loadRazorpay();
       return new Promise((resolve, reject) => {
         const options = razorpayOptions(key, order, newReceipt.total);
