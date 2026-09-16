@@ -7,6 +7,23 @@
   },
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/index.js" },
+    { "source": "/activity.html", "destination": "/frontend/activity.html" },
+    { "source": "/cash-counter.html", "destination": "/frontend/cash-counter.html" },
+    { "source": "/categories.html", "destination": "/frontend/categories.html" },
+    { "source": "/customers.html", "destination": "/frontend/customers.html" },
+    { "source": "/dashboard.html", "destination": "/frontend/dashboard.html" },
+    { "source": "/expenses.html", "destination": "/frontend/expenses.html" },
+    { "source": "/exit-check.html", "destination": "/frontend/exit-check.html" },
+    { "source": "/login.html", "destination": "/frontend/login.html" },
+    { "source": "/pos.html", "destination": "/frontend/pos.html" },
+    { "source": "/products.html", "destination": "/frontend/products.html" },
+    { "source": "/purchase.html", "destination": "/frontend/purchase.html" },
+    { "source": "/reports.html", "destination": "/frontend/reports.html" },
+    { "source": "/sales.html", "destination": "/frontend/sales.html" },
+    { "source": "/settings.html", "destination": "/frontend/settings.html" },
+    { "source": "/stock.html", "destination": "/frontend/stock.html" },
+    { "source": "/suppliers.html", "destination": "/frontend/suppliers.html" },
+    { "source": "/users.html", "destination": "/frontend/users.html" },
     { "source": "/", "destination": "/frontend/index.html" }
   ]
 }

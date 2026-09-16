@@ -1,7 +1,8 @@
 (function () {
   'use strict';
 
-  const base = location.port === '3000' ? '' : 'http://127.0.0.1:3000';
+  const isLocalDev = ['localhost', '127.0.0.1'].includes(location.hostname) && location.port !== '3000';
+  const base = isLocalDev ? 'http://127.0.0.1:3000' : '';
 
   async function request(path, options = {}) {
     const response = await fetch(`${base}${path}`, {
