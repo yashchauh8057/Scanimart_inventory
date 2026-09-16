@@ -303,6 +303,7 @@
           if (!verified) { elements.payBtn.disabled = false; return; }
           cart = []; renderCart();
           showSuccess(receipt, verified.razorpayPaymentId || verified.id);
+          showExit();
         }
       } catch (error) {
         toast(error.message || 'Payment failed', 'error');
