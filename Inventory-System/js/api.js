@@ -10,7 +10,9 @@
     });
     if (!response.ok) {
       const body = await response.json().catch(() => ({}));
-      throw new Error(body.error || `Request failed (${response.status})`);
+      const error = new Error(body.error || `Request failed (${response.status})`);
+      error.status = response.status;
+      throw error;
     }
     return response.json();
   }
@@ -21,6 +23,7 @@
     create: (collection, data) => request(`/api/${collection}`, { method: 'POST', body: JSON.stringify(data) }),
     update: (collection, id, data) => request(`/api/${collection}/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     remove: (collection, id) => request(`/api/${collection}/${id}`, { method: 'DELETE' }),
+    generateProductQrs: () => request('/api/products/generate-qrs', { method: 'POST' }),
     storeCheckout: data => request(`/api/store/checkout`, { method: 'POST', body: JSON.stringify(data) }),
     storeReceipt: id => request(`/api/store/receipt/${encodeURIComponent(id)}`),
     storeCollectCash: id => request(`/api/store/receipt/${encodeURIComponent(id)}/collect-cash`, { method: 'POST' }),
@@ -30,7 +33,8 @@
     authLogin: data => request(`/api/auth/login`, { method: 'POST', body: JSON.stringify(data) })
   };
 
-  const money = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+  const moneyFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+  const money = value => moneyFormatter.format(Number(value) || 0);
   const text = value => String(value ?? '').replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]);
   const badge = status => ({ Active: 'success', Inactive: 'warning', Blocked: 'danger', Paid: 'success', Pending: 'warning', Failed: 'danger', Received: 'success', Processing: 'warning', Overdue: 'danger', 'In Stock': 'success', 'Low Stock': 'warning', 'Out Of Stock': 'danger', Delivered: 'success', Cancelled: 'danger' })[status] || 'warning';
 

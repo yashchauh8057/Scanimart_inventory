@@ -5,18 +5,37 @@ window.StoreScanner = (() => {
 
   let reader = null;
 
+  function cameraError() {
+    if (!window.isSecureContext && !['localhost', '127.0.0.1'].includes(location.hostname)) {
+      return new Error('Camera access requires HTTPS on this LAN address. Use the manual receipt ID field or open the app through HTTPS.');
+    }
+    return new Error('Camera could not be opened. Allow camera permission and try again, or enter the receipt ID manually.');
+  }
+
   async function start(containerId, onScan, onError) {
     await stop();
     if (typeof window.Html5Qrcode === 'undefined') throw new Error('QR scanner library not loaded.');
     const element = document.getElementById(containerId);
     if (!element) throw new Error('Scanner container not found.');
+    if (!window.isSecureContext && !['localhost', '127.0.0.1'].includes(location.hostname)) {
+      const error = cameraError();
+      onError?.(error);
+      throw error;
+    }
     reader = new Html5Qrcode(containerId);
-    await reader.start(
-      { facingMode: 'environment' },
-      { fps: 10, qrbox: { width: 240, height: 240 } },
-      decodedText => { stop(); onScan(decodedText); },
-      () => { /* frame error ignored */ }
-    );
+    try {
+      await reader.start(
+        { facingMode: 'environment' },
+        { fps: 10, qrbox: { width: 240, height: 240 } },
+        decodedText => { stop(); onScan(decodedText); },
+        () => { /* frame error ignored */ }
+      );
+    } catch (error) {
+      const friendlyError = cameraError();
+      onError?.(friendlyError);
+      await stop();
+      throw error;
+    }
   }
 
   async function stop() {

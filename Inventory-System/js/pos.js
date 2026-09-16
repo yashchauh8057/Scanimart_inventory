@@ -174,10 +174,27 @@
       try {
         await window.StoreScanner.start('qrReader', async decoded => {
           elements.scanOverlay.hidden = true;
-          const code = String(decoded).trim().toUpperCase();
-          const product = products.find(p => String(p.sku).toUpperCase() === code);
+          const rawCode = String(decoded).trim();
+          const parsed = window.StoreScanner.parse(rawCode);
+          const code = parsed?.type === 'PRODUCT'
+            ? parsed.receiptId.trim().toUpperCase()
+            : rawCode.toUpperCase();
+          let product = products.find(p =>
+            String(p.sku || '').toUpperCase() === code ||
+            String(p.id || '').toUpperCase() === code ||
+            String(p.qrValue || '').toUpperCase() === rawCode.toUpperCase()
+          );
+
+          // Refresh from Firebase once if the product was added after POS loaded.
+          if (!product) {
+            try {
+              products = await API.list('products');
+              renderChips();
+              product = products.find(p => String(p.sku || '').toUpperCase() === code || String(p.id || '').toUpperCase() === code);
+            } catch { /* show the not-found message below */ }
+          }
           if (product) { addToCart(product); toast(`${product.emoji || ''} ${product.name} added`); }
-          else toast(`Product "${decoded}" not found`, 'error');
+          else toast(`Product QR "${rawCode}" not found in Firebase`, 'error');
         }, () => {});
       } catch (error) {
         elements.scanOverlay.hidden = true;

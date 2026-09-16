@@ -12,6 +12,9 @@
     const qrTarget = document.getElementById('qrcode');
     const qrName = qrModal && qrModal.querySelector('h3');
     const qrSku = qrModal && qrModal.querySelector('p');
+    const qrGalleryModal = document.getElementById('qrGalleryModal');
+    const qrGallery = document.getElementById('qrGallery');
+    const generateQrsButton = document.getElementById('generateProductQrsBtn');
     const categoryFilter = document.querySelector('.filter-container select');
     let records = [];
     let editTarget = null;
@@ -26,6 +29,24 @@
       if (stock <= 0) return 'Out Of Stock';
       if (stock <= Number(product.reorderLevel || 10)) return 'Low Stock';
       return product.status === 'Inactive' ? 'Inactive' : 'Active';
+    };
+
+    const qrValueOf = product => product.qrValue || `SCANIMART|PRODUCT|${product.sku || product.id}`;
+
+    const renderQrGallery = products => {
+      if (!qrGallery) return;
+      qrGallery.innerHTML = products.map((product, index) => `
+        <article class="qr-gallery-card">
+          <strong>${text(product.name)}</strong>
+          <small>SKU: ${text(product.sku || product.id)}</small>
+          <div class="qr-gallery-preview" id="qr-gallery-${index}"></div>
+          <button class="secondary-btn" type="button" data-print-qr="${index}"><i class="fa-solid fa-print"></i> Print QR</button>
+        </article>
+      `).join('');
+      products.forEach((product, index) => {
+        const target = document.getElementById(`qr-gallery-${index}`);
+        if (target) window.InventoryQR?.(target, qrValueOf(product));
+      });
     };
 
     const render = () => {
@@ -119,7 +140,7 @@
       }
     });
 
-    tbody && tbody.addEventListener('click', event => {
+    tbody && tbody.addEventListener('click', async event => {
       const button = event.target.closest('button.action-btn');
       if (!button) return;
       const row = button.closest('tr');
@@ -129,12 +150,55 @@
         editTarget = product;
         fillForm(editForm, product);
       } else if (button.dataset.action === 'qr') {
+        const qrValue = qrValueOf(product);
+        if (!product.qrValue) {
+          try {
+            await API.update('products', product.id, { qrValue, qrGeneratedAt: new Date().toISOString() });
+            product.qrValue = qrValue;
+          } catch (error) {
+            if (window.InventoryApp) window.InventoryApp.toast(error.message, 'error');
+          }
+        }
         if (qrName) qrName.textContent = product.name;
         if (qrSku) qrSku.textContent = `SKU : ${product.sku || product.id}`;
-        if (window.InventoryQR && qrTarget) window.InventoryQR(qrTarget, `${product.sku || product.id}|${product.name}`);
+        if (window.InventoryQR && qrTarget) window.InventoryQR(qrTarget, qrValue);
+        if (window.InventoryApp && qrModal) window.InventoryApp.openModal(qrModal);
       } else if (button.dataset.action === 'delete') {
         deleteTarget = product;
       }
+    });
+
+    if (generateQrsButton) generateQrsButton.addEventListener('click', async () => {
+      generateQrsButton.disabled = true;
+      try {
+        let result;
+        try {
+          result = await API.generateProductQrs();
+        } catch (error) {
+          if (error.status !== 404) throw error;
+          const generatedAt = new Date().toISOString();
+          const generated = await Promise.all(records.map(async product => {
+            const qrValue = qrValueOf(product);
+            await API.update('products', product.id, { qrValue, qrGeneratedAt: generatedAt });
+            return { ...product, qrValue, qrGeneratedAt: generatedAt };
+          }));
+          result = { count: generated.length, products: generated };
+        }
+        records = result.products || [];
+        render();
+        renderQrGallery(records);
+        if (window.InventoryApp && qrGalleryModal) window.InventoryApp.openModal(qrGalleryModal);
+        if (window.InventoryApp) window.InventoryApp.toast(`${result.count} product QR codes saved to Firebase.`);
+      } catch (error) {
+        if (window.InventoryApp) window.InventoryApp.toast(error.message, 'error');
+      } finally {
+        generateQrsButton.disabled = false;
+      }
+    });
+
+    qrGallery && qrGallery.addEventListener('click', event => {
+      const button = event.target.closest('[data-print-qr]');
+      if (button) window.print();
     });
 
     if (deleteModal) deleteModal.addEventListener('click', async event => {

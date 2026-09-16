@@ -15,7 +15,8 @@
       blockedState: document.getElementById('blockedState'),
       blockedReason: document.getElementById('blockedReason'),
       nextBtn: document.getElementById('nextBtn'),
-      nextBtn2: document.getElementById('nextBtn2')
+      nextBtn2: document.getElementById('nextBtn2'),
+      scannerStatus: document.getElementById('scannerStatus')
     };
 
     elements.userName.textContent = session.user;
@@ -33,8 +34,13 @@
       elements.blockedState.hidden = true;
       elements.codeInput.value = '';
       try {
-        await window.StoreScanner.start('qrReader', handleScan, () => {});
-      } catch { /* camera unavailable - manual entry only */ }
+        if (elements.scannerStatus) elements.scannerStatus.textContent = '';
+        await window.StoreScanner.start('qrReader', handleScan, error => {
+          if (elements.scannerStatus) elements.scannerStatus.textContent = error.message;
+        });
+      } catch (error) {
+        if (elements.scannerStatus) elements.scannerStatus.textContent = error.message;
+      }
     };
 
     const handleScan = payload => {

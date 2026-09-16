@@ -94,6 +94,7 @@ input, select { font: inherit; }
   background: rgba(0, 0, 0, .55); color: #fff; font-size: 12px;
   padding: 6px 10px; text-align: center;
 }
+.scanner-status { color: var(--danger); font-size: 13px; margin-top: 10px; text-align: center; }
 
 /* Manual code entry */
 .code-entry { display: flex; gap: 8px; margin-top: 12px; }
@@ -204,3 +205,19 @@ input, select { font: inherit; }
   padding: 16px;
 }
 .scanner-overlay > .card { width: 100%; max-width: 420px; }
+
+@media (max-width: 600px) {
+  .store-header { padding: 10px 12px; }
+  .store-header .brand { min-width: 0; font-size: 16px; }
+  .store-header .brand i { font-size: 19px; }
+  .store-header .user { max-width: 48%; }
+  .store-header .user span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .store-container { width: 100%; padding: 12px; padding-bottom: 28px; }
+  .card { padding: 14px; margin-bottom: 12px; }
+  .card h2 { font-size: 16px; }
+  #qrReader { min-height: 220px; }
+  .code-entry { flex-direction: column; }
+  .code-entry .btn { width: 100%; }
+  .receipt-list li { align-items: flex-start; font-size: 13px; }
+  .total-row.grand { font-size: 17px; }
+}

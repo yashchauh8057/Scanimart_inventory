@@ -55,6 +55,14 @@
     font-size:30px;
     color:#4f46e5;
     }
+
+    .sidebar .logo img{
+    width:42px;
+    height:42px;
+    object-fit:cover;
+    border-radius:10px;
+    background:#fff;
+    }
     
     .menu{
     padding:20px 15px;

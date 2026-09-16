@@ -429,6 +429,14 @@ margin:auto;
     .logo i{
     font-size:30px;
     }
+
+    .logo img{
+    width:42px;
+    height:42px;
+    object-fit:cover;
+    border-radius:10px;
+    background:#fff;
+    }
     
     /*==============================
      MENU
@@ -1164,6 +1172,13 @@ color:#fff;
     align-items:center;
     justify-content:center;
     z-index:10000;
+    }
+
+    .loader.is-hidden{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:opacity .35s ease, visibility .35s ease;
     }
     
     .spinner{
@@ -2104,6 +2119,45 @@ color:#fff;
     .qr-preview img,
     .qr-preview canvas{
     max-width:100%;
+    }
+
+    .qr-gallery-modal{
+    max-width:1100px;
+    max-height:90vh;
+    overflow:auto;
+    }
+
+    .qr-gallery-status{
+    color:var(--gray);
+    margin:0 0 20px;
+    }
+
+    .qr-gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:18px;
+    }
+
+    .qr-gallery-card{
+    padding:16px;
+    border:1px solid var(--border);
+    border-radius:14px;
+    background:var(--card);
+    text-align:center;
+    }
+
+    .qr-gallery-preview{
+    min-height:180px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:10px 0;
+    }
+
+    .qr-gallery-preview canvas,
+    .qr-gallery-preview img{
+    max-width:180px;
+    height:auto;
     }
     
     .scan-box{

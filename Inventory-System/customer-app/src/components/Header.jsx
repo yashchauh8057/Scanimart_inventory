@@ -3,6 +3,7 @@ import { QrCode, Bell, LogOut, User, Tags, Truck, ChevronDown } from 'lucide-rea
 import { Avatar, AvatarFallback } from '../components/ui/avatar';
 import { Button } from '../components/ui/button';
 import { useAuth } from '../lib/auth';
+import logo from '../assets/scanimart-logo.png';
 
 export default function Header() {
   const { session, signOut } = useAuth();
@@ -26,8 +27,8 @@ export default function Header() {
     <header className="sticky top-4 z-40 animate-in px-4 sm:px-6 lg:px-8">
       <div className="glass w-full px-4 py-3.5 rounded-2xl flex items-center justify-between gap-3 shadow-[0_8px_32px_-8px_rgba(91,33,182,.15)]">
         <div className="flex items-center gap-3">
-          <div className="relative grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-primary via-violet-600 to-accent text-white shadow-[0_8px_24px_-8px_rgba(91,33,182,.5)]">
-            <QrCode size={20} />
+          <div className="relative h-10 w-10 overflow-hidden rounded-xl bg-white shadow-[0_8px_24px_-8px_rgba(91,33,182,.5)]">
+            <img src={logo} alt="Scanimart logo" className="h-full w-full object-cover" />
             <span className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full bg-emerald-500 border-2 border-white" />
           </div>
           <div>

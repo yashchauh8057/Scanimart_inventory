@@ -4,7 +4,7 @@ import { api } from './api';
 const KEY = 'scanimartSession';
 
 const ROLES = {
-  admin: '/dashboard',
+  admin: 'http://127.0.0.1:5500/frontend/dashboard.html',
   user: '/checkout',
   staff: '/cash-counter',
   security: '/exit-check'

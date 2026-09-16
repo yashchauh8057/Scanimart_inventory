@@ -4,6 +4,7 @@ import { LayoutDashboard, Package, Tag, Users, Truck, ShoppingCart, ShoppingBag,
 import { Avatar, AvatarFallback } from '../components/ui/avatar';
 import { Button } from '../components/ui/button';
 import { useAuth } from '../lib/auth';
+import logo from '../assets/scanimart-logo.png';
 
 const NAV_ITEMS = [
   { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -35,8 +36,8 @@ export default function AdminLayout() {
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between h-16 px-4 border-b border-white/50">
             <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-primary via-violet-600 to-accent text-white shadow-[0_8px_24px_-8px_rgba(91,33,182,.5)]">
-                <Shield size={20} />
+              <div className="h-10 w-10 overflow-hidden rounded-xl bg-white shadow-[0_8px_24px_-8px_rgba(91,33,182,.5)]">
+                <img src={logo} alt="Scanimart logo" className="h-full w-full object-cover" />
               </div>
               <span className="font-display text-xl font-extrabold bg-gradient-to-r from-primary to-violet-600 bg-clip-text text-transparent">Scanimart</span>
             </div>

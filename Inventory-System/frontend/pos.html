@@ -19,12 +19,19 @@
         <div class="blob b3"></div>
     </div>
 
+    <button class="chat-toggle" id="chatToggle" aria-label="Open Scanimart assistant"><i class="fa-solid fa-comments"></i></button>
+    <aside class="chat-box" id="chatBox" aria-label="Scanimart assistant">
+        <div class="chat-head"><div><strong>Scanimart Assistant</strong><small>Product and checkout help</small></div><button id="chatClose" aria-label="Close chat">×</button></div>
+        <div class="chat-messages" id="chatMessages"><div class="chat-message assistant">Hi! Ask me about products, prices, stock, scanning, payment, or exit QR.</div></div>
+        <form class="chat-form" id="chatForm"><input id="chatInput" placeholder="Ask Scanimart..." autocomplete="off"><button aria-label="Send message"><i class="fa-solid fa-paper-plane"></i></button></form>
+    </aside>
+
     <div class="pos-shell">
 
         <!-- ============ HEADER ============ -->
         <header class="pos-header">
             <div class="logo">
-                <div class="logo-ic"><i class="fa-solid fa-qrcode"></i></div>
+                <img src="../assets/scanimart-logo.png" alt="Scanimart logo">
                 Scanimart
             </div>
             <div class="header-right">
@@ -257,11 +264,12 @@
 
     <script src="../libraries/qrcode.min.js"></script>
     <script src="../libraries/html5-qrcode.min.js"></script>
-    <script src="../js/app-config.js"></script>
+    <script src="../js/app-config.js?v=20260916"></script>
     <script src="../js/auth.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/scanner.js"></script>
     <script src="../js/pos.js"></script>
+    <script src="../js/chat.js"></script>
 
 </body>
 

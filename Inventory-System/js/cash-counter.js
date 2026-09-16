@@ -23,7 +23,8 @@
       confirmBtn: document.getElementById('confirmBtn'),
       successState: document.getElementById('successState'),
       successReceiptId: document.getElementById('successReceiptId'),
-      nextBtn: document.getElementById('nextBtn')
+      nextBtn: document.getElementById('nextBtn'),
+      scannerStatus: document.getElementById('scannerStatus')
     };
 
     let current = null;
@@ -50,8 +51,13 @@
       elements.successState.hidden = true;
       elements.codeInput.value = '';
       try {
-        await window.StoreScanner.start('qrReader', handleScan, () => {});
-      } catch { /* camera unavailable - manual entry only */ }
+        if (elements.scannerStatus) elements.scannerStatus.textContent = '';
+        await window.StoreScanner.start('qrReader', handleScan, error => {
+          if (elements.scannerStatus) elements.scannerStatus.textContent = error.message;
+        });
+      } catch (error) {
+        if (elements.scannerStatus) elements.scannerStatus.textContent = error.message;
+      }
     };
 
     const handleScan = payload => {

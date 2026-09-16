@@ -6,6 +6,7 @@ import { Card } from '../components/ui/card';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { useAuth } from '../lib/auth';
+import logo from '../assets/scanimart-logo.png';
 
 const CREDENTIALS = [
   { role: 'Admin', email: 'admin@scanimart.com', password: 'admin123', color: 'from-rose-500 to-orange-500' },
@@ -54,7 +55,7 @@ export default function Login() {
         <Card variant="strong" className="p-8">
           <div className="mb-8 text-center">
             <div className="relative mx-auto mb-5 grid h-18 w-18 place-items-center rounded-3xl bg-gradient-to-br from-primary via-violet-600 to-accent text-white shadow-[0_20px_50px_-16px_rgba(91,33,182,.5)]">
-              <QrCode size={34} />
+              <img src={logo} alt="Scanimart logo" className="h-16 w-16 rounded-2xl bg-white object-cover shadow-lg" />
               <span className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 border-3 border-white animate-ping" />
             </div>
             <h1 className="text-3xl font-extrabold bg-gradient-to-r from-primary to-violet-600 bg-clip-text text-transparent">Scanimart</h1>

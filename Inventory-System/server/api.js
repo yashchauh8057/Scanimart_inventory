@@ -55,6 +55,29 @@ router.get('/:collection', async (request, response, next) => {
   } catch (error) { next(error); }
 });
 
+router.post('/products/generate-qrs', async (request, response, next) => {
+  try {
+    const products = await list('products');
+    const generatedAt = new Date().toISOString();
+    const updates = {};
+    const generated = products.map(product => {
+      const sku = String(product.sku || product.id);
+      const qrValue = `SCANIMART|PRODUCT|${sku}`;
+      updates[`${product.id}/qrValue`] = qrValue;
+      updates[`${product.id}/qrGeneratedAt`] = generatedAt;
+      return { ...product, qrValue, qrGeneratedAt: generatedAt };
+    });
+
+    if (Object.keys(updates).length) await ref('products').update(updates);
+    await ref('activities').push({
+      message: `QR codes generated for ${generated.length} products`,
+      icon: 'fa-qrcode',
+      createdAt: generatedAt
+    });
+    response.json({ count: generated.length, products: generated });
+  } catch (error) { next(error); }
+});
+
 router.post('/:collection', async (request, response, next) => {
   try {
     const { collection } = request.params;
