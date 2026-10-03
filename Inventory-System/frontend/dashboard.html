@@ -22,9 +22,29 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <script>
+        try {
+            var t = localStorage.getItem('inventoryTheme') || localStorage.getItem('scanimart-theme');
+            if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.dataset.theme = 'dark';
+            }
+        } catch (e) {}
+    </script>
+    <style>
+        html[data-theme="dark"] body { background: #0f172a; color: #fff; }
+    </style>
+
 </head>
 
 <body>
+    <script>
+        try {
+            var t = localStorage.getItem('inventoryTheme') || localStorage.getItem('scanimart-theme');
+            if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.body.classList.add('dark', 'dark-theme');
+            }
+        } catch (e) {}
+    </script>
 
 <div class="wrapper">
 
@@ -262,7 +282,7 @@
 
         </button>
 
-        <button class="icon">
+        <button class="icon" id="themeToggle" title="Switch to dark mode" aria-label="Switch to dark mode">
 
             <i class="fa-regular fa-moon"></i>
 
@@ -270,7 +290,7 @@
 
         <div class="profile">
 
-            <img src="../assets/images/user.png" alt="User">
+            <img src="../assets/images/user.png" alt="Admin">
 
             <div>
 

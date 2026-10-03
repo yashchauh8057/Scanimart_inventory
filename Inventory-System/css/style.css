@@ -97,7 +97,8 @@ list-style:none;
  DARK MODE
 ==============================*/
 
-body.dark{
+body.dark,
+body.dark-theme{
 
 --bg:#0f172a;
 
@@ -2508,40 +2509,60 @@ color:#fff;
     ==============================*/
     
     body.dark .card,
+    body.dark-theme .card,
     body.dark .table-card,
+    body.dark-theme .table-card,
     body.dark .chart-card,
+    body.dark-theme .chart-card,
     body.dark .modal-content,
+    body.dark-theme .modal-content,
     body.dark .feature-card,
+    body.dark-theme .feature-card,
     body.dark .price-card,
+    body.dark-theme .price-card,
     body.dark .testimonial,
+    body.dark-theme .testimonial,
     body.dark .customer-card,
+    body.dark-theme .customer-card,
     body.dark .summary-card,
+    body.dark-theme .summary-card,
     body.dark .checkout-card,
+    body.dark-theme .checkout-card,
     body.dark .payment-card,
+    body.dark-theme .payment-card,
     body.dark .notification-item,
+    body.dark-theme .notification-item,
     body.dark .timeline-item,
-    body.dark .faq-item{
+    body.dark-theme .timeline-item,
+    body.dark .faq-item,
+    body.dark-theme .faq-item{
     background:#1e293b;
     color:#fff;
     }
     
     body.dark input,
+    body.dark-theme input,
     body.dark textarea,
-    body.dark select{
+    body.dark-theme textarea,
+    body.dark select,
+    body.dark-theme select{
     background:#0f172a;
     color:#fff;
     border-color:#334155;
     }
     
-    body.dark .header{
+    body.dark .header,
+    body.dark-theme .header{
     background:rgba(15,23,42,.95);
     }
     
-    body.dark .footer{
+    body.dark .footer,
+    body.dark-theme .footer{
     background:#020617;
     }
     
-    body.dark .hero{
+    body.dark .hero,
+    body.dark-theme .hero{
     background:linear-gradient(135deg,#0f172a,#1e293b);
     }
     

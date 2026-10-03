@@ -127,15 +127,41 @@
   }
 
   function installTheme() {
-    const saved = localStorage.getItem('inventoryTheme');
-    if (saved === 'dark') document.body.classList.add('dark-theme');
-    $$('.icon').forEach(button => {
-      if (!$('.fa-moon, .fa-sun', button)) return;
-      button.addEventListener('click', () => {
-        const isDark = document.body.classList.toggle('dark-theme');
-        localStorage.setItem('inventoryTheme', isDark ? 'dark' : 'light');
+    const applyTheme = (isDark) => {
+      document.body.classList.toggle('dark', isDark);
+      document.body.classList.toggle('dark-theme', isDark);
+      document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+      $$('#themeToggle i, .icon i.fa-moon, .icon i.fa-sun').forEach(icon => {
+        icon.classList.remove('fa-moon', 'fa-sun');
+        icon.classList.add(isDark ? 'fa-sun' : 'fa-moon');
       });
-    });
+      const toggle = $('#themeToggle');
+      if (toggle) {
+        toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        toggle.title = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+      }
+    };
+    const saved = localStorage.getItem('inventoryTheme') || localStorage.getItem('scanimart-theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(saved ? saved === 'dark' : prefersDark);
+    const toggleTheme = () => {
+      const isDark = !(document.body.classList.contains('dark') || document.body.classList.contains('dark-theme'));
+      applyTheme(isDark);
+      localStorage.setItem('inventoryTheme', isDark ? 'dark' : 'light');
+      localStorage.setItem('scanimart-theme', isDark ? 'dark' : 'light');
+      document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: isDark ? 'dark' : 'light' } }));
+      return isDark;
+    };
+    window.toggleTheme = toggleTheme;
+    const bound = new Set();
+    const bindButtons = () => {
+      $$('#themeToggle, .icon').forEach(button => {
+        if (!$('.fa-moon, .fa-sun', button) || bound.has(button)) return;
+        bound.add(button);
+        button.addEventListener('click', toggleTheme);
+      });
+    };
+    bindButtons();
   }
 
   function installLogin() {

@@ -31,7 +31,9 @@
     storeVerifyExit: id => request(`/api/store/receipt/${encodeURIComponent(id)}/verify-exit`, { method: 'POST' }),
     razorpayOrder: receiptId => request(`/api/store/razorpay/order`, { method: 'POST', body: JSON.stringify({ receiptId }) }),
     razorpayVerify: data => request(`/api/store/razorpay/verify`, { method: 'POST', body: JSON.stringify(data) }),
-    authLogin: data => request(`/api/auth/login`, { method: 'POST', body: JSON.stringify(data) })
+    authLogin: data => request(`/api/auth/login`, { method: 'POST', body: JSON.stringify(data) }),
+    authGoogle: idToken => request(`/api/auth/google`, { method: 'POST', body: JSON.stringify({ idToken }) }),
+    googleConfig: () => request(`/api/auth/google-config`)
   };
 
   const moneyFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });

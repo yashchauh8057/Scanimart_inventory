@@ -52,6 +52,16 @@
     });
   }
 
+  async function signInWithGoogle(idToken) {
+    const account = await window.API.authGoogle(idToken);
+    return saveSession({
+      user: account.name,
+      email: account.email,
+      uid: account.role,
+      role: account.role
+    });
+  }
+
   function logout() {
     clearSession();
     window.location.href = 'login.html';
@@ -66,6 +76,7 @@
     requireRole,
     roleHome,
     homePage,
-    signInWithPassword
+    signInWithPassword,
+    signInWithGoogle
   };
 })();
