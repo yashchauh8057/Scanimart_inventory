@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanimart | Login</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/store.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-left">
+
+        <div class="brand">
+
+            <div class="logo">
+                <img src="../assets/scanimart-logo.png" alt="Scanimart logo">
+            </div>
+
+            <h1>Scanimart</h1>
+
+            <p>
+                Smart Store – Scan, Pay &amp; Go
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="login-right">
+
+        <div class="login-card">
+
+            <h2>Welcome</h2>
+
+            <p>Sign in to your panel</p>
+
+            <div id="signedInBar" class="signed-in-bar" hidden>
+
+                <p>Signed in as <strong id="signedInName"></strong></p>
+
+                <div class="signed-in-actions">
+                    <button type="button" class="login-btn" id="continueBtn">Continue</button>
+                    <button type="button" class="login-btn ghost-btn" id="signOutBtn">Sign out</button>
+                </div>
+
+            </div>
+
+            <form id="loginForm" novalidate>
+
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <div class="input-box">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="loginEmail" name="email" placeholder="you@example.com"
+                            autocomplete="username" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="input-box">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="loginPassword" name="password" placeholder="Enter your password"
+                            autocomplete="current-password" required>
+                    </div>
+                </div>
+
+                <button class="login-btn" type="submit" id="signInBtn">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Sign In
+                </button>
+
+                <div class="divider"><span>or</span></div>
+
+                <button class="login-btn google-btn" type="button" id="googleSignInBtn" disabled title="Loading Google sign-in...">
+                    <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.8 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.7-.2-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.8 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C36.9 39.2 44 34 44 24c0-1.3-.1-2.7-.2-3.9z"/></svg>
+                    <span id="googleBtnText">Continue with Google</span>
+                </button>
+
+                <p id="loginError" class="login-error" hidden></p>
+
+            </form>
+
+            <div class="cred-hint">
+
+                <p class="cred-title">Demo credentials</p>
+
+                <ul>
+                    <li><span>Admin</span> admin@scanimart.com / admin123</li>
+                    <li><span>Customer</span> user@scanimart.com / user123</li>
+                    <li><span>Cash Counter</span> staff@scanimart.com / staff123</li>
+                    <li><span>Security</span> security@scanimart.com / security123</li>
+                </ul>
+
+            </div>
+
+            <div class="bottom-text">
+
+                <p>
+
+                    Scanimart Store System
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="../js/app-config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('loginForm');
+  const emailInput = document.getElementById('loginEmail');
+  const passwordInput = document.getElementById('loginPassword');
+  const button = document.getElementById('signInBtn');
+  const errorBox = document.getElementById('loginError');
+  const signedInBar = document.getElementById('signedInBar');
+  const signedInName = document.getElementById('signedInName');
+  const continueBtn = document.getElementById('continueBtn');
+  const signOutBtn = document.getElementById('signOutBtn');
+
+  const existing = window.AppAuth.getSession();
+  if (existing) {
+    signedInName.textContent = `${existing.user} (${existing.role})`;
+    signedInBar.hidden = false;
+  }
+
+  continueBtn.addEventListener('click', () => {
+    window.location.href = window.AppAuth.roleHome(existing.role);
+  });
+
+  signOutBtn.addEventListener('click', () => {
+    window.AppAuth.clearSession();
+    signedInBar.hidden = true;
+    form.reset();
+  });
+
+  const resetButton = () => {
+    button.disabled = false;
+    button.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+  };
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    errorBox.hidden = true;
+    button.disabled = true;
+    button.textContent = 'Signing in...';
+    try {
+      const session = await window.AppAuth.signInWithPassword(emailInput.value, passwordInput.value);
+      window.location.href = window.AppAuth.roleHome(session.role);
+    } catch (error) {
+      errorBox.textContent = error.message || 'Sign-in failed.';
+      errorBox.hidden = false;
+      resetButton();
+    }
+  });
+
+  // ----- Google sign-in (Google Identity Services + backend verify) -----
+  const googleBtn = document.getElementById('googleSignInBtn');
+  const googleBtnText = document.getElementById('googleBtnText');
+  let googleClientId = '';
+
+  const showGoogleError = (message) => {
+    errorBox.textContent = message;
+    errorBox.hidden = false;
+  };
+
+  const handleGoogleCredential = async (response) => {
+    errorBox.hidden = true;
+    googleBtn.disabled = true;
+    googleBtnText.textContent = 'Verifying...';
+    try {
+      const session = await window.AppAuth.signInWithGoogle(response.credential);
+      window.location.href = window.AppAuth.roleHome(session.role);
+    } catch (error) {
+      showGoogleError(error.message || 'Google sign-in failed.');
+      googleBtn.disabled = false;
+      googleBtnText.textContent = 'Continue with Google';
+    }
+  };
+
+  const initGoogle = () => {
+    if (!googleClientId || !window.google || !window.google.accounts || !window.google.accounts.id) return false;
+    window.google.accounts.id.initialize({ client_id: googleClientId, callback: handleGoogleCredential, auto_select: false });
+    googleBtn.disabled = false;
+    googleBtn.title = 'Sign in with your test Google account';
+    googleBtn.addEventListener('click', () => {
+      errorBox.hidden = true;
+      try {
+        window.google.accounts.id.prompt(notification => {
+          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            // Fallback: open Google account chooser in a popup via temporary token client.
+            showGoogleError('Choose a Google account in the popup. If nothing opened, allow popups and try again.');
+          }
+        });
+      } catch (error) {
+        showGoogleError('Google sign-in could not start. Check authorized origins in Google Console.');
+      }
+    });
+    return true;
+  };
+
+  window.API.googleConfig().then(config => {
+    googleClientId = (config && config.clientId) || '';
+    if (!googleClientId) {
+      googleBtnText.textContent = 'Google sign-in not configured';
+      return;
+    }
+    if (initGoogle()) return;
+    let tries = 0;
+    const timer = setInterval(() => {
+      tries += 1;
+      if (initGoogle() || tries > 40) clearInterval(timer);
+    }, 250);
+  }).catch(() => {
+    googleBtnText.textContent = 'Google sign-in unavailable';
+  });
+});
+</script>
+
+</body>
+
+</html>
