@@ -213,6 +213,7 @@
         await window.StoreScanner.start('qrReader', async decoded => {
           setScanStatus(`Got it: ${decoded}`);
           elements.scanOverlay.hidden = true;
+          if (navigator.vibrate) navigator.vibrate(80);
           await handleScannedCode(decoded);
         }, error => {
           if (error?.message) setScanStatus(error.message);
@@ -409,6 +410,32 @@
     }));
 
     elements.scanBtn.addEventListener('click', startScanner);
+    const torchBtn = document.getElementById('torchBtn');
+    if (torchBtn) {
+      torchBtn.hidden = false;
+      torchBtn.addEventListener('click', async () => {
+        try {
+          const on = await window.StoreScanner.toggleTorch();
+          torchBtn.classList.toggle('selected', on);
+          toast(on ? 'Torch on' : 'Torch off', 'info');
+        } catch { toast('Torch is not available on this device.', 'error'); }
+      });
+    }
+    const scanFileInput = document.getElementById('scanFileInput');
+    if (scanFileInput) scanFileInput.addEventListener('change', async () => {
+      const file = scanFileInput.files?.[0];
+      scanFileInput.value = '';
+      if (!file) return;
+      try {
+        const decoded = await window.StoreScanner.scanFile(file);
+        elements.scanOverlay.hidden = true;
+        await window.StoreScanner.stop();
+        if (navigator.vibrate) navigator.vibrate(80);
+        await handleScannedCode(decoded);
+      } catch {
+        toast('Could not read a code from that photo. Try a clearer close-up.', 'error');
+      }
+    });
     const manualAddBtn = document.getElementById('manualAddBtn');
     if (manualAddBtn) manualAddBtn.addEventListener('click', async () => {
       const value = document.getElementById('manualCode')?.value || '';
