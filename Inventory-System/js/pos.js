@@ -170,7 +170,9 @@
     /* ---------------- scanner ---------------- */
     const handleScannedCode = async rawText => {
       const rawCode = String(rawText || '').trim();
-      if (!rawCode) return;
+      if (!rawCode) { toast('Nothing was scanned. Try again.', 'error'); return; }
+      toast(`Scanned: ${rawCode}`, 'info');
+      try {
       const parsed = window.StoreScanner.parse(rawCode);
       const code = parsed?.type === 'PRODUCT'
         ? parsed.receiptId.trim().toUpperCase()
@@ -191,18 +193,31 @@
       }
       if (product) { addToCart(product); toast(`${product.emoji || ''} ${product.name} added`); }
       else toast(`Product code "${rawCode}" not found. Check the SKU in Admin → Products.`, 'error');
+      } catch (error) {
+        toast(error?.message || 'Scan failed. Try again.', 'error');
+      }
+    };
+
+    const setScanStatus = text => {
+      const el = document.getElementById('scanStatus');
+      if (el) el.textContent = text;
     };
 
     const startScanner = async () => {
       if (!elements.scanOverlay) return;
       elements.scanOverlay.hidden = false;
+      setScanStatus('Starting camera…');
       const manual = document.getElementById('manualCode');
       if (manual) { manual.value = ''; setTimeout(() => manual.focus({ preventScroll: true }), 300); }
       try {
         await window.StoreScanner.start('qrReader', async decoded => {
+          setScanStatus(`Got it: ${decoded}`);
           elements.scanOverlay.hidden = true;
           await handleScannedCode(decoded);
-        }, () => {});
+        }, error => {
+          if (error?.message) setScanStatus(error.message);
+        });
+        setScanStatus('Point camera at a product QR or barcode…');
       } catch (error) {
         elements.scanOverlay.hidden = true;
         toast(error.message || 'Unable to start camera', 'error');
