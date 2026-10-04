@@ -127,6 +127,7 @@
 
     const renderCart = () => {
       const count = cart.reduce((s, i) => s + i.qty, 0);
+      try { localStorage.setItem('scanimartPosCart', JSON.stringify(cart)); } catch {}
       elements.cartCount.textContent = `${count} item${count === 1 ? '' : 's'}`;
       elements.cartList.innerHTML = cart.length
         ? cart.map(cartItemRow).join('')
@@ -358,6 +359,7 @@
 
     const startNewSession = () => {
       cart = []; receipt = null;
+      try { localStorage.removeItem('scanimartPosCart'); } catch {}
       clearInterval(pollTimer);
       elements.methodSection.hidden = false;
       elements.successScreen.hidden = true;
@@ -477,6 +479,7 @@
 
     /* ---------------- init ---------------- */
     try {
+      try { cart = JSON.parse(localStorage.getItem('scanimartPosCart') || '[]'); } catch { cart = []; }
       products = await API.list('products');
       renderChips();
       renderCart();
