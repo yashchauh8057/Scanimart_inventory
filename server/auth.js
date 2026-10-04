@@ -1,5 +1,6 @@
 const express = require('express');
 const { database } = require('./firebase');
+const cache = require('./cache');
 const { rateLimit } = require('./rate-limit');
 
 const router = express.Router();
@@ -12,6 +13,48 @@ async function findAccountByEmail(email) {
   return Object.values(users).find(
     user => String(user.email || '').toLowerCase() === normalized
   ) || null;
+}
+
+async function findUserKeyByEmail(email) {
+  const normalized = String(email || '').trim().toLowerCase();
+  if (!normalized) return null;
+  const snapshot = await database().ref('users').get();
+  const users = snapshot.val() || {};
+  return Object.keys(users).find(key => String(users[key]?.email || '').trim().toLowerCase() === normalized) || null;
+}
+
+async function recordCustomerAction({ email, name, action, provider, receiptId } = {}) {
+  const key = await findUserKeyByEmail(email);
+  if (!key) return;
+
+  const now = new Date().toISOString();
+  const update = {
+    email: String(email).trim().toLowerCase(),
+    ...(name ? { name } : {}),
+    ...(provider ? { provider } : {}),
+    lastSeenAt: now,
+    lastAction: action,
+    lastActionAt: now,
+    ...(action === 'signed in' ? { lastLogin: now } : {}),
+    ...(receiptId ? { lastReceiptId: receiptId } : {})
+  };
+  const actionRecord = { action, createdAt: now, ...(receiptId ? { receiptId } : {}) };
+
+  await Promise.all([
+    database().ref(`users/${key}`).update(update),
+    database().ref(`users/${key}/actions`).push(actionRecord),
+    database().ref('activities').push({
+      type: 'customer-action',
+      userId: key,
+      name: name || '',
+      email: String(email).trim().toLowerCase(),
+      message: `${name || email} ${action}`,
+      icon: 'fa-user-clock',
+      createdAt: now,
+      ...(receiptId ? { receiptId } : {})
+    })
+  ]);
+  await cache.delByPrefix('collection:users');
 }
 
 function toSession(account) {
@@ -41,7 +84,11 @@ router.post('/login', rateLimit('auth'), async (request, response, next) => {
       return response.status(403).json({ error: 'This account is inactive. Contact the administrator.' });
     }
 
-    response.json(toSession(account));
+    const session = toSession(account);
+    if (session.role === 'user') {
+      await recordCustomerAction({ email: session.email, name: session.name, action: 'signed in', provider: account.provider || 'local' });
+    }
+    response.json(session);
   } catch (error) { next(error); }
 });
 
@@ -68,7 +115,12 @@ router.post('/google', rateLimit('auth'), async (request, response, next) => {
       if (String(account.status || 'Active').toLowerCase() === 'inactive') {
         return response.status(403).json({ error: 'This account is inactive. Contact the administrator.' });
       }
-      return response.json(toSession(account));
+      // Record the live sign-in email + provider for admin customer views.
+      try {
+        await recordCustomerAction({ email: account.email, name: account.name || payload.name, action: 'signed in', provider: account.provider || 'google' });
+        await database().ref(`users/${await findUserKeyByEmail(account.email)}`).update({ lastLogin: new Date().toISOString() });
+      } catch {}
+      return response.json({ ...toSession(account), provider: account.provider || 'google' });
     }
 
     // New Google user -> auto-register as User (customer panel).
@@ -89,17 +141,15 @@ router.post('/google', rateLimit('auth'), async (request, response, next) => {
       role: 'User',
       status: 'Active',
       provider: 'google',
+      lastLogin: new Date().toISOString(),
       createdAt: new Date().toISOString()
     };
     await database().ref(`users/${id}`).set(newAccount);
-    database().ref('activities').push({
-      message: `New customer ${name} registered via Google`,
-      icon: 'fa-user-plus',
-      createdAt: new Date().toISOString()
-    }).catch(() => {});
+    await recordCustomerAction({ email, name, action: 'registered and signed in', provider: 'google' });
 
     response.json(toSession(newAccount));
   } catch (error) { next(error); }
 });
 
+router.recordCustomerAction = recordCustomerAction;
 module.exports = router;

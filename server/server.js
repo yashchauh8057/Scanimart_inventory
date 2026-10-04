@@ -48,6 +48,30 @@ app.get('/api/dashboard/stream', (request, response) => {
   request.on('close', () => root.off('value', sendDashboard));
 });
 
+app.get('/api/users/stream', (request, response) => {
+  response.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    'X-Accel-Buffering': 'no'
+  });
+
+  const sendCustomers = snapshot => {
+    const users = snapshot.val() || {};
+    const customers = Object.entries(users)
+      .filter(([, user]) => String(user?.role || '').toLowerCase() === 'user')
+      .map(([id, user]) => {
+        const { password, actions, ...safeUser } = user || {};
+        return { id, ...safeUser, actionCount: Object.keys(actions || {}).length };
+      });
+    response.write(`data: ${JSON.stringify(customers)}\n\n`);
+  };
+
+  const usersRef = db.ref('users');
+  usersRef.on('value', sendCustomers, error => response.write(`event: error\ndata: ${JSON.stringify({ message: error.message })}\n\n`));
+  request.on('close', () => usersRef.off('value', sendCustomers));
+});
+
 app.use((error, _, response, __) => {
   console.error(error);
   response.status(500).json({ error: error.message || 'Unable to process the request.' });

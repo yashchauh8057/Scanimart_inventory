@@ -101,6 +101,7 @@ export function useListPage({ collection, fetchFn, columns, renderActions, title
 
   return {
     data,
+    setData,
     loading,
     search,
     setSearch,

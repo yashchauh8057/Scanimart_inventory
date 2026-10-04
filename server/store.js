@@ -4,6 +4,7 @@ const https = require('node:https');
 const { database } = require('./firebase');
 const cache = require('./cache');
 const { rateLimit } = require('./rate-limit');
+const { recordCustomerAction } = require('./auth');
 
 const router = express.Router();
 
@@ -120,6 +121,12 @@ router.post('/checkout', rateLimit('store'), async (request, response, next) => 
       saveReceipt(id, receipt),
       ...Object.entries(stockUpdates).map(([productId, stock]) => ref(`products/${productId}/stock`).set(stock))
     ]);
+    await recordCustomerAction({
+      email: receipt.userEmail,
+      name: receipt.user,
+      action: `created receipt ${id}`,
+      receiptId: id
+    });
     await logActivity(`New receipt ${id} created (${paymentMethod}) for ${receipt.user}`, 'fa-receipt');
     response.status(201).json(receipt);
   } catch (error) { next(error); }
@@ -141,6 +148,7 @@ router.post('/receipt/:id/collect-cash', rateLimit('store'), async (request, res
     receipt.paymentStatus = 'paid';
     receipt.cashVerified = true;
     await saveReceipt(request.params.id, receipt);
+    await recordCustomerAction({ email: receipt.userEmail, name: receipt.user, action: `paid receipt ${receipt.id} with cash`, receiptId: receipt.id });
     await logActivity(`Cash collected for receipt ${receipt.id}`, 'fa-money-bill');
     response.json(receipt);
   } catch (error) { next(error); }
@@ -154,6 +162,7 @@ router.post('/receipt/:id/verify-exit', rateLimit('store'), async (request, resp
     if (allowed && !receipt.securityVerified) {
       receipt.securityVerified = true;
       await saveReceipt(request.params.id, receipt);
+      await recordCustomerAction({ email: receipt.userEmail, name: receipt.user, action: `verified exit for receipt ${receipt.id}`, receiptId: receipt.id });
       await logActivity(`Exit verified for receipt ${receipt.id}`, 'fa-shield-halved');
     }
     response.json({ allowed, receipt });
@@ -168,6 +177,7 @@ router.post('/receipt/:id/test-pay', rateLimit('store'), async (request, respons
     receipt.paymentMethod = 'razorpay';
     receipt.razorpayPaymentId = `TEST-${receipt.id}`;
     await saveReceipt(request.params.id, receipt);
+    await recordCustomerAction({ email: receipt.userEmail, name: receipt.user, action: `completed test payment for receipt ${receipt.id}`, receiptId: receipt.id });
     await logActivity(`Test payment marked for receipt ${receipt.id}`, 'fa-flask');
     response.json(receipt);
   } catch (error) { next(error); }
@@ -210,6 +220,7 @@ router.post('/razorpay/verify', rateLimit('store'), async (request, response, ne
     receipt.paymentMethod = 'razorpay';
     receipt.razorpayPaymentId = razorpay_payment_id;
     await saveReceipt(receiptId, receipt);
+    await recordCustomerAction({ email: receipt.userEmail, name: receipt.user, action: `paid receipt ${receipt.id} online`, receiptId: receipt.id });
     await logActivity(`Online payment received for receipt ${receipt.id}`, 'fa-credit-card');
     response.json(receipt);
   } catch (error) { next(error); }

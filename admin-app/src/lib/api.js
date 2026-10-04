@@ -32,6 +32,7 @@ export const api = {
   stock: () => request('/stock'),
   expenses: () => request('/expenses'),
   users: () => request('/users'),
+  usersStream: () => new EventSource('/api/users/stream'),
   orders: () => request('/orders'),
   activities: () => request('/activities'),
 
