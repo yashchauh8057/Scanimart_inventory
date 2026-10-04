@@ -52,6 +52,11 @@ export default function Customers() {
 
   useEffect(() => {
     const stream = api.usersStream();
+    const refreshCustomers = () => {
+      api.users()
+        .then(users => setData(users.filter(u => String(u.role || '').toLowerCase() === 'user')))
+        .catch(() => {});
+    };
     stream.onmessage = event => {
       try {
         setData(JSON.parse(event.data));
@@ -60,7 +65,11 @@ export default function Customers() {
     stream.onerror = () => {
       // EventSource automatically retries; the existing list remains usable while it reconnects.
     };
-    return () => stream.close();
+    const fallbackTimer = window.setInterval(refreshCustomers, 5000);
+    return () => {
+      stream.close();
+      window.clearInterval(fallbackTimer);
+    };
   }, [setData]);
 
   return (

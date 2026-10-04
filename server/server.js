@@ -83,8 +83,9 @@ if (require.main === module) {
   const sslKeyPath = path.resolve(process.cwd(), process.env.SSL_KEY_PATH || './cert/server-key.pem');
   const sslCertPath = path.resolve(process.cwd(), process.env.SSL_CERT_PATH || './cert/server-cert.pem');
   if (fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath)) {
-    https.createServer({ key: fs.readFileSync(sslKeyPath), cert: fs.readFileSync(sslCertPath) }, app)
-      .listen(httpsPort, host, () => console.log(`Scanimart server: https://${publicHost}:${httpsPort}`));
+    const secureServer = https.createServer({ key: fs.readFileSync(sslKeyPath), cert: fs.readFileSync(sslCertPath) }, app);
+    secureServer.on('error', error => console.error(`HTTPS server unavailable on port ${httpsPort}: ${error.message}`));
+    secureServer.listen(httpsPort, host, () => console.log(`Scanimart server: https://${publicHost}:${httpsPort}`));
   }
 }
 
