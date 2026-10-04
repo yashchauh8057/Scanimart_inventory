@@ -1,0 +1,9 @@
+.env
+.env.local
+.env.*.local
+serviceAccountKey.json
+cert/
+node_modules/
+*.log
+.DS_Store
+.vercel

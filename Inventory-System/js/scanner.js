@@ -1,14 +1,18 @@
-// Camera QR/barcode scanner wrapper around html5-qrcode.
+// Camera QR/barcode scanner wrapper.
 // Scanimart QR payloads look like: SCANIMART|STAFF|RCPT0001
 window.StoreScanner = (() => {
   'use strict';
 
-  let reader = null;
+  let reader = null;      // Html5Qrcode fallback
+  let stream = null;      // native getUserMedia stream
+  let video = null;       // native <video>
+  let canvas = null;      // native scan canvas
+  let scanTimer = null;   // native scan loop
   let torchOn = false;
+  let activeMode = null;  // 'native' | 'html5qrcode'
 
-  // Reads QR codes AND common 1D product barcodes (EAN/UPC/Code128/...).
-  // Without formatsToSupport the library only looks for QR codes, so a real
-  // product barcode never decodes and the UI looks "dead".
+  const NATIVE_FORMATS = ['qr_code', 'ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'code_39', 'code_93', 'codabar', 'itf', 'data_matrix'];
+
   const FORMATS = () => {
     const F = window.Html5QrcodeSupportedFormats;
     if (!F) return undefined;
@@ -18,24 +22,15 @@ window.StoreScanner = (() => {
     ].filter(v => v !== undefined);
   };
 
-  // Adaptive scan box: fixed pixel boxes can exceed small phone viewfinders
-  // (then no frame ever decodes on mobile while laptops work fine).
-  function qrbox(viewfinderWidth, viewfinderHeight) {
-    const w = Math.max(200, Math.floor(viewfinderWidth * 0.85));
-    const h = Math.max(120, Math.floor(Math.min(viewfinderHeight * 0.45, 220)));
-    return { width: w, height: h };
-  }
-
   function cameraError() {
     if (!window.isSecureContext && !['localhost', '127.0.0.1'].includes(location.hostname)) {
-      return new Error('Camera access requires HTTPS on this LAN address. Use the manual receipt ID field or open the app through HTTPS.');
+      return new Error('Camera access requires HTTPS. Use the manual code field or upload a photo.');
     }
-    return new Error('Camera could not be opened. Allow camera permission and try again, or enter the receipt ID manually.');
+    return new Error('Camera could not be opened. Allow camera permission and try again, or use manual code entry.');
   }
 
   async function start(containerId, onScan, onError) {
     await stop();
-    if (typeof window.Html5Qrcode === 'undefined') throw new Error('QR scanner library not loaded.');
     const element = document.getElementById(containerId);
     if (!element) throw new Error('Scanner container not found.');
     if (!window.isSecureContext && !['localhost', '127.0.0.1'].includes(location.hostname)) {
@@ -43,12 +38,75 @@ window.StoreScanner = (() => {
       onError?.(error);
       throw error;
     }
+
+    // Prefer the browser's native detector: it is far more reliable on phones.
+    if (typeof window.BarcodeDetector !== 'undefined') {
+      try {
+        await startNative(containerId, onScan);
+        activeMode = 'native';
+        return;
+      } catch (error) {
+        console.warn('Native scanner failed, falling back to Html5Qrcode', error);
+        await stopNative();
+      }
+    }
+
+    await startHtml5Qrcode(containerId, onScan, onError);
+    activeMode = 'html5qrcode';
+  }
+
+  async function startNative(containerId, onScan) {
+    const element = document.getElementById(containerId);
+    element.innerHTML = '';
+    video = document.createElement('video');
+    video.playsInline = true;
+    video.autoplay = true;
+    video.muted = true;
+    video.style.width = '100%';
+    video.style.height = '100%';
+    video.style.objectFit = 'cover';
+    element.appendChild(video);
+
+    canvas = document.createElement('canvas');
+    canvas.style.display = 'none';
+    element.appendChild(canvas);
+
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false
+    });
+    video.srcObject = stream;
+    await video.play();
+
+    const detector = new BarcodeDetector({ formats: NATIVE_FORMATS });
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+    scanTimer = setInterval(async () => {
+      try {
+        if (!video.videoWidth || !video.videoHeight) return;
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const codes = await detector.detect(canvas);
+        if (codes && codes.length) {
+          const raw = codes[0].rawValue;
+          await stop();
+          onScan(raw);
+        }
+      } catch {
+        // keep scanning
+      }
+    }, 250);
+  }
+
+  async function startHtml5Qrcode(containerId, onScan, onError) {
+    if (typeof window.Html5Qrcode === 'undefined') throw new Error('QR scanner library not loaded.');
+    const element = document.getElementById(containerId);
+    element.innerHTML = '';
     reader = new Html5Qrcode(containerId);
     const config = {
       fps: 10,
-      // Function box scales to the actual viewfinder: a fixed 300px box can
-      // exceed small phone screens, silently killing mobile decoding.
-      qrbox,
+      qrbox: { width: Math.min(300, Math.floor(window.innerWidth * 0.8)), height: 160 },
       formatsToSupport: FORMATS(),
       experimentalFeatures: { useBarCodeDetectorIfSupported: true }
     };
@@ -58,29 +116,44 @@ window.StoreScanner = (() => {
         { facingMode: 'environment' },
         config,
         decodedText => { stop(); onScan(decodedText); },
-        () => { /* frame error ignored */ }
+        () => {}
       );
     } catch (error) {
-      const friendlyError = cameraError();
-      onError?.(friendlyError);
+      onError?.(cameraError());
       await stop();
       throw error;
     }
   }
 
-  async function stop() {
-    if (reader) {
-      try { if (reader.isScanning) await reader.stop(); } catch { /* ignore */ }
-      try { reader.clear(); } catch { /* ignore */ }
-      reader = null;
-    }
+  async function stopNative() {
+    if (scanTimer) { clearInterval(scanTimer); scanTimer = null; }
+    if (video) { try { video.pause(); video.srcObject = null; } catch {} video.remove(); video = null; }
+    if (canvas) { canvas.remove(); canvas = null; }
+    if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
     torchOn = false;
   }
 
-  // Decode from a photo (gallery/camera capture). Works on phones even when
-  // live decoding struggles (focus, light, old browser).
+  async function stop() {
+    if (reader) {
+      try { if (reader.isScanning) await reader.stop(); } catch {}
+      try { reader.clear(); } catch {}
+      reader = null;
+    }
+    await stopNative();
+    activeMode = null;
+  }
+
   async function scanFile(file) {
     if (!file) throw new Error('No photo selected.');
+    // Native decode first for uploaded photos too.
+    if (typeof window.BarcodeDetector !== 'undefined') {
+      try {
+        const bitmap = await createImageBitmap(file);
+        const detector = new BarcodeDetector({ formats: NATIVE_FORMATS });
+        const codes = await detector.detect(bitmap);
+        if (codes && codes.length) return codes[0].rawValue;
+      } catch {}
+    }
     if (typeof window.Html5Qrcode === 'undefined') throw new Error('QR scanner library not loaded.');
     let holder = document.getElementById('__scan_file__');
     if (!holder) {
@@ -93,21 +166,26 @@ window.StoreScanner = (() => {
     try {
       return await temp.scanFile(file, true);
     } finally {
-      try { temp.clear(); } catch { /* ignore */ }
+      try { temp.clear(); } catch {}
     }
   }
 
-  // Toggle phone flashlight while the live scanner runs.
   async function toggleTorch() {
-    if (!reader || !reader.isScanning || typeof reader.applyVideoConstraints !== 'function') {
-      throw new Error('Torch is not available on this device.');
+    if (activeMode === 'native' && stream) {
+      const track = stream.getVideoTracks()[0];
+      if (!track) throw new Error('Torch is not available.');
+      torchOn = !torchOn;
+      await track.applyConstraints({ advanced: [{ torch: torchOn }] });
+      return torchOn;
     }
-    torchOn = !torchOn;
-    await reader.applyVideoConstraints({ advanced: [{ torch: torchOn }] });
-    return torchOn;
+    if (reader && reader.isScanning && typeof reader.applyVideoConstraints === 'function') {
+      torchOn = !torchOn;
+      await reader.applyVideoConstraints({ advanced: [{ torch: torchOn }] });
+      return torchOn;
+    }
+    throw new Error('Torch is not available on this device.');
   }
 
-  // Parses "SCANIMART|TYPE|RECEIPT_ID" -> { type, receiptId } or null
   function parse(payload) {
     const parts = String(payload || '').split('|');
     if (parts[0] !== 'SCANIMART' || !parts[1] || !parts[2]) return null;

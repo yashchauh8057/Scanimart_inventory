@@ -298,7 +298,7 @@
             resolve(verified);
           } catch (error) { reject(error); }
         };
-        options.modal = { ondismiss: () => resolve(null) };
+        options.modal = { ondismiss: () => resolve({ dismissed: true }) };
         const instance = new Razorpay(options);
         instance.on('payment.failed', () => reject(new Error('Payment failed. Please try again.')));
         instance.open();
@@ -323,7 +323,16 @@
           renderCashQr(receipt);
         } else {
           const verified = await startRazorpayFlow(newReceipt);
-          if (!verified) { elements.payBtn.disabled = false; return; }
+          if (!verified || verified.dismissed) {
+            // Testing mode: if the shopper closes the Razorpay popup, still
+            // mark the test receipt paid and show the exit QR.
+            const paid = await API.storeTestPay(receipt);
+            cart = []; renderCart();
+            showSuccess(receipt, paid.razorpayPaymentId || `TEST-${receipt}`);
+            showExit();
+            toast('Payment popup closed. Test exit QR generated.', 'info');
+            return;
+          }
           cart = []; renderCart();
           showSuccess(receipt, verified.razorpayPaymentId || verified.id);
           showExit();
