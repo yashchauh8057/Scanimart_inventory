@@ -28,6 +28,7 @@
     storeCheckout: data => request(`/api/store/checkout`, { method: 'POST', body: JSON.stringify(data) }),
     storeReceipt: id => request(`/api/store/receipt/${encodeURIComponent(id)}`),
     storeCollectCash: id => request(`/api/store/receipt/${encodeURIComponent(id)}/collect-cash`, { method: 'POST' }),
+    storeTestPay: id => request(`/api/store/receipt/${encodeURIComponent(id)}/test-pay`, { method: 'POST' }),
     storeVerifyExit: id => request(`/api/store/receipt/${encodeURIComponent(id)}/verify-exit`, { method: 'POST' }),
     razorpayOrder: receiptId => request(`/api/store/razorpay/order`, { method: 'POST', body: JSON.stringify({ receiptId }) }),
     razorpayVerify: data => request(`/api/store/razorpay/verify`, { method: 'POST', body: JSON.stringify(data) }),

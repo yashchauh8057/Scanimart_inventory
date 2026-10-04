@@ -131,7 +131,7 @@
       document.body.classList.toggle('dark', isDark);
       document.body.classList.toggle('dark-theme', isDark);
       document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
-      $$('#themeToggle i, .icon i.fa-moon, .icon i.fa-sun').forEach(icon => {
+      $$('#themeToggle i, .icon i.fa-moon, .icon i.fa-sun, .theme-btn i').forEach(icon => {
         icon.classList.remove('fa-moon', 'fa-sun');
         icon.classList.add(isDark ? 'fa-sun' : 'fa-moon');
       });
@@ -155,7 +155,7 @@
     window.toggleTheme = toggleTheme;
     const bound = new Set();
     const bindButtons = () => {
-      $$('#themeToggle, .icon').forEach(button => {
+      $$('#themeToggle, .icon, .theme-btn').forEach(button => {
         if (!$('.fa-moon, .fa-sun', button) || bound.has(button)) return;
         bound.add(button);
         button.addEventListener('click', toggleTheme);

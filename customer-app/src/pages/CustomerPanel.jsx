@@ -15,7 +15,9 @@ import { useAuth } from '../lib/auth';
 export default function CustomerPanel() {
   const { session } = useAuth();
   const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('scanimartCart') || '[]'); } catch { return []; }
+  });
   const [method, setMethod] = useState('upi');
   const [phase, setPhase] = useState('method');
   const [txnId, setTxnId] = useState('');
@@ -27,6 +29,10 @@ export default function CustomerPanel() {
   useEffect(() => {
     api.products().then(setProducts).catch(e => toast.error(e.message));
   }, []);
+
+  useEffect(() => {
+    try { localStorage.setItem('scanimartCart', JSON.stringify(cart)); } catch {}
+  }, [cart]);
 
   const totals = useMemo(() => {
     const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
@@ -115,7 +121,15 @@ export default function CustomerPanel() {
         startCashPolling(newReceipt.id);
       } else {
         const verified = await startRazorpay(newReceipt.id);
-        if (!verified) return;
+        if (!verified) {
+          const paid = await api.storeTestPay(newReceipt.id);
+          setReceiptId(newReceipt.id);
+          setTxnId(paid.razorpayPaymentId || `TEST-${newReceipt.id}`);
+          setPhase('success');
+          setCart([]);
+          toast.info('Payment popup closed. Test exit QR generated.');
+          return;
+        }
         setPhase('success');
         setTxnId(verified.razorpayPaymentId || verified.id);
         confetti({ particleCount: 180, spread: 90, origin: { y: 0.55 }, colors: ['#5b21b6', '#8b5cf6', '#06b6d4', '#10b981'] });
@@ -130,6 +144,7 @@ export default function CustomerPanel() {
   const resetSession = () => {
     clearInterval(pollTimer.current);
     setCart([]); setReceiptId(''); setTxnId(''); setPhase('method'); setMethod('upi'); setTab('cart');
+    try { localStorage.removeItem('scanimartCart'); } catch {}
     toast.info('New session started. Happy shopping!');
   };
 

@@ -14,11 +14,13 @@ async function request(path, options = {}) {
 
 export const api = {
   login: data => request('/auth/login', { method: 'POST', body: JSON.stringify(data) }),
-  products: () => request('/products'),
+  products: () => request('/products?limit=100'),
+  productBySku: sku => request(`/products/by-sku/${encodeURIComponent(sku)}`),
   checkout: data => request('/store/checkout', { method: 'POST', body: JSON.stringify(data) }),
   storeReceipt: id => request(`/store/receipt/${encodeURIComponent(id)}`),
   razorpayOrder: receiptId => request('/store/razorpay/order', { method: 'POST', body: JSON.stringify({ receiptId }) }),
-  razorpayVerify: data => request('/store/razorpay/verify', { method: 'POST', body: JSON.stringify(data) })
+  razorpayVerify: data => request('/store/razorpay/verify', { method: 'POST', body: JSON.stringify(data) }),
+  storeTestPay: id => request(`/store/receipt/${encodeURIComponent(id)}/test-pay`, { method: 'POST' })
 };
 
 export const storeScanner = {

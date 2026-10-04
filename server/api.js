@@ -1,5 +1,7 @@
 const express = require('express');
 const { database } = require('./firebase');
+const cache = require('./cache');
+const { rateLimit } = require('./rate-limit');
 
 const COLLECTIONS = ['products', 'categories', 'customers', 'suppliers', 'sales', 'purchases', 'stock', 'expenses', 'users', 'orders', 'activities'];
 const ID_PREFIX = {
@@ -22,9 +24,39 @@ const router = express.Router();
 
 function ref(collection) { return database().ref(collection); }
 
-async function list(collection) {
+async function listAll(collection) {
   const snapshot = await ref(collection).get();
   return Object.entries(snapshot.val() || {}).map(([id, item]) => ({ id, ...item }));
+}
+
+async function list(collection, params = {}) {
+  const { limit, startAfter, search } = params;
+  const ttl = collection === 'products' ? 120 : 30;
+
+  // No extra filters: cache a single list per collection.
+  if (!limit && !startAfter && !search) {
+    return cache.cached(`collection:${collection}`, ttl, () => listAll(collection));
+  }
+
+  // Targeted page read from Firebase instead of scanning the whole tree.
+  let query = ref(collection).orderByKey();
+  if (startAfter) query = query.startAfter(String(startAfter));
+  if (limit) query = query.limitToFirst(Math.min(500, Number(limit) || 50));
+  const snapshot = await query.get();
+  let records = Object.entries(snapshot.val() || {}).map(([id, item]) => ({ id, ...item }));
+  if (search) {
+    const q = String(search).toLowerCase();
+    records = records.filter(r => [r.name, r.sku, r.brand, r.category, r.description, r.email, r.id].filter(Boolean).join(' ').toLowerCase().includes(q));
+  }
+  return records;
+}
+
+async function getBySku(sku) {
+  const normalized = String(sku || '').trim();
+  return cache.cached(`product-by-sku:${normalized.toLowerCase()}`, 300, async () => {
+    const products = await cache.cached('collection:products', 120, () => listAll('products'));
+    return products.find(p => String(p.sku || p.id || '').toUpperCase() === normalized.toUpperCase()) || null;
+  });
 }
 
 function nextId(collection, records) {
@@ -48,10 +80,26 @@ function logActivity(collection, item, verb) {
   return ref('activities').push({ message, icon: ACTIVITY_ICON[collection], createdAt: new Date().toISOString() }).catch(() => {});
 }
 
+router.get('/products/by-sku/:sku', rateLimit('products'), async (request, response, next) => {
+  try {
+    const product = await getBySku(request.params.sku);
+    if (!product) return response.status(404).json({ error: 'Product not found.' });
+    response.set('Cache-Control', 'public, max-age=60');
+    response.json(product);
+  } catch (error) { next(error); }
+});
+
 router.get('/:collection', async (request, response, next) => {
   try {
-    if (!COLLECTIONS.includes(request.params.collection)) return next();
-    response.json(await list(request.params.collection));
+    const collection = request.params.collection;
+    if (!COLLECTIONS.includes(collection)) return next();
+    const records = await list(collection, {
+      limit: request.query.limit,
+      startAfter: request.query.startAfter,
+      search: request.query.search
+    });
+    if (request.query.limit) response.set('X-Next-Cursor', records.length ? records[records.length - 1].id : '');
+    response.json(records);
   } catch (error) { next(error); }
 });
 
@@ -75,6 +123,8 @@ router.post('/products/generate-qrs', async (request, response, next) => {
       createdAt: generatedAt
     });
     response.json({ count: generated.length, products: generated });
+    await cache.delByPrefix('collection:products');
+    await cache.delByPrefix('product-by-sku:');
   } catch (error) { next(error); }
 });
 
@@ -90,6 +140,8 @@ router.post('/:collection', async (request, response, next) => {
     await ref(collection).child(id).set(record);
     response.status(201).json(record);
     logActivity(collection, body, 'added');
+    await cache.delByPrefix(`collection:${collection}`);
+    await cache.delByPrefix('product-by-sku:');
   } catch (error) { next(error); }
 });
 
@@ -104,6 +156,8 @@ router.put('/:collection/:id', async (request, response, next) => {
     await snapshot.ref.update(body);
     response.json({ id, ...body });
     logActivity(collection, body, 'updated');
+    await cache.delByPrefix(`collection:${collection}`);
+    await cache.delByPrefix('product-by-sku:');
   } catch (error) { next(error); }
 });
 
@@ -116,6 +170,8 @@ router.delete('/:collection/:id', async (request, response, next) => {
     await snapshot.ref.remove();
     response.json({ id });
     logActivity(collection, { name: id }, 'deleted');
+    await cache.delByPrefix(`collection:${collection}`);
+    await cache.delByPrefix('product-by-sku:');
   } catch (error) { next(error); }
 });
 

@@ -2,6 +2,8 @@ const express = require('express');
 const crypto = require('node:crypto');
 const https = require('node:https');
 const { database } = require('./firebase');
+const cache = require('./cache');
+const { rateLimit } = require('./rate-limit');
 
 const router = express.Router();
 
@@ -29,12 +31,15 @@ async function logActivity(message, icon = 'fa-receipt') {
 }
 
 async function getReceipt(id) {
-  const snapshot = await ref(`receipts/${id}`).get();
-  return snapshot.exists() ? snapshot.val() : null;
+  return cache.cached(`receipt:${id}`, 10, async () => {
+    const snapshot = await ref(`receipts/${id}`).get();
+    return snapshot.exists() ? snapshot.val() : null;
+  });
 }
 
 async function saveReceipt(id, receipt) {
   await ref(`receipts/${id}`).set(receipt);
+  await cache.set(`receipt:${id}`, receipt, 10);
 }
 
 function razorpayConfig() {
@@ -71,7 +76,7 @@ function razorpayRequest(method, path, payload, keyId, keySecret) {
   });
 }
 
-router.post('/checkout', async (request, response, next) => {
+router.post('/checkout', rateLimit('store'), async (request, response, next) => {
   try {
     const items = Array.isArray(request.body.items) ? request.body.items.filter(item => item && item.sku) : [];
     const paymentMethod = request.body.paymentMethod === 'razorpay' ? 'razorpay' : 'cash';
@@ -120,7 +125,7 @@ router.post('/checkout', async (request, response, next) => {
   } catch (error) { next(error); }
 });
 
-router.get('/receipt/:id', async (request, response, next) => {
+router.get('/receipt/:id', rateLimit('store'), async (request, response, next) => {
   try {
     const receipt = await getReceipt(request.params.id);
     if (!receipt) return response.status(404).json({ error: 'Receipt not found.' });
@@ -128,7 +133,7 @@ router.get('/receipt/:id', async (request, response, next) => {
   } catch (error) { next(error); }
 });
 
-router.post('/receipt/:id/collect-cash', async (request, response, next) => {
+router.post('/receipt/:id/collect-cash', rateLimit('store'), async (request, response, next) => {
   try {
     const receipt = await getReceipt(request.params.id);
     if (!receipt) return response.status(404).json({ error: 'Receipt not found.' });
@@ -141,7 +146,7 @@ router.post('/receipt/:id/collect-cash', async (request, response, next) => {
   } catch (error) { next(error); }
 });
 
-router.post('/receipt/:id/verify-exit', async (request, response, next) => {
+router.post('/receipt/:id/verify-exit', rateLimit('store'), async (request, response, next) => {
   try {
     const receipt = await getReceipt(request.params.id);
     if (!receipt) return response.status(404).json({ error: 'Receipt not found.' });
@@ -155,7 +160,20 @@ router.post('/receipt/:id/verify-exit', async (request, response, next) => {
   } catch (error) { next(error); }
 });
 
-router.post('/razorpay/order', async (request, response, next) => {
+router.post('/receipt/:id/test-pay', rateLimit('store'), async (request, response, next) => {
+  try {
+    const receipt = await getReceipt(request.params.id);
+    if (!receipt) return response.status(404).json({ error: 'Receipt not found.' });
+    receipt.paymentStatus = 'paid';
+    receipt.paymentMethod = 'razorpay';
+    receipt.razorpayPaymentId = `TEST-${receipt.id}`;
+    await saveReceipt(request.params.id, receipt);
+    await logActivity(`Test payment marked for receipt ${receipt.id}`, 'fa-flask');
+    response.json(receipt);
+  } catch (error) { next(error); }
+});
+
+router.post('/razorpay/order', rateLimit('store'), async (request, response, next) => {
   try {
     const { keyId, keySecret, configured } = razorpayConfig();
     if (!configured) return response.status(501).json({ error: 'Razorpay is not configured. Add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to .env' });
@@ -176,7 +194,7 @@ router.post('/razorpay/order', async (request, response, next) => {
   } catch (error) { next(error); }
 });
 
-router.post('/razorpay/verify', async (request, response, next) => {
+router.post('/razorpay/verify', rateLimit('store'), async (request, response, next) => {
   try {
     const { keySecret } = razorpayConfig();
     const { receiptId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = request.body;

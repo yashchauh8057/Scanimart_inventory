@@ -10,6 +10,7 @@ const apiRouter = require('./api');
 const storeRouter = require('./store');
 const authRouter = require('./auth');
 const chatRouter = require('./chat');
+const { rateLimit } = require('./rate-limit');
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
@@ -29,10 +30,10 @@ app.use((request, response, next) => {
 app.use(express.static(path.join(__dirname, '..')));
 app.get('/', (_, response) => response.redirect('/frontend/index.html'));
 
-app.use('/api/store', storeRouter);
+app.use('/api/store', rateLimit('store'), storeRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/chat', chatRouter);
-app.use('/api', apiRouter);
+app.use('/api/chat', rateLimit('chat'), chatRouter);
+app.use('/api', rateLimit('general'), apiRouter);
 app.get('/api/health', (_, response) => response.json({ ok: true }));
 app.get('/api/dashboard', async (_, response, next) => {
   try { response.json(dashboardFromData((await db.ref().get()).val() || {})); }

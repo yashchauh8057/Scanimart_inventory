@@ -7,6 +7,7 @@ import { Badge } from '../components/ui/badge';
 import { Input } from '../components/ui/input';
 import { Scanner } from './scanner';
 import { money } from '../lib/utils';
+import { api, storeScanner } from '../lib/api';
 
 export default function CartTab({ products, cart, addProduct, updateQty, removeItem, totals, onProceed }) {
   const [query, setQuery] = useState('');
@@ -32,11 +33,19 @@ export default function CartTab({ products, cart, addProduct, updateQty, removeI
     setShowDropdown(false);
   };
 
-  const handleScan = code => {
+  const handleScan = async code => {
     setScanOpen(false);
-    const product = products.find(p => String(p.sku).toUpperCase() === String(code).trim().toUpperCase());
-    if (product) add(product);
-    else toast.error(`Product "${code}" not found`);
+    const parsed = storeScanner.parse(code);
+    const sku = parsed?.type === 'PRODUCT' ? parsed.receiptId : String(code || '').trim();
+    const local = products.find(p => String(p.sku).toUpperCase() === sku.toUpperCase());
+    if (local) return add(local);
+    try {
+      const product = await api.productBySku(sku);
+      if (product) add(product);
+      else toast.error(`Product "${sku}" not found`);
+    } catch (error) {
+      toast.error(error.message || 'Product lookup failed');
+    }
   };
 
   useEffect(() => {

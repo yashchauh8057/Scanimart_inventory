@@ -257,7 +257,17 @@
             </div>
             <div class="scanner-box">
                 <div id="qrReader"></div>
-                <div class="scanner-note">Point camera at a product barcode</div>
+                <div class="scanner-note">Point camera at a product QR or barcode</div>
+            </div>
+            <div class="scanner-status" id="scanStatus">Starting camera…</div>
+            <div class="scan-actions">
+                <button class="btn btn-ghost btn-sm" id="torchBtn" type="button" hidden><i class="fa-solid fa-bolt"></i> Torch</button>
+                <label class="btn btn-ghost btn-sm" for="scanFileInput" style="cursor:pointer;"><i class="fa-solid fa-image"></i> Upload photo</label>
+                <input type="file" id="scanFileInput" accept="image/*" capture="environment" hidden>
+            </div>
+            <div class="code-entry">
+                <input id="manualCode" placeholder="Or type SKU / product code" autocomplete="off">
+                <button class="btn" id="manualAddBtn" type="button">Add</button>
             </div>
         </div>
     </div>
@@ -265,11 +275,11 @@
     <script src="../libraries/qrcode.min.js"></script>
     <script src="../libraries/html5-qrcode.min.js"></script>
     <script src="../js/app-config.js?v=20260916"></script>
-    <script src="../js/auth.js"></script>
-    <script src="../js/api.js"></script>
-    <script src="../js/scanner.js"></script>
-    <script src="../js/pos.js"></script>
-    <script src="../js/chat.js"></script>
+    <script src="../js/auth.js?v=20261004-2"></script>
+    <script src="../js/api.js?v=20261004-5"></script>
+    <script src="../js/scanner.js?v=20261004-4"></script>
+    <script src="../js/pos.js?v=20261004-5"></script>
+    <script src="../js/chat.js?v=20261004-2"></script>
 
 </body>
 

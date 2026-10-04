@@ -7,12 +7,15 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "node --watch server/server.js",
-    "seed": "node server/seed.js"
+    "seed": "node server/seed.js",
+    "loadtest": "node server/loadtest.js"
   },
   "dependencies": {
+    "autocannon": "^8.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^5.1.0",
-    "firebase-admin": "^13.4.0"
+    "firebase-admin": "^13.4.0",
+    "ioredis": "^6.0.0"
   }
 }

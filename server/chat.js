@@ -1,5 +1,6 @@
 const express = require('express');
 const { database } = require('./firebase');
+const { rateLimit } = require('./rate-limit');
 
 const router = express.Router();
 const DEEPSEEK_URL = process.env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com/chat/completions';
@@ -22,7 +23,7 @@ function fallbackAnswer(query, context) {
   return match ? `Here is what I found: ${match.text}` : `I can help with Scanimart products, prices, stock, scanning, payment, and exit instructions. I could not find a matching record for “${query}”. Try a product name or SKU.`;
 }
 
-router.post('/', async (request, response, next) => {
+router.post('/', rateLimit('chat'), async (request, response, next) => {
   try {
     const message = String(request.body?.message || '').trim();
     if (!message) return response.status(400).json({ error: 'Message is required.' });

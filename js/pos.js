@@ -127,6 +127,7 @@
 
     const renderCart = () => {
       const count = cart.reduce((s, i) => s + i.qty, 0);
+      try { localStorage.setItem('scanimartPosCart', JSON.stringify(cart)); } catch {}
       elements.cartCount.textContent = `${count} item${count === 1 ? '' : 's'}`;
       elements.cartList.innerHTML = cart.length
         ? cart.map(cartItemRow).join('')
@@ -168,34 +169,57 @@
     };
 
     /* ---------------- scanner ---------------- */
+    const handleScannedCode = async rawText => {
+      const rawCode = String(rawText || '').trim();
+      if (!rawCode) { toast('Nothing was scanned. Try again.', 'error'); return; }
+      toast(`Scanned: ${rawCode}`, 'info');
+      try {
+      const parsed = window.StoreScanner.parse(rawCode);
+      const code = parsed?.type === 'PRODUCT'
+        ? parsed.receiptId.trim().toUpperCase()
+        : rawCode.toUpperCase();
+      let product = products.find(p =>
+        String(p.sku || '').toUpperCase() === code ||
+        String(p.id || '').toUpperCase() === code ||
+        String(p.qrValue || '').toUpperCase() === rawCode.toUpperCase()
+      );
+
+      // Refresh from Firebase once if the product was added after POS loaded.
+      if (!product) {
+        try {
+          products = await API.list('products');
+          renderChips();
+          product = products.find(p => String(p.sku || '').toUpperCase() === code || String(p.id || '').toUpperCase() === code);
+        } catch { /* show the not-found message below */ }
+      }
+      if (product) { addToCart(product); toast(`${product.emoji || ''} ${product.name} added`); }
+      else toast(`Product code "${rawCode}" not found. Check the SKU in Admin → Products.`, 'error');
+      } catch (error) {
+        toast(error?.message || 'Scan failed. Try again.', 'error');
+      }
+    };
+
+    const setScanStatus = text => {
+      const el = document.getElementById('scanStatus');
+      if (el) el.textContent = text;
+    };
+
     const startScanner = async () => {
       if (!elements.scanOverlay) return;
       elements.scanOverlay.hidden = false;
+      setScanStatus('Starting camera…');
+      const manual = document.getElementById('manualCode');
+      if (manual) { manual.value = ''; setTimeout(() => manual.focus({ preventScroll: true }), 300); }
       try {
         await window.StoreScanner.start('qrReader', async decoded => {
+          setScanStatus(`Got it: ${decoded}`);
           elements.scanOverlay.hidden = true;
-          const rawCode = String(decoded).trim();
-          const parsed = window.StoreScanner.parse(rawCode);
-          const code = parsed?.type === 'PRODUCT'
-            ? parsed.receiptId.trim().toUpperCase()
-            : rawCode.toUpperCase();
-          let product = products.find(p =>
-            String(p.sku || '').toUpperCase() === code ||
-            String(p.id || '').toUpperCase() === code ||
-            String(p.qrValue || '').toUpperCase() === rawCode.toUpperCase()
-          );
-
-          // Refresh from Firebase once if the product was added after POS loaded.
-          if (!product) {
-            try {
-              products = await API.list('products');
-              renderChips();
-              product = products.find(p => String(p.sku || '').toUpperCase() === code || String(p.id || '').toUpperCase() === code);
-            } catch { /* show the not-found message below */ }
-          }
-          if (product) { addToCart(product); toast(`${product.emoji || ''} ${product.name} added`); }
-          else toast(`Product QR "${rawCode}" not found in Firebase`, 'error');
-        }, () => {});
+          if (navigator.vibrate) navigator.vibrate(80);
+          await handleScannedCode(decoded);
+        }, error => {
+          if (error?.message) setScanStatus(error.message);
+        });
+        setScanStatus('Point camera at a product QR or barcode…');
       } catch (error) {
         elements.scanOverlay.hidden = true;
         toast(error.message || 'Unable to start camera', 'error');
@@ -275,7 +299,7 @@
             resolve(verified);
           } catch (error) { reject(error); }
         };
-        options.modal = { ondismiss: () => resolve(null) };
+        options.modal = { ondismiss: () => resolve({ dismissed: true }) };
         const instance = new Razorpay(options);
         instance.on('payment.failed', () => reject(new Error('Payment failed. Please try again.')));
         instance.open();
@@ -300,7 +324,16 @@
           renderCashQr(receipt);
         } else {
           const verified = await startRazorpayFlow(newReceipt);
-          if (!verified) { elements.payBtn.disabled = false; return; }
+          if (!verified || verified.dismissed) {
+            // Testing mode: if the shopper closes the Razorpay popup, still
+            // mark the test receipt paid and show the exit QR.
+            const paid = await API.storeTestPay(receipt);
+            cart = []; renderCart();
+            showSuccess(receipt, paid.razorpayPaymentId || `TEST-${receipt}`);
+            showExit();
+            toast('Payment popup closed. Test exit QR generated.', 'info');
+            return;
+          }
           cart = []; renderCart();
           showSuccess(receipt, verified.razorpayPaymentId || verified.id);
           showExit();
@@ -326,6 +359,7 @@
 
     const startNewSession = () => {
       cart = []; receipt = null;
+      try { localStorage.removeItem('scanimartPosCart'); } catch {}
       clearInterval(pollTimer);
       elements.methodSection.hidden = false;
       elements.successScreen.hidden = true;
@@ -387,6 +421,39 @@
     }));
 
     elements.scanBtn.addEventListener('click', startScanner);
+    const torchBtn = document.getElementById('torchBtn');
+    if (torchBtn) {
+      torchBtn.hidden = false;
+      torchBtn.addEventListener('click', async () => {
+        try {
+          const on = await window.StoreScanner.toggleTorch();
+          torchBtn.classList.toggle('selected', on);
+          toast(on ? 'Torch on' : 'Torch off', 'info');
+        } catch { toast('Torch is not available on this device.', 'error'); }
+      });
+    }
+    const scanFileInput = document.getElementById('scanFileInput');
+    if (scanFileInput) scanFileInput.addEventListener('change', async () => {
+      const file = scanFileInput.files?.[0];
+      scanFileInput.value = '';
+      if (!file) return;
+      try {
+        const decoded = await window.StoreScanner.scanFile(file);
+        elements.scanOverlay.hidden = true;
+        await window.StoreScanner.stop();
+        if (navigator.vibrate) navigator.vibrate(80);
+        await handleScannedCode(decoded);
+      } catch {
+        toast('Could not read a code from that photo. Try a clearer close-up.', 'error');
+      }
+    });
+    const manualAddBtn = document.getElementById('manualAddBtn');
+    if (manualAddBtn) manualAddBtn.addEventListener('click', async () => {
+      const value = document.getElementById('manualCode')?.value || '';
+      elements.scanOverlay.hidden = true;
+      await window.StoreScanner.stop();
+      await handleScannedCode(value);
+    });
     elements.closeScanBtn.addEventListener('click', async () => {
       elements.scanOverlay.hidden = true;
       await window.StoreScanner.stop();
@@ -412,6 +479,7 @@
 
     /* ---------------- init ---------------- */
     try {
+      try { cart = JSON.parse(localStorage.getItem('scanimartPosCart') || '[]'); } catch { cart = []; }
       products = await API.list('products');
       renderChips();
       renderCart();

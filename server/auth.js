@@ -1,5 +1,6 @@
 const express = require('express');
 const { database } = require('./firebase');
+const { rateLimit } = require('./rate-limit');
 
 const router = express.Router();
 
@@ -26,7 +27,7 @@ router.get('/google-config', (_, response) => {
   response.json({ clientId: process.env.GOOGLE_CLIENT_ID || '' });
 });
 
-router.post('/login', async (request, response, next) => {
+router.post('/login', rateLimit('auth'), async (request, response, next) => {
   try {
     const email = String(request.body.email || '').trim().toLowerCase();
     const password = String(request.body.password || '');
@@ -47,7 +48,7 @@ router.post('/login', async (request, response, next) => {
 // Verify a Google ID token (from Google Identity Services). Any verified
 // Google email is allowed: existing `users` keep their role, new emails are
 // auto-registered as `User` so the frontend redirects them to the user panel.
-router.post('/google', async (request, response, next) => {
+router.post('/google', rateLimit('auth'), async (request, response, next) => {
   try {
     const idToken = String(request.body.idToken || '').trim();
     if (!idToken) return response.status(400).json({ error: 'Google ID token is required.' });

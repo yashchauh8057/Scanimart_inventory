@@ -229,6 +229,8 @@ h1, h2, h3, h4, .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
 .btn-green { color: #fff; background: linear-gradient(135deg, #059669, var(--success)); box-shadow: 0 14px 30px -10px rgba(16,185,129,.65); }
 .btn-ghost { background: rgba(255,255,255,.8); color: var(--primary); border: 1px solid rgba(124,58,237,.3); }
 .btn i { margin-right: 7px; }
+.btn-sm { padding: 10px 14px; font-size: 13px; border-radius: 12px; display: inline-flex; align-items: center; }
+.scan-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
 
 /* ---------- payment methods ---------- */
 .pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }

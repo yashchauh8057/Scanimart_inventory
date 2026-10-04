@@ -12,7 +12,21 @@ export function Scanner({ onScan, onError }) {
         reader = new Html5Qrcode('react-qr-reader');
         await reader.start(
           { facingMode: 'environment' },
-          { fps: 10, qrbox: { width: 220, height: 220 } },
+          {
+            fps: 10,
+            qrbox: { width: Math.min(300, Math.floor(window.innerWidth * 0.8)), height: 160 },
+            formatsToSupport: typeof window !== 'undefined' && window.Html5QrcodeSupportedFormats ? [
+              window.Html5QrcodeSupportedFormats.QR_CODE,
+              window.Html5QrcodeSupportedFormats.EAN_13,
+              window.Html5QrcodeSupportedFormats.EAN_8,
+              window.Html5QrcodeSupportedFormats.UPC_A,
+              window.Html5QrcodeSupportedFormats.UPC_E,
+              window.Html5QrcodeSupportedFormats.CODE_128,
+              window.Html5QrcodeSupportedFormats.CODE_39,
+              window.Html5QrcodeSupportedFormats.DATA_MATRIX
+            ].filter(v => v !== undefined) : undefined,
+            experimentalFeatures: { useBarCodeDetectorIfSupported: true }
+          },
           text => { if (!cancelled) onScan(text); },
           () => {}
         );
