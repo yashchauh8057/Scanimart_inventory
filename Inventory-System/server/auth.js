@@ -68,7 +68,14 @@ router.post('/google', rateLimit('auth'), async (request, response, next) => {
       if (String(account.status || 'Active').toLowerCase() === 'inactive') {
         return response.status(403).json({ error: 'This account is inactive. Contact the administrator.' });
       }
-      return response.json(toSession(account));
+      // Record the live sign-in email + provider for admin customer views.
+      try {
+        const snapshot = await database().ref('users').get();
+        const users = snapshot.val() || {};
+        const id = Object.keys(users).find(key => String(users[key].email || '').toLowerCase() === String(payload.email || '').toLowerCase());
+        if (id) await database().ref(`users/${id}`).update({ email: account.email, name: account.name || payload.name, provider: account.provider || 'google', lastLogin: new Date().toISOString() });
+      } catch {}
+      return response.json({ ...toSession(account), provider: account.provider || 'google' });
     }
 
     // New Google user -> auto-register as User (customer panel).
@@ -89,6 +96,7 @@ router.post('/google', rateLimit('auth'), async (request, response, next) => {
       role: 'User',
       status: 'Active',
       provider: 'google',
+      lastLogin: new Date().toISOString(),
       createdAt: new Date().toISOString()
     };
     await database().ref(`users/${id}`).set(newAccount);
