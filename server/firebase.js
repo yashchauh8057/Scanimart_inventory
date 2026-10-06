@@ -3,12 +3,19 @@ const path = require('node:path');
 const admin = require('firebase-admin');
 
 
+
+
 function serviceAccount() {
+  if (process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
+    return JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_BASE64, 'base64').toString('utf8'));
+  }
   if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
     const account = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
     if (account.private_key) account.private_key = account.private_key.replace(/\\n/g, '\n');
     return account;
   }
+
+
 
 
   const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH;
@@ -17,12 +24,16 @@ function serviceAccount() {
   }
 
 
+
+
   const resolvedPath = path.resolve(process.cwd(), serviceAccountPath);
   if (!fs.existsSync(resolvedPath)) {
     throw new Error(`Firebase service account file was not found: ${resolvedPath}`);
   }
   return JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
 }
+
+
 
 
 function database() {
@@ -34,7 +45,3 @@ function database() {
   }
   return admin.database();
 }
-
-
-module.exports = { database };
-
