@@ -2,15 +2,20 @@ const fs = require('node:fs');
 const path = require('node:path');
 const admin = require('firebase-admin');
 
+
 function serviceAccount() {
   if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-    return JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+    const account = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+    if (account.private_key) account.private_key = account.private_key.replace(/\\n/g, '\n');
+    return account;
   }
+
 
   const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH;
   if (!serviceAccountPath) {
     throw new Error('Set FIREBASE_SERVICE_ACCOUNT_PATH or FIREBASE_SERVICE_ACCOUNT_JSON in .env.');
   }
+
 
   const resolvedPath = path.resolve(process.cwd(), serviceAccountPath);
   if (!fs.existsSync(resolvedPath)) {
@@ -18,6 +23,7 @@ function serviceAccount() {
   }
   return JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
 }
+
 
 function database() {
   if (!process.env.FIREBASE_DATABASE_URL) {
@@ -29,4 +35,6 @@ function database() {
   return admin.database();
 }
 
+
 module.exports = { database };
+
