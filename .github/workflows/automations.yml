@@ -1,0 +1,24 @@
+name: Scanimart automations
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 3 * * *' # 09:00 Asia/Kolkata
+    - cron: '30 4 * * *' # 10:00 Asia/Kolkata
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Low-stock alert
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '30 3 * * *'
+        run: curl --fail-with-body -X POST "$SCANIMART_URL/api/automation/low-stock" -H "x-automation-token: $AUTOMATION_TOKEN"
+        env:
+          SCANIMART_URL: ${{ secrets.SCANIMART_URL }}
+          AUTOMATION_TOKEN: ${{ secrets.AUTOMATION_TOKEN }}
+      - name: Daily report
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '30 4 * * *'
+        run: curl --fail-with-body -X POST "$SCANIMART_URL/api/automation/daily-report" -H "x-automation-token: $AUTOMATION_TOKEN"
+        env:
+          SCANIMART_URL: ${{ secrets.SCANIMART_URL }}
+          AUTOMATION_TOKEN: ${{ secrets.AUTOMATION_TOKEN }}
