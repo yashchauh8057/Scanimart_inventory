@@ -2,14 +2,17 @@ const fs = require('node:fs');
 const path = require('node:path');
 const admin = require('firebase-admin');
 
+function normalizeAccount(account) {
+  if (account.private_key) account.private_key = account.private_key.replace(/\\n/g, '\n');
+  return account;
+}
+
 function serviceAccount() {
   if (!process.env.FIREBASE_SERVICE_ACCOUNT_PATH && process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
-    return JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_BASE64, 'base64').toString('utf8'));
+    return normalizeAccount(JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_BASE64, 'base64').toString('utf8')));
   }
   if (!process.env.FIREBASE_SERVICE_ACCOUNT_PATH && process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-    const account = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
-    if (account.private_key) account.private_key = account.private_key.replace(/\\n/g, '\n');
-    return account;
+    return normalizeAccount(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON));
   }
 
   const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH;
@@ -21,7 +24,7 @@ function serviceAccount() {
   if (!fs.existsSync(resolvedPath)) {
     throw new Error('Firebase service account file was not found: ' + resolvedPath);
   }
-  return JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
+  return normalizeAccount(JSON.parse(fs.readFileSync(resolvedPath, 'utf8')));
 }
 
 function database() {
