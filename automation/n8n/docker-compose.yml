@@ -1,0 +1,55 @@
+services:
+  scanimart-backend:
+    image: node:20-bookworm-slim
+    container_name: scanimart-backend
+    restart: unless-stopped
+    working_dir: /app
+    env_file:
+      - ../../.env
+    command: node server/server.js
+    ports:
+      - "3000:3000"
+      - "3443:3443"
+    volumes:
+      - ../..:/app
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: scanimart-n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - GENERIC_TIMEZONE=${AUTOMATION_TIME_ZONE:-Asia/Kolkata}
+      - TZ=${AUTOMATION_TIME_ZONE:-Asia/Kolkata}
+      - N8N_DEFAULT_LOCALE=en
+      - N8N_SECURE_COOKIE=false
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      # Required by these local workflows, which read non-secret routing values
+      # and shared API configuration from n8n environment variables.
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      - N8N_RUNNERS_ENABLED=true
+      - N8N_BASIC_AUTH_ACTIVE=${N8N_BASIC_AUTH_ACTIVE:-true}
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER:-admin}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD:?Set N8N_BASIC_AUTH_PASSWORD in automation/n8n/.env}
+      - SCANIMART_AUTOMATION_TOKEN=${AUTOMATION_TOKEN:?Set AUTOMATION_TOKEN in automation/n8n/.env}
+      - AUTOMATION_TOKEN=${AUTOMATION_TOKEN:?Set AUTOMATION_TOKEN in automation/n8n/.env}
+      - SCANIMART_API_URL=${SCANIMART_API_URL:-http://scanimart-backend:3000}
+      - SCANIMART_N8N_URL=${SCANIMART_N8N_URL:-http://n8n:5678}
+      - SCANIMART_ADMIN_RECIPIENT=${SCANIMART_ADMIN_RECIPIENT:-}
+      - WHATSAPP_API_VERSION=${WHATSAPP_API_VERSION:-v22.0}
+      - WHATSAPP_PHONE_NUMBER_ID=${WHATSAPP_PHONE_NUMBER_ID:-}
+      - WHATSAPP_ACCESS_TOKEN=${WHATSAPP_ACCESS_TOKEN:-}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - DEEPSEEK_BASE_URL=${DEEPSEEK_BASE_URL:-https://api.deepseek.com/chat/completions}
+      - DEEPSEEK_MODEL=${DEEPSEEK_MODEL:-deepseek-chat}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - scanimart-backend
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./workflows:/opt/scanimart-workflows:ro
+
+volumes:
+  n8n_data:

@@ -1,0 +1,11 @@
+{
+  "name": "ScaniMart - Daily Sales Analytics",
+  "nodes": [
+    {"parameters":{"rule":{"interval":[{"field":"days","daysInterval":1,"triggerAtHour":20,"triggerAtMinute":0}]}},"id":"analytics-schedule","name":"Every day at 20:00","type":"n8n-nodes-base.scheduleTrigger","typeVersion":1.2,"position":[0,0]},
+    {"parameters":{"method":"GET","url":"={{$env.SCANIMART_API_URL}}/api/automation/analytics/daily","sendHeaders":true,"headerParameters":{"parameters":[{"name":"x-automation-token","value":"={{$env.SCANIMART_AUTOMATION_TOKEN}}"}]},"options":{}},"id":"analytics-fetch","name":"Calculate verified sales","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[240,0]},
+    {"parameters":{"jsCode":"const report = $json;\nreturn [{ json: { ...report, summary: `ScaniMart daily report ${report.date}: ${report.completedOrders} completed orders, revenue ₹${Number(report.revenue || 0).toFixed(2)}, average order value ₹${Number(report.averageOrderValue || 0).toFixed(2)}` } }];"},"id":"analytics-summary","name":"Build admin summary","type":"n8n-nodes-base.code","typeVersion":2,"position":[480,0]},
+    {"parameters":{"method":"POST","url":"={{$env.SCANIMART_API_URL}}/api/automation/notifications/claim","sendHeaders":true,"sendBody":true,"contentType":"json","headerParameters":{"parameters":[{"name":"x-automation-token","value":"={{$env.SCANIMART_AUTOMATION_TOKEN}}"}]},"bodyParameters":{"parameters":[{"name":"channel","value":"admin-daily-report"},{"name":"recipient","value":"={{$env.SCANIMART_ADMIN_RECIPIENT}}"},{"name":"template","value":"daily_report"},{"name":"dedupeKey","value":"={{$json.date}}"}]},"options":{}},"id":"analytics-claim","name":"Prevent duplicate report","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[720,0]}
+  ],
+  "connections":{"Every day at 20:00":{"main":[[{"node":"Calculate verified sales","type":"main","index":0}]]},"Calculate verified sales":{"main":[[{"node":"Build admin summary","type":"main","index":0}]]},"Build admin summary":{"main":[[{"node":"Prevent duplicate report","type":"main","index":0}]]}},
+  "active":false,"settings":{"executionOrder":"v1","timezone":"Asia/Kolkata"},"tags":[]
+}

@@ -15,6 +15,10 @@ services:
         sync: false
       - key: AUTOMATION_TOKEN
         sync: false
+      - key: N8N_CUSTOMER_EMAIL_WEBHOOK_URL
+        sync: false
+      - key: PUBLIC_BASE_URL
+        sync: false
       - key: TELEGRAM_BOT_TOKEN
         sync: false
       - key: TELEGRAM_CHAT_ID

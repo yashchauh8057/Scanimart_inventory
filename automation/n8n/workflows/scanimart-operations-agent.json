@@ -1,0 +1,56 @@
+{
+  "name": "ScaniMart - Operations Agent",
+  "nodes": [
+    {
+      "parameters": {"httpMethod":"POST","path":"scanimart/agent","responseMode":"lastNode","options":{}},
+      "id":"agent-webhook","name":"Ask ScaniMart agent","type":"n8n-nodes-base.webhook","typeVersion":2,"position":[0,0]
+    },
+    {
+      "parameters": {"jsCode":"const body = $json.body || $json;\nconst request = String(body.request || body.message || '').trim();\nif (!request) throw new Error('request or message is required');\nconst allowed = ['order_process', 'low_stock', 'daily_analytics', 'analytics_chart', 'unknown'];\nconst system = `You are the ScaniMart operations routing agent. Return JSON only: {\\\"action\\\":\\\"one allowed action\\\",\\\"orderId\\\":\\\"optional\\\",\\\"reason\\\":\\\"short\\\"}. Allowed actions: ${allowed.join(', ')}. Choose order_process only when a concrete order or receipt ID is present. Never claim payment is verified; the backend verifies payment.`;\nreturn [{json:{request, orderId:String(body.orderId || body.receiptId || ''), system}}];"},
+      "id":"agent-guard","name":"Create safe agent prompt","type":"n8n-nodes-base.code","typeVersion":2,"position":[220,0]
+    },
+    {
+      "parameters": {
+        "method":"POST",
+        "url":"={{$env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com/chat/completions'}}",
+        "sendHeaders":true,
+        "sendBody":true,
+        "specifyBody":"json",
+        "jsonBody":"={{ JSON.stringify({ model: $env.DEEPSEEK_MODEL || 'deepseek-chat', response_format: { type: 'json_object' }, messages: [{ role: 'system', content: $json.system }, { role: 'user', content: $json.request }] }) }}",
+        "headerParameters":{"parameters":[{"name":"Authorization","value":"=Bearer {{$env.DEEPSEEK_API_KEY}}"},{"name":"Content-Type","value":"application/json"}]},
+        "options":{"timeout":15000}
+      },
+      "id":"agent-model","name":"DeepSeek routing model","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[460,0]
+    },
+    {
+      "parameters":{"jsCode":"const content = $json.choices?.[0]?.message?.content || '{}';\nlet decision;\ntry { decision = JSON.parse(content); } catch { decision = { action: 'unknown', reason: 'Agent response was not valid JSON' }; }\nconst allowed = new Set(['order_process','low_stock','daily_analytics','analytics_chart']);\nconst action = allowed.has(decision.action) ? decision.action : 'unknown';\nreturn [{json:{action, orderId: decision.orderId || '', reason: decision.reason || 'No reason supplied'}}];"},
+      "id":"agent-parse","name":"Validate agent decision","type":"n8n-nodes-base.code","typeVersion":2,"position":[700,0]
+    },
+    {
+      "parameters":{"rules":{"values":[{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"leftValue":"={{$json.action}}","rightValue":"order_process","operator":{"type":"string","operation":"equals"}}]},"renameOutput":true,"outputKey":"Order processing"},{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"leftValue":"={{$json.action}}","rightValue":"low_stock","operator":{"type":"string","operation":"equals"}}]},"renameOutput":true,"outputKey":"Low stock"},{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"leftValue":"={{$json.action}}","rightValue":"daily_analytics","operator":{"type":"string","operation":"equals"}}]},"renameOutput":true,"outputKey":"Daily analytics"},{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"leftValue":"={{$json.action}}","rightValue":"analytics_chart","operator":{"type":"string","operation":"equals"}}]},"renameOutput":true,"outputKey":"Chart"}]},"options":{}},
+      "id":"agent-router","name":"Route allowlisted action","type":"n8n-nodes-base.switch","typeVersion":3.2,"position":[940,0]
+    },
+    {
+      "parameters":{"method":"POST","url":"={{$env.SCANIMART_API_URL}}/api/automation/orders/{{$json.orderId}}/process","sendHeaders":true,"headerParameters":{"parameters":[{"name":"x-automation-token","value":"={{$env.SCANIMART_AUTOMATION_TOKEN}}"}]},"options":{}},
+      "id":"agent-order","name":"Run order processing","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[1200,-240]
+    },
+    {
+      "parameters":{"method":"GET","url":"={{$env.SCANIMART_API_URL}}/api/automation/inventory/low-stock","sendHeaders":true,"headerParameters":{"parameters":[{"name":"x-automation-token","value":"={{$env.SCANIMART_AUTOMATION_TOKEN}}"}]},"options":{}},
+      "id":"agent-stock","name":"Read low stock","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[1200,-80]
+    },
+    {
+      "parameters":{"method":"GET","url":"={{$env.SCANIMART_API_URL}}/api/automation/analytics/daily","sendHeaders":true,"headerParameters":{"parameters":[{"name":"x-automation-token","value":"={{$env.SCANIMART_AUTOMATION_TOKEN}}"}]},"options":{}},
+      "id":"agent-analytics","name":"Read daily analytics","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[1200,80]
+    },
+    {
+      "parameters":{"jsCode":"return [{json:{ok:true, action:'analytics_chart', chartUrl:`${$env.SCANIMART_N8N_URL || 'http://localhost:5678'}/webhook/scanimart/analytics/chart`}}];"},
+      "id":"agent-chart","name":"Return chart link","type":"n8n-nodes-base.code","typeVersion":2,"position":[1200,240]
+    },
+    {
+      "parameters":{"jsCode":"return [{json:{ok:false, action:'unknown', message:'The agent can process a paid order, inspect low stock, read daily analytics, or return the analytics chart link.'}}];"},
+      "id":"agent-unknown","name":"Safe fallback","type":"n8n-nodes-base.code","typeVersion":2,"position":[1200,400]
+    }
+  ],
+  "connections":{"Ask ScaniMart agent":{"main":[[{"node":"Create safe agent prompt","type":"main","index":0}]]},"Create safe agent prompt":{"main":[[{"node":"DeepSeek routing model","type":"main","index":0}]]},"DeepSeek routing model":{"main":[[{"node":"Validate agent decision","type":"main","index":0}]]},"Validate agent decision":{"main":[[{"node":"Route allowlisted action","type":"main","index":0}]]},"Route allowlisted action":{"main":[[{"node":"Run order processing","type":"main","index":0}],[{"node":"Read low stock","type":"main","index":0}],[{"node":"Read daily analytics","type":"main","index":0}],[{"node":"Return chart link","type":"main","index":0}],[{"node":"Safe fallback","type":"main","index":0}]]}},
+  "active":false,"settings":{"executionOrder":"v1","timezone":"Asia/Kolkata"},"tags":[]
+}

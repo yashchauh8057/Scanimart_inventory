@@ -32,7 +32,14 @@ export default function CustomerPanel() {
 
   useEffect(() => {
     try { localStorage.setItem('scanimartCart', JSON.stringify(cart)); } catch {}
-  }, [cart]);
+    if (session?.email && cart.length) {
+      api.saveCart({ customerId: session.email, email: session.email, name: session.user, phone: session.phone, whatsappOptIn: session.whatsappOptIn, items: cart }).catch(() => {});
+    }
+  }, [cart, session]);
+
+  const completeAbandonedCart = useCallback(() => {
+    if (session?.email) api.completeCart({ customerId: session.email, email: session.email }).catch(() => {});
+  }, [session]);
 
   const totals = useMemo(() => {
     const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
@@ -71,13 +78,14 @@ export default function CustomerPanel() {
         const latest = await api.storeReceipt(id);
         if (latest.paymentStatus === 'paid') {
           clearInterval(pollTimer.current);
+          completeAbandonedCart();
           setPhase('success');
           setTxnId(`CASH-${id}`);
           confetti({ particleCount: 180, spread: 90, origin: { y: 0.55 }, colors: ['#5b21b6', '#8b5cf6', '#06b6d4', '#10b981'] });
         }
       } catch { }
     }, 2500);
-  }, []);
+  }, [completeAbandonedCart]);
 
   const startRazorpay = useCallback(async id => {
     const order = await api.razorpayOrder(id);
@@ -123,6 +131,7 @@ export default function CustomerPanel() {
         const verified = await startRazorpay(newReceipt.id);
         if (!verified) {
           const paid = await api.storeTestPay(newReceipt.id);
+          completeAbandonedCart();
           setReceiptId(newReceipt.id);
           setTxnId(paid.razorpayPaymentId || `TEST-${newReceipt.id}`);
           setPhase('success');
@@ -130,6 +139,7 @@ export default function CustomerPanel() {
           toast.info('Payment popup closed. Test exit QR generated.');
           return;
         }
+        completeAbandonedCart();
         setPhase('success');
         setTxnId(verified.razorpayPaymentId || verified.id);
         confetti({ particleCount: 180, spread: 90, origin: { y: 0.55 }, colors: ['#5b21b6', '#8b5cf6', '#06b6d4', '#10b981'] });

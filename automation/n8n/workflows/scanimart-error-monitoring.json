@@ -1,0 +1,10 @@
+{
+  "name": "ScaniMart - Error Monitoring",
+  "nodes": [
+    {"parameters":{},"id":"error-trigger","name":"Workflow error","type":"n8n-nodes-base.errorTrigger","typeVersion":1,"position":[0,0]},
+    {"parameters":{"jsCode":"const error = $json.execution?.error || {};\nconst workflow = $json.workflowData?.name || 'Unknown workflow';\nreturn [{json:{event:'automation.error',consent:true,customer:{phone:$env.SCANIMART_ADMIN_RECIPIENT},message:`ScaniMart automation failed: ${workflow}. ${error.message || 'Unknown error'}`}}];"},"id":"error-format","name":"Format admin alert","type":"n8n-nodes-base.code","typeVersion":2,"position":[240,0]},
+    {"parameters":{"method":"POST","url":"={{$env.SCANIMART_N8N_URL}}/webhook/scanimart/notifications/whatsapp","sendBody":true,"contentType":"json","bodyParameters":{"parameters":[{"name":"event","value":"automation.error"},{"name":"consent","value":"true"},{"name":"customer","value":"={{JSON.stringify($json.customer)}}"},{"name":"message","value":"={{$json.message}}"}]},"options":{}},"id":"error-notify","name":"Notify administrator","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[500,0]}
+  ],
+  "connections":{"Workflow error":{"main":[[{"node":"Format admin alert","type":"main","index":0}]]},"Format admin alert":{"main":[[{"node":"Notify administrator","type":"main","index":0}]]}},
+  "active":false,"settings":{"executionOrder":"v1","timezone":"Asia/Kolkata"},"tags":[]
+}

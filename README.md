@@ -56,3 +56,13 @@ The app includes protected automation endpoints for a Telegram owner notificatio
 - `GET /api/automation/status`
 
 Send the `x-automation-token` header with the `AUTOMATION_TOKEN` value. Configure `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` in the deployment environment. The included `.github/workflows/automations.yml` calls the endpoints on a schedule, so it does not depend on a sleeping Render service. Add `SCANIMART_URL` and `AUTOMATION_TOKEN` as GitHub Actions secrets.
+
+## n8n automation system
+
+The Docker-based n8n modules are in [`automation/n8n/`](automation/n8n/). They integrate through the protected backend contract and never read Firebase credentials directly. See [`automation/n8n/README.md`](automation/n8n/README.md) for startup, environment variables, workflow import, and activation guidance.
+
+### Customer exit thank-you email
+
+Import [`customer-email-workflows.json`](customer-email-workflows.json) into n8n, configure the SMTP credential on both email nodes, verify the sender address, and publish the workflow. The ScaniMart API sends a `thank_you_store_visit` event after a paid receipt passes exit verification. Set `N8N_CUSTOMER_EMAIL_WEBHOOK_URL` to the n8n production webhook URL in the deployed API environment; the localhost value is for development only.
+
+For a live deployment, n8n must run on n8n Cloud or a publicly reachable server. The Render service in `render.yaml` deploys the ScaniMart API, not n8n. Keep SMTP passwords, n8n credentials, Firebase keys, and API tokens in hosting-provider secret settings, never in workflow JSON or Git.

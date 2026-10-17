@@ -1,0 +1,57 @@
+{
+  "name": "ScaniMart - Full Automation",
+  "nodes": [
+    {"parameters":{"httpMethod":"POST","path":"scanimart/order","responseMode":"onReceived","options":{}},"id":"order-trigger","name":"Order event webhook","type":"n8n-nodes-base.webhook","typeVersion":2,"position":[0,0]},
+    {"parameters":{"jsCode":"const body=$json.body||$json; const orderId=String(body.orderId||body.receiptId||'').trim(); if(!orderId) throw new Error('orderId is required'); return [{json:{orderId}}];"},"id":"order-input","name":"Validate order event","type":"n8n-nodes-base.code","typeVersion":2,"position":[220,0]},
+    {"parameters":{"method":"GET","url":"={{$env.SCANIMART_API_URL}}/api/automation/orders/{{$json.orderId}}","sendHeaders":true,"headerParameters":{"parameters":[{"name":"x-automation-token","value":"={{$env.SCANIMART_AUTOMATION_TOKEN}}"}]},"options":{}},"id":"order-read","name":"Read trusted order","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[440,0]},
+    {"parameters":{"conditions":{"boolean":[{"value1":"={{$json.valid}}","operation":"isTrue"}]}},"id":"order-paid","name":"Payment verified","type":"n8n-nodes-base.if","typeVersion":2.2,"position":[660,0]},
+    {"parameters":{"method":"POST","url":"={{$env.SCANIMART_API_URL}}/api/automation/orders/{{$json.orderId}}/process","sendHeaders":true,"headerParameters":{"parameters":[{"name":"x-automation-token","value":"={{$env.SCANIMART_AUTOMATION_TOKEN}}"}]},"options":{}},"id":"order-process","name":"Process order once","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[880,-100]},
+    {"parameters":{"jsCode":"const n=$json.notifications||{}; return [{json:{...$json,send:Boolean(n.whatsapp&&n.customer?.phone),phone:n.customer?.phone||'',template:'scanimart_order_confirmation',dedupeKey:`order:${$json.orderId}`}}];"},"id":"order-message","name":"Check WhatsApp consent","type":"n8n-nodes-base.code","typeVersion":2,"position":[1100,-100]},
+    {"parameters":{"conditions":{"boolean":[{"value1":"={{$json.send}}","operation":"isTrue"}]}},"id":"order-consent","name":"Customer opted in","type":"n8n-nodes-base.if","typeVersion":2.2,"position":[1320,-100]},
+    {"parameters":{"method":"POST","url":"={{$env.SCANIMART_API_URL}}/api/automation/notifications/claim","sendHeaders":true,"sendBody":true,"contentType":"json","headerParameters":{"parameters":[{"name":"x-automation-token","value":"={{$env.SCANIMART_AUTOMATION_TOKEN}}"}]},"bodyParameters":{"parameters":[{"name":"channel","value":"whatsapp"},{"name":"recipient","value":"={{$json.phone}}"},{"name":"template","value":"={{$json.template}}"},{"name":"dedupeKey","value":"={{$json.dedupeKey}}"}]},"options":{}},"id":"order-claim","name":"Prevent duplicate confirmation","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[1540,-100]},
+    {"parameters":{"conditions":{"boolean":[{"value1":"={{$json.claimed}}","operation":"isTrue"}]}},"id":"order-claimed","name":"New notification","type":"n8n-nodes-base.if","typeVersion":2.2,"position":[1760,-100]},
+    {"parameters":{"method":"POST","url":"=https://graph.facebook.com/{{$env.WHATSAPP_API_VERSION || 'v22.0'}}/{{$env.WHATSAPP_PHONE_NUMBER_ID}}/messages","sendHeaders":true,"sendBody":true,"specifyBody":"json","jsonBody":"={{JSON.stringify({messaging_product:'whatsapp',to:$json.recipient,type:'template',template:{name:'scanimart_order_confirmation',language:{code:'en_US'},components:[]}})}}","headerParameters":{"parameters":[{"name":"Authorization","value":"=Bearer {{$env.WHATSAPP_ACCESS_TOKEN}}"}]},"options":{}},"id":"order-whatsapp","name":"Send order confirmation","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[1980,-100]},
+
+    {"parameters":{"rule":{"interval":[{"field":"minutes","minutesInterval":30}]}},"id":"stock-trigger","name":"Low stock schedule","type":"n8n-nodes-base.scheduleTrigger","typeVersion":1.2,"position":[0,300]},
+    {"parameters":{"method":"GET","url":"={{$env.SCANIMART_API_URL}}/api/automation/inventory/low-stock","sendHeaders":true,"headerParameters":{"parameters":[{"name":"x-automation-token","value":"={{$env.SCANIMART_AUTOMATION_TOKEN}}"}]},"options":{}},"id":"stock-read","name":"Read inventory","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[220,300]},
+    {"parameters":{"jsCode":"return ($json.items||[]).map(item=>({json:{...item,phone:$env.SCANIMART_ADMIN_RECIPIENT,template:'low_stock_alert',dedupeKey:`stock:${item.alertKey}`}}));"},"id":"stock-items","name":"Build stock alerts","type":"n8n-nodes-base.code","typeVersion":2,"position":[440,300]},
+    {"parameters":{"method":"POST","url":"={{$env.SCANIMART_API_URL}}/api/automation/notifications/claim","sendHeaders":true,"sendBody":true,"contentType":"json","headerParameters":{"parameters":[{"name":"x-automation-token","value":"={{$env.SCANIMART_AUTOMATION_TOKEN}}"}]},"bodyParameters":{"parameters":[{"name":"channel","value":"admin-whatsapp"},{"name":"recipient","value":"={{$json.phone}}"},{"name":"template","value":"={{$json.template}}"},{"name":"dedupeKey","value":"={{$json.dedupeKey}}"}]},"options":{}},"id":"stock-claim","name":"Prevent repeated stock alerts","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[660,300]},
+    {"parameters":{"conditions":{"boolean":[{"value1":"={{$json.claimed}}","operation":"isTrue"}]}},"id":"stock-new","name":"New stock condition","type":"n8n-nodes-base.if","typeVersion":2.2,"position":[880,300]},
+    {"parameters":{"method":"POST","url":"=https://graph.facebook.com/{{$env.WHATSAPP_API_VERSION || 'v22.0'}}/{{$env.WHATSAPP_PHONE_NUMBER_ID}}/messages","sendHeaders":true,"sendBody":true,"specifyBody":"json","jsonBody":"={{JSON.stringify({messaging_product:'whatsapp',to:$json.recipient,type:'template',template:{name:'low_stock_alert',language:{code:'en_US'},components:[]}})}}","headerParameters":{"parameters":[{"name":"Authorization","value":"=Bearer {{$env.WHATSAPP_ACCESS_TOKEN}}"}]},"options":{}},"id":"stock-whatsapp","name":"Send low stock WhatsApp","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[1100,300]},
+
+    {"parameters":{"rule":{"interval":[{"field":"days","daysInterval":1,"triggerAtHour":20,"triggerAtMinute":0}]}},"id":"report-trigger","name":"Daily report schedule","type":"n8n-nodes-base.scheduleTrigger","typeVersion":1.2,"position":[0,600]},
+    {"parameters":{"method":"GET","url":"={{$env.SCANIMART_API_URL}}/api/automation/analytics/daily","sendHeaders":true,"headerParameters":{"parameters":[{"name":"x-automation-token","value":"={{$env.SCANIMART_AUTOMATION_TOKEN}}"}]},"options":{}},"id":"report-read","name":"Calculate verified sales","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[220,600]},
+    {"parameters":{"method":"POST","url":"={{$env.SCANIMART_API_URL}}/api/automation/notifications/claim","sendHeaders":true,"sendBody":true,"contentType":"json","headerParameters":{"parameters":[{"name":"x-automation-token","value":"={{$env.SCANIMART_AUTOMATION_TOKEN}}"}]},"bodyParameters":{"parameters":[{"name":"channel","value":"admin-whatsapp"},{"name":"recipient","value":"={{$env.SCANIMART_ADMIN_RECIPIENT}}"},{"name":"template","value":"daily_report"},{"name":"dedupeKey","value":"={{$json.date}}"}]},"options":{}},"id":"report-claim","name":"Prevent duplicate report","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[440,600]},
+    {"parameters":{"conditions":{"boolean":[{"value1":"={{$json.claimed}}","operation":"isTrue"}]}},"id":"report-new","name":"New daily report","type":"n8n-nodes-base.if","typeVersion":2.2,"position":[660,600]},
+    {"parameters":{"method":"POST","url":"=https://graph.facebook.com/{{$env.WHATSAPP_API_VERSION || 'v22.0'}}/{{$env.WHATSAPP_PHONE_NUMBER_ID}}/messages","sendHeaders":true,"sendBody":true,"specifyBody":"json","jsonBody":"={{JSON.stringify({messaging_product:'whatsapp',to:$json.recipient,type:'template',template:{name:'daily_report',language:{code:'en_US'},components:[]}})}}","headerParameters":{"parameters":[{"name":"Authorization","value":"=Bearer {{$env.WHATSAPP_ACCESS_TOKEN}}"}]},"options":{}},"id":"report-whatsapp","name":"Send daily sales report","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[880,600]},
+
+    {"parameters":{},"id":"error-trigger","name":"Automation error trigger","type":"n8n-nodes-base.errorTrigger","typeVersion":1,"position":[0,900]},
+    {"parameters":{"jsCode":"const error=$json.execution?.error||{}; return [{json:{recipient:$env.SCANIMART_ADMIN_RECIPIENT,message:`ScaniMart automation failed: ${error.message||'Unknown error'}`}}];"},"id":"error-format","name":"Format error alert","type":"n8n-nodes-base.code","typeVersion":2,"position":[220,900]},
+    {"parameters":{"method":"POST","url":"=https://graph.facebook.com/{{$env.WHATSAPP_API_VERSION || 'v22.0'}}/{{$env.WHATSAPP_PHONE_NUMBER_ID}}/messages","sendHeaders":true,"sendBody":true,"specifyBody":"json","jsonBody":"={{JSON.stringify({messaging_product:'whatsapp',to:$json.recipient,type:'template',template:{name:'scanimart_order_update',language:{code:'en_US'},components:[]}})}}","headerParameters":{"parameters":[{"name":"Authorization","value":"=Bearer {{$env.WHATSAPP_ACCESS_TOKEN}}"}]},"options":{}},"id":"error-whatsapp","name":"Alert administrator","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[440,900]}
+  ],
+  "connections":{
+    "Order event webhook":{"main":[[{"node":"Validate order event","type":"main","index":0}]]},
+    "Validate order event":{"main":[[{"node":"Read trusted order","type":"main","index":0}]]},
+    "Read trusted order":{"main":[[{"node":"Payment verified","type":"main","index":0}]]},
+    "Payment verified":{"main":[[{"node":"Process order once","type":"main","index":0}],[{"node":"Check WhatsApp consent","type":"main","index":0}]]},
+    "Process order once":{"main":[[{"node":"Check WhatsApp consent","type":"main","index":0}]]},
+    "Check WhatsApp consent":{"main":[[{"node":"Customer opted in","type":"main","index":0}]]},
+    "Customer opted in":{"main":[[{"node":"Prevent duplicate confirmation","type":"main","index":0}]]},
+    "Prevent duplicate confirmation":{"main":[[{"node":"New notification","type":"main","index":0}]]},
+    "New notification":{"main":[[{"node":"Send order confirmation","type":"main","index":0}]]},
+    "Low stock schedule":{"main":[[{"node":"Read inventory","type":"main","index":0}]]},
+    "Read inventory":{"main":[[{"node":"Build stock alerts","type":"main","index":0}]]},
+    "Build stock alerts":{"main":[[{"node":"Prevent repeated stock alerts","type":"main","index":0}]]},
+    "Prevent repeated stock alerts":{"main":[[{"node":"New stock condition","type":"main","index":0}]]},
+    "New stock condition":{"main":[[{"node":"Send low stock WhatsApp","type":"main","index":0}]]},
+    "Daily report schedule":{"main":[[{"node":"Calculate verified sales","type":"main","index":0}]]},
+    "Calculate verified sales":{"main":[[{"node":"Prevent duplicate report","type":"main","index":0}]]},
+    "Prevent duplicate report":{"main":[[{"node":"New daily report","type":"main","index":0}]]},
+    "New daily report":{"main":[[{"node":"Send daily sales report","type":"main","index":0}]]},
+    "Automation error trigger":{"main":[[{"node":"Format error alert","type":"main","index":0}]]},
+    "Format error alert":{"main":[[{"node":"Alert administrator","type":"main","index":0}]]}
+  },
+  "active":false,
+  "settings":{"executionOrder":"v1","timezone":"Asia/Kolkata"},
+  "tags":[]
+}

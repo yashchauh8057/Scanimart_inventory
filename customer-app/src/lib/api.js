@@ -21,6 +21,8 @@ export const api = {
   razorpayOrder: receiptId => request('/store/razorpay/order', { method: 'POST', body: JSON.stringify({ receiptId }) }),
   razorpayVerify: data => request('/store/razorpay/verify', { method: 'POST', body: JSON.stringify(data) }),
   storeTestPay: id => request(`/store/receipt/${encodeURIComponent(id)}/test-pay`, { method: 'POST' })
+  ,saveCart: data => request('/automation/carts', { method: 'POST', body: JSON.stringify(data) })
+  ,completeCart: data => request('/automation/carts/complete', { method: 'POST', body: JSON.stringify(data) })
 };
 
 export const storeScanner = {

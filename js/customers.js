@@ -22,8 +22,8 @@
 
     const renderStats = () => {
       const active = records.filter(customer => customer.status === 'Active').length;
-      const premium = records.filter(customer => customer.membership === 'Premium').length;
-      const values = [records.length, active, active, premium];
+      const google = records.filter(customer => customer.provider === 'google').length;
+      const values = [records.length, active, google, active];
       cardNumbers.forEach((element, index) => { if (element && values[index] !== undefined) element.textContent = values[index].toLocaleString('en-IN'); });
     };
 
@@ -33,15 +33,14 @@
         tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:24px">No customers in the database.</td></tr>`;
         return;
       }
-      tbody.innerHTML = records.map(customer => `<tr data-id="${text(customer.id)}" data-status="${text(customer.status)}">
+      tbody.innerHTML = records.map(user => `<tr data-id="${text(user.id)}" data-status="${text(user.status || 'Active')}">
         <td><input type="checkbox"></td>
-        <td><div class="user-cell"><img src="../assets/images/user1.jpg" class="avatar" alt=""><div><h4>${text(customer.name)}</h4><small>${text(customer.id)}</small></div></div></td>
-        <td>${text(customer.email)}</td>
-        <td>${text(customer.phone)}</td>
-        <td><span class="badge ${membershipClass(customer.membership)}">${text(customer.membership || 'Regular')}</span></td>
-        <td>${text(customer.orders || 0)}</td>
-        <td>${money(customer.totalPurchase || 0)}</td>
-        <td><span class="badge ${badge(customer.status)}">${text(customer.status)}</span></td>
+        <td><div class="user-cell"><img src="../assets/images/user1.jpg" class="avatar" alt=""><div><h4>${text(user.name)}</h4><small>${text(user.id)}</small></div></div></td>
+        <td>${text(user.email)}</td>
+        <td><span class="badge primary">${text(user.role || 'User')}</span></td>
+        <td><span class="badge ${user.provider === 'google' ? 'success' : 'primary'}">${text(user.provider === 'google' ? 'Google' : 'Local')}</span></td>
+        <td>${text(user.lastLogin ? new Date(user.lastLogin).toLocaleString('en-IN') : 'Never')}</td>
+        <td><span class="badge ${badge(user.status || 'Active')}">${text(user.status || 'Active')}</span></td>
         <td>
           <button class="action-btn view" data-action="view" title="View"><i class="fa-solid fa-eye"></i></button>
           <button class="action-btn edit" data-action="edit" title="Edit"><i class="fa-solid fa-pen"></i></button>
@@ -59,14 +58,14 @@
         <h3>${text(customer.name)}</h3>
         <p>${text(customer.email)}</p>
         <p>${text(customer.phone || '')}</p>
-        <p>Total Orders : ${text(customer.orders || 0)}</p>
-        <p>Total Purchase : ${money(customer.totalPurchase || 0)}</p>
-        <p>Membership : ${text(customer.membership || 'Regular')}</p>`;
+        <p>Role : ${text(customer.role || 'User')}</p>
+        <p>Provider : ${text(customer.provider === 'google' ? 'Google' : 'Local')}</p>
+        <p>Status : ${text(customer.status || 'Active')}</p>`;
     };
 
     const load = async () => {
       try {
-        records = await API.list('customers');
+        records = (await API.list('users')).filter(user => String(user.role || '').toLowerCase() === 'user');
         render();
         renderStats();
       } catch (error) {
@@ -81,15 +80,13 @@
       const payload = {
         name: values.name,
         email: values.email,
-        phone: values.phone,
-        membership: values.membership || 'Regular',
-        address: values.address || '',
-        orders: 0,
-        totalPurchase: 0,
+        phone: values.phone || '',
+        role: values.role || 'User',
+        provider: values.provider || 'local',
         status: 'Active'
       };
       try {
-        await API.create('customers', payload);
+        await API.create('users', payload);
         if (window.InventoryApp) window.InventoryApp.closeModal(addForm.closest('.modal'));
         addForm.reset();
         await load();
@@ -103,9 +100,9 @@
       event.preventDefault();
       if (!editTarget) return;
       const values = readForm(editForm);
-      const payload = { name: values.name, email: values.email, phone: values.phone, status: values.status };
+      const payload = { name: values.name, email: values.email, phone: values.phone || '', status: values.status };
       try {
-        await API.update('customers', editTarget.id, payload);
+        await API.update('users', editTarget.id, payload);
         if (window.InventoryApp) window.InventoryApp.closeModal(editModal);
         await load();
         if (window.InventoryApp) window.InventoryApp.toast('Customer updated.');
@@ -132,7 +129,7 @@
       if (!confirmButton) return;
       if (!deleteTarget) return;
       try {
-        await API.remove('customers', deleteTarget.id);
+        await API.remove('users', deleteTarget.id);
         if (window.InventoryApp) window.InventoryApp.closeModal(deleteModal);
         deleteTarget = null;
         await load();

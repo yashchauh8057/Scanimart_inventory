@@ -321,8 +321,33 @@ h1, h2, h3, h4, .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
 @keyframes slideup { 0% { transform: translate(-50%, 20px); opacity: 0; } 100% { transform: translate(-50%, 0); opacity: 1; } }
 
 /* ---------- responsive ---------- */
-@media (max-width: 380px) {
-  .pos-shell { padding: 0 10px 40px; }
+@media (max-width: 768px) {
+  .pos-shell { padding: 0 10px 70px; max-width: 100%; }
+  .pos-header { flex-wrap: wrap; gap: 10px; padding: 12px; border-radius: 18px; }
+  .pos-header .logo { font-size: 17px; }
+  .header-right { width: 100%; justify-content: space-between; flex-wrap: wrap; }
   .session-dot span.lbl { display: none; }
+  .avatar-pill .av-name { max-width: 70px; }
+  .tab-bar { font-size: 12px; gap: 4px; }
+  .tab { padding: 10px 8px; }
+  .tab-num { display: none; }
+  .glass { padding: 14px; }
+  .search-row { flex-direction: row; }
+  .search-box input, .text-input { font-size: 16px; }
+  .scan-btn { flex: 0 0 auto; }
   .pay-grid { grid-template-columns: 1fr 1fr; }
+  .method-detail { padding: 12px; }
+  .qr-frame { max-width: 220px; }
+  .success-wrap h2 { font-size: 22px; }
+  .chat-toggle { right: 14px; bottom: 14px; }
+  .chat-box { right: 10px; left: 10px; bottom: 74px; width: auto; height: min(420px, calc(100vh - 120px)); }
+  .toast { bottom: 14px; font-size: 13px; padding: 11px 14px; }
+}
+
+@media (max-width: 380px) {
+  .pos-shell { padding: 0 8px 50px; }
+  .pay-grid { grid-template-columns: 1fr; }
+  .tab { font-size: 11px; }
+  .chip-row { gap: 6px; }
+  .chip { font-size: 11px; padding: 7px 10px; }
 }

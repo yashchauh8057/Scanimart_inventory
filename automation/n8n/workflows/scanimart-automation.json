@@ -1,0 +1,101 @@
+{
+  "name": "Scanimart - Inventory Automations",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "id": "low-stock-schedule",
+      "name": "Every 30 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [260, 180]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3000/api/automation/low-stock",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-automation-token",
+              "value": "={{$env.SCANIMART_AUTOMATION_TOKEN}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "low-stock-request",
+      "name": "Check low stock",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 180]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 20,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "daily-report-schedule",
+      "name": "Daily at 20:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [260, 420]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3000/api/automation/daily-report",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-automation-token",
+              "value": "={{$env.SCANIMART_AUTOMATION_TOKEN}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "daily-report-request",
+      "name": "Send daily report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 420]
+    }
+  ],
+  "connections": {
+    "Every 30 minutes": {
+      "main": [[{"node": "Check low stock", "type": "main", "index": 0}]]
+    },
+    "Daily at 20:00": {
+      "main": [[{"node": "Send daily report", "type": "main", "index": 0}]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata"
+  },
+  "versionId": "scanimart-automation-v1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}
