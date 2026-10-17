@@ -23,3 +23,42 @@ services:
         sync: false
       - key: TELEGRAM_CHAT_ID
         sync: false
+
+  - type: web
+    name: scanimart-n8n
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./automation/n8n/Dockerfile
+    dockerContext: .
+    healthCheckPath: /healthz
+    disk:
+      name: scanimart-n8n-data
+      mountPath: /home/node/.n8n
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: N8N_PORT
+        value: "10000"
+      - key: N8N_HOST
+        value: 0.0.0.0
+      - key: N8N_PROTOCOL
+        value: https
+      - key: N8N_SECURE_COOKIE
+        value: "true"
+      - key: N8N_ENCRYPTION_KEY
+        generateValue: true
+      - key: N8N_BASIC_AUTH_ACTIVE
+        value: "true"
+      - key: N8N_BASIC_AUTH_USER
+        sync: false
+      - key: N8N_BASIC_AUTH_PASSWORD
+        sync: false
+      - key: N8N_RUNNERS_ENABLED
+        value: "true"
+      - key: N8N_BLOCK_ENV_ACCESS_IN_NODE
+        value: "false"
+      - key: GENERIC_TIMEZONE
+        value: Asia/Kolkata
+      - key: TZ
+        value: Asia/Kolkata

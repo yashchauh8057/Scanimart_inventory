@@ -50,4 +50,8 @@ The API must be running on the host at `http://localhost:3000`. Inside Docker it
 
 For production, replace the local Docker URL with a public n8n deployment. The local Docker Compose file is intended for development and must not be exposed directly to the internet without HTTPS, authentication, persistent storage, and a reverse proxy.
 
+## Render deployment
+
+The repository Blueprint defines a separate `scanimart-n8n` Docker web service with a persistent n8n data disk. Sync `render.yaml` in the Render Dashboard, provide the n8n basic-auth username and password when prompted, and wait for the service health check to pass. Open the generated HTTPS URL, import `../../customer-email-workflows.json`, configure SMTP on both email nodes, and activate the workflow. In the ScaniMart API service, set `N8N_CUSTOMER_EMAIL_WEBHOOK_URL` to the n8n URL ending in `/webhook/customer-email-event` and set `PUBLIC_BASE_URL` to the API URL. Never commit n8n passwords, SMTP credentials, Firebase keys, or API tokens.
+
 Stop the service with `docker compose down`. The named `n8n_data` volume preserves n8n's local database and credentials.
