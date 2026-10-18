@@ -1,0 +1,25 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=${N8N_HOST:-0.0.0.0}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-https}
+      - WEBHOOK_URL=${WEBHOOK_URL:?Set WEBHOOK_URL to the public n8n URL}
+      - N8N_EDITOR_BASE_URL=${N8N_EDITOR_BASE_URL:?Set N8N_EDITOR_BASE_URL to the public n8n URL}
+      - N8N_SECURE_COOKIE=true
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:?Set a long random encryption key}
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER:?Set n8n username}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD:?Set a strong n8n password}
+      - N8N_RUNNERS_ENABLED=true
+      - GENERIC_TIMEZONE=${AUTOMATION_TIME_ZONE:-Asia/Kolkata}
+      - TZ=${AUTOMATION_TIME_ZONE:-Asia/Kolkata}
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:

@@ -32,6 +32,21 @@ async function logActivity(message, icon = 'fa-receipt') {
 }
 
 async function notifyCustomerExit(receipt, request) {
+  const functionUrl = process.env.CUSTOMER_EMAIL_FUNCTION_URL;
+  if (functionUrl) {
+    const response = await fetch(functionUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(process.env.AUTOMATION_TOKEN ? { 'x-automation-token': process.env.AUTOMATION_TOKEN } : {})
+      },
+      body: JSON.stringify({ receiptId: receipt.id })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || `Firebase email function failed with HTTP ${response.status}`);
+    return { sent: !result.duplicate, duplicate: Boolean(result.duplicate) };
+  }
+
   const webhookUrl = process.env.N8N_CUSTOMER_EMAIL_WEBHOOK_URL || 'http://127.0.0.1:5678/webhook/customer-email-event';
   if (!receipt?.userEmail) return { sent: false, reason: 'Customer has no email address.' };
 
@@ -190,12 +205,18 @@ router.post('/receipt/:id/verify-exit', rateLimit('store'), async (request, resp
     if (!receipt) return response.status(404).json({ error: 'Receipt not found.' });
     const allowed = receipt.paymentStatus === 'paid';
     let emailNotification = { sent: false, reason: 'Payment is not verified.' };
-    if (allowed && !receipt.securityVerified) {
-      receipt.securityVerified = true;
-      await saveReceipt(request.params.id, receipt);
-      await recordCustomerAction({ email: receipt.userEmail, name: receipt.user, action: `verified exit for receipt ${receipt.id}`, receiptId: receipt.id });
-      await logActivity(`Exit verified for receipt ${receipt.id}`, 'fa-shield-halved');
+    if (allowed && (!receipt.securityVerified || !receipt.emailNotificationSentAt)) {
+      if (!receipt.securityVerified) {
+        receipt.securityVerified = true;
+        await saveReceipt(request.params.id, receipt);
+        await recordCustomerAction({ email: receipt.userEmail, name: receipt.user, action: `verified exit for receipt ${receipt.id}`, receiptId: receipt.id });
+        await logActivity(`Exit verified for receipt ${receipt.id}`, 'fa-shield-halved');
+      }
       emailNotification = await notifyCustomerExit(receipt, request).catch(error => ({ sent: false, reason: error.message }));
+      if (emailNotification.sent) {
+        receipt.emailNotificationSentAt = new Date().toISOString();
+        await saveReceipt(request.params.id, receipt);
+      }
     }
     response.json({ allowed, receipt, emailNotification });
   } catch (error) { next(error); }

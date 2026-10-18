@@ -50,8 +50,69 @@ The API must be running on the host at `http://localhost:3000`. Inside Docker it
 
 For production, replace the local Docker URL with a public n8n deployment. The local Docker Compose file is intended for development and must not be exposed directly to the internet without HTTPS, authentication, persistent storage, and a reverse proxy.
 
+## Free production deployment on Google Cloud
+
+The ScaniMart API can remain on Render while n8n runs on a Google Cloud Always Free
+`e2-micro` VM. This is preferable to a Render free n8n service because the VM keeps
+the n8n database on persistent disk and does not sleep during webhook delivery.
+
+1. Create an Ubuntu `e2-micro` Compute Engine VM in an eligible Always Free region.
+2. Allow TCP port `5678` temporarily, or put n8n behind a reverse proxy with HTTPS.
+3. Install Docker and Docker Compose on the VM.
+4. Copy `docker-compose.gcp.yml` and create a `.env` beside it with:
+
+   ```env
+   WEBHOOK_URL=https://your-n8n-domain.example/
+   N8N_EDITOR_BASE_URL=https://your-n8n-domain.example
+   N8N_ENCRYPTION_KEY=generate-a-long-random-secret
+   N8N_BASIC_AUTH_USER=admin
+   N8N_BASIC_AUTH_PASSWORD=use-a-strong-password
+   AUTOMATION_TIME_ZONE=Asia/Kolkata
+   ```
+
+5. Start n8n with `docker compose -f docker-compose.gcp.yml up -d`.
+6. Open the n8n editor, import `../../customer-email-workflows.json`, attach the
+   SMTP credential to both email nodes, replace `store@example.com`, and activate
+   the workflow.
+7. In the Render API service, set:
+
+   ```text
+   N8N_CUSTOMER_EMAIL_WEBHOOK_URL=https://your-n8n-domain.example/webhook/customer-email-event
+   PUBLIC_BASE_URL=https://your-render-api.onrender.com
+   AUTOMATION_TOKEN=<the same strong token used by n8n>
+   ```
+
+The API sends n8n a verified exit event containing the customer email, receipt,
+items, and bill URL. n8n does not need Firebase Admin credentials, which keeps the
+Firebase service account out of the automation host.
+
+## Firebase Cloud Function alternative
+
+If n8n is not required, this repository includes a Firebase HTTPS Function that
+reads the verified receipt directly from Firebase and sends the thank-you email:
+`functions/index.js`.
+
+From the repository root:
+
+```bash
+npm install -g firebase-tools
+firebase login
+firebase use YOUR_FIREBASE_PROJECT_ID
+cd functions && npm install && cd ..
+firebase deploy --only functions:sendCustomerThankYouEmail
+```
+
+Before deploying, copy `functions/.env.example` to `functions/.env` and set the
+Firebase database URL, the same `AUTOMATION_TOKEN` used by Render, and SMTP
+credentials. Gmail requires a 2-Step Verification app password; do not use the
+normal Gmail password. Firebase Functions requires the Blaze billing plan, but
+the function may remain within the provider's monthly no-cost quota for a small
+project. After deployment, set the returned HTTPS URL as
+`CUSTOMER_EMAIL_FUNCTION_URL` in Render. When this variable is present, the API
+calls the Firebase Function after exit verification and n8n is not used.
+
 ## Render deployment
 
-The repository Blueprint defines a separate `scanimart-n8n` Docker web service with a persistent n8n data disk. Sync `render.yaml` in the Render Dashboard, provide the n8n basic-auth username and password when prompted, and wait for the service health check to pass. Open the generated HTTPS URL, import `../../customer-email-workflows.json`, configure SMTP on both email nodes, and activate the workflow. In the ScaniMart API service, set `N8N_CUSTOMER_EMAIL_WEBHOOK_URL` to the n8n URL ending in `/webhook/customer-email-event` and set `PUBLIC_BASE_URL` to the API URL. Never commit n8n passwords, SMTP credentials, Firebase keys, or API tokens.
+The repository Blueprint defines a separate `scanimart-n8n` Docker web service with a persistent n8n data disk. It currently uses Render's paid `starter` plan. Do not change it to Render's free plan for production: free services sleep and do not provide the persistent disk needed by n8n. Use the Google Cloud deployment above for a fully free n8n host. Never commit n8n passwords, SMTP credentials, Firebase keys, or API tokens.
 
 Stop the service with `docker compose down`. The named `n8n_data` volume preserves n8n's local database and credentials.
