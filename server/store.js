@@ -52,28 +52,43 @@ async function notifyCustomerExit(receipt, request) {
 
   const baseUrl = process.env.PUBLIC_BASE_URL || `${request.protocol}://${request.get('host')}`;
   const billUrl = `${baseUrl}/api/store/receipt/${encodeURIComponent(receipt.id)}`;
-  const response = await fetch(webhookUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(process.env.AUTOMATION_TOKEN ? { 'x-automation-token': process.env.AUTOMATION_TOKEN } : {})
-    },
-    body: JSON.stringify({
-      eventType: 'thank_you_store_visit',
-      customerName: receipt.user || 'Valued Customer',
-      customerEmail: receipt.userEmail,
-      orderId: receipt.id,
-      paymentStatus: receipt.paymentStatus,
-      customerLeftStore: true,
-      totalAmount: receipt.total,
-      currency: 'INR',
-      billUrl,
-      items: receipt.items || []
-    })
+  const payload = JSON.stringify({
+    eventType: 'thank_you_store_visit',
+    customerName: receipt.user || 'Valued Customer',
+    customerEmail: receipt.userEmail,
+    orderId: receipt.id,
+    paymentStatus: receipt.paymentStatus,
+    customerLeftStore: true,
+    totalAmount: receipt.total,
+    currency: 'INR',
+    billUrl,
+    items: receipt.items || []
   });
-
-  if (!response.ok) throw new Error(`n8n customer email webhook failed with HTTP ${response.status}`);
-  return { sent: true };
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(process.env.AUTOMATION_TOKEN ? { 'x-automation-token': process.env.AUTOMATION_TOKEN } : {})
+  };
+  let lastError;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers,
+        body: payload,
+        signal: controller.signal
+      });
+      if (response.ok) return { sent: true, attempt };
+      lastError = new Error(`n8n customer email webhook failed with HTTP ${response.status}`);
+    } catch (error) {
+      lastError = error.name === 'AbortError' ? new Error('n8n customer email webhook timed out') : error;
+    } finally {
+      clearTimeout(timeout);
+    }
+    if (attempt < 3) await new Promise(resolve => setTimeout(resolve, attempt * 2000));
+  }
+  throw lastError || new Error('n8n customer email webhook failed');
 }
 
 async function getReceipt(id) {
