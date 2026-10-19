@@ -2,7 +2,8 @@
   'use strict';
 
   const isLocalDev = ['localhost', '127.0.0.1'].includes(location.hostname) && location.port !== '3000';
-  const base = isLocalDev ? 'http://127.0.0.1:3000' : '';
+  const configuredBase = window.APP_CONFIG?.apiBaseUrl || '';
+  const base = isLocalDev ? 'http://127.0.0.1:3000' : configuredBase;
 
   async function request(path, options = {}) {
     const response = await fetch(`${base}${path}`, {

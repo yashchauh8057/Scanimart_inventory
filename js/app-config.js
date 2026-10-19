@@ -3,6 +3,10 @@
 // Google sign-in and Razorpay payments. Everything still works in demo mode
 // without them.
 window.APP_CONFIG = {
+  // The static website is hosted on Vercel, while the email-enabled API runs
+  // on Render. Keep this URL explicit so exit verification reaches the same
+  // backend that has the Brevo credentials configured.
+  apiBaseUrl: 'https://scanimart-inventory.onrender.com',
   firebase: {
     apiKey: '',                                   // Firebase Console > Project settings > General > Your apps
     authDomain: 'scanimart-5ef87.firebaseapp.com',
