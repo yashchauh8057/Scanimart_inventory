@@ -1,6 +1,7 @@
 const express = require('express');
 const crypto = require('node:crypto');
 const https = require('node:https');
+const nodemailer = require('nodemailer');
 const { database } = require('./firebase');
 const cache = require('./cache');
 const { rateLimit } = require('./rate-limit');
@@ -32,63 +33,47 @@ async function logActivity(message, icon = 'fa-receipt') {
 }
 
 async function notifyCustomerExit(receipt, request) {
-  const functionUrl = process.env.CUSTOMER_EMAIL_FUNCTION_URL;
-  if (functionUrl) {
-    const response = await fetch(functionUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(process.env.AUTOMATION_TOKEN ? { 'x-automation-token': process.env.AUTOMATION_TOKEN } : {})
-      },
-      body: JSON.stringify({ receiptId: receipt.id })
-    });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(result.error || `Firebase email function failed with HTTP ${response.status}`);
-    return { sent: !result.duplicate, duplicate: Boolean(result.duplicate) };
-  }
-
-  const webhookUrl = process.env.N8N_CUSTOMER_EMAIL_WEBHOOK_URL || 'http://127.0.0.1:5678/webhook/customer-email-event';
   if (!receipt?.userEmail) return { sent: false, reason: 'Customer has no email address.' };
 
   const baseUrl = process.env.PUBLIC_BASE_URL || `${request.protocol}://${request.get('host')}`;
   const billUrl = `${baseUrl}/api/store/receipt/${encodeURIComponent(receipt.id)}`;
-  const payload = JSON.stringify({
-    eventType: 'thank_you_store_visit',
-    customerName: receipt.user || 'Valued Customer',
-    customerEmail: receipt.userEmail,
-    orderId: receipt.id,
-    paymentStatus: receipt.paymentStatus,
-    customerLeftStore: true,
-    totalAmount: receipt.total,
-    currency: 'INR',
-    billUrl,
-    items: receipt.items || []
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+  if (!smtpUser || !smtpPass) return { sent: false, reason: 'SMTP credentials are not configured.' };
+
+  const port = Number(process.env.SMTP_PORT || 465);
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port,
+    secure: String(process.env.SMTP_SECURE ?? (port === 465)) !== 'false',
+    auth: { user: smtpUser, pass: smtpPass },
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 20000
   });
-  const headers = {
-    'Content-Type': 'application/json',
-    ...(process.env.AUTOMATION_TOKEN ? { 'x-automation-token': process.env.AUTOMATION_TOKEN } : {})
-  };
-  let lastError;
-  for (let attempt = 1; attempt <= 3; attempt += 1) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
-    try {
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers,
-        body: payload,
-        signal: controller.signal
-      });
-      if (response.ok) return { sent: true, attempt };
-      lastError = new Error(`n8n customer email webhook failed with HTTP ${response.status}`);
-    } catch (error) {
-      lastError = error.name === 'AbortError' ? new Error('n8n customer email webhook timed out') : error;
-    } finally {
-      clearTimeout(timeout);
-    }
-    if (attempt < 3) await new Promise(resolve => setTimeout(resolve, attempt * 2000));
-  }
-  throw lastError || new Error('n8n customer email webhook failed');
+  const items = (receipt.items || [])
+    .map(item => `${item.name} x${item.qty || 1}`)
+    .join(', ');
+  const from = process.env.SMTP_FROM || smtpUser;
+  await transporter.sendMail({
+    from,
+    to: receipt.userEmail,
+    replyTo: process.env.SMTP_REPLY_TO || from,
+    subject: 'Thank You for Shopping With Us',
+    text: [
+      `Hello ${receipt.user || 'Valued Customer'},`,
+      '',
+      `Thank you for shopping with us. Order: ${receipt.id}.`,
+      `Products: ${items || 'Store purchase'}.`,
+      `Total: INR ${Number(receipt.total || 0).toFixed(2)}.`,
+      '',
+      `View your receipt: ${billUrl}`,
+      '',
+      'Regards,',
+      'Your Store Team'
+    ].join('\n')
+  });
+  return { sent: true, provider: 'smtp' };
 }
 
 async function getReceipt(id) {
