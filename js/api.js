@@ -34,6 +34,8 @@
     razorpayOrder: receiptId => request(`/api/store/razorpay/order`, { method: 'POST', body: JSON.stringify({ receiptId }) }),
     razorpayVerify: data => request(`/api/store/razorpay/verify`, { method: 'POST', body: JSON.stringify(data) }),
     authLogin: data => request(`/api/auth/login`, { method: 'POST', body: JSON.stringify(data) }),
+    authRegister: data => request(`/api/auth/register`, { method: 'POST', body: JSON.stringify(data) }),
+    contact: data => request(`/api/auth/contact`, { method: 'POST', body: JSON.stringify(data) }),
     authGoogle: idToken => request(`/api/auth/google`, { method: 'POST', body: JSON.stringify({ idToken }) }),
     googleConfig: () => request(`/api/auth/google-config`)
   };

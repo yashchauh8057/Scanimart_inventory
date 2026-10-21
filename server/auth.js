@@ -67,6 +67,59 @@ function toSession(account) {
   };
 }
 
+function validateEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim());
+}
+
+// Public signup used by the marketing site. Accounts are created as customer
+// users; an administrator can promote them later from the dashboard.
+router.post('/register', rateLimit('auth'), async (request, response, next) => {
+  try {
+    const name = String(request.body.name || '').trim();
+    const email = String(request.body.email || '').trim().toLowerCase();
+    const phone = String(request.body.phone || '').trim();
+    const password = String(request.body.password || '');
+    const plan = String(request.body.plan || 'starter').trim().toLowerCase();
+    if (name.length < 2 || !validateEmail(email) || password.length < 8) {
+      return response.status(400).json({ error: 'Enter a valid name, email and password of at least 8 characters.' });
+    }
+    if (await findAccountByEmail(email)) return response.status(409).json({ error: 'An account with this email already exists. Please sign in.' });
+
+    const usersSnapshot = await database().ref('users').get();
+    const users = usersSnapshot.val() || {};
+    let max = 0;
+    Object.keys(users).forEach(id => {
+      const value = Number(String(id).replace(/^U/i, ''));
+      if (Number.isInteger(value) && value > max) max = value;
+    });
+    const id = `U${String(max + 1).padStart(3, '0')}`;
+    const account = {
+      id, name, email, phone, password, role: 'User', status: 'Active',
+      plan: ['starter', 'professional', 'enterprise'].includes(plan) ? plan : 'starter',
+      provider: 'local', createdAt: new Date().toISOString(), lastLogin: new Date().toISOString()
+    };
+    await database().ref(`users/${id}`).set(account);
+    return response.status(201).json(toSession(account));
+  } catch (error) { next(error); }
+});
+
+// Contact requests are persisted even when SMTP is not configured, so no
+// enquiry disappears in local development or on a server without mail creds.
+router.post('/contact', rateLimit('contact'), async (request, response, next) => {
+  try {
+    const name = String(request.body.name || '').trim();
+    const email = String(request.body.email || '').trim().toLowerCase();
+    const phone = String(request.body.phone || '').trim();
+    const message = String(request.body.message || '').trim();
+    if (name.length < 2 || !validateEmail(email) || message.length < 10) {
+      return response.status(400).json({ error: 'Please provide your name, a valid email and a message of at least 10 characters.' });
+    }
+    const lead = { name, email, phone, message, createdAt: new Date().toISOString(), status: 'new' };
+    const saved = await database().ref('contactMessages').push(lead);
+    return response.status(201).json({ ok: true, id: saved.key, message: 'Thanks — your message has been received.' });
+  } catch (error) { next(error); }
+});
+
 // Public client ID for Google Identity Services (safe to expose).
 router.get('/google-config', (_, response) => {
   response.json({ clientId: process.env.GOOGLE_CLIENT_ID || '' });

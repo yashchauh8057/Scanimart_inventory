@@ -5,7 +5,8 @@ const LIMITS = {
   auth: { window: 60_000, max: 15 },
   store: { window: 60_000, max: 60 },
   products: { window: 60_000, max: 180 },
-  chat: { window: 60_000, max: 30 }
+  chat: { window: 60_000, max: 30 },
+  contact: { window: 60_000, max: 10 }
 };
 
 function key(bucket, req) {
