@@ -102,7 +102,7 @@
   function installForms() {
     $$('form').forEach(form => form.addEventListener('submit', event => {
       event.preventDefault();
-      if (form.id === 'loginForm') return;
+      if (form.id === 'loginForm' || form.id === 'contactForm') return;
       if (form.dataset.pageManaged === 'true') return;
       if (!form.checkValidity()) { form.reportValidity(); return; }
       const modal = form.closest('.modal');
@@ -130,6 +130,7 @@
     const applyTheme = (isDark) => {
       document.body.classList.toggle('dark', isDark);
       document.body.classList.toggle('dark-theme', isDark);
+      document.documentElement.classList.toggle('dark', isDark);
       document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
       $$('#themeToggle i, .icon i.fa-moon, .icon i.fa-sun, .theme-btn i').forEach(icon => {
         icon.classList.remove('fa-moon', 'fa-sun');

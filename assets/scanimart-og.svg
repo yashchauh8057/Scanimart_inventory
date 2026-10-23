@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Scanimart inventory and billing</title>
+  <desc id="desc">Inventory, billing and GST workflows for growing businesses.</desc>
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#312e81"/><stop offset="1" stop-color="#4f46e5"/></linearGradient></defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1030" cy="90" r="230" fill="#818cf8" opacity=".22"/><circle cx="130" cy="570" r="280" fill="#a78bfa" opacity=".16"/>
+  <rect x="92" y="112" width="88" height="88" rx="22" fill="#fff" opacity=".95"/>
+  <text x="136" y="174" text-anchor="middle" font-family="Arial,sans-serif" font-size="54" font-weight="700" fill="#4f46e5">S</text>
+  <text x="92" y="300" font-family="Arial,sans-serif" font-size="72" font-weight="700" fill="#fff">Scanimart</text>
+  <text x="96" y="365" font-family="Arial,sans-serif" font-size="30" fill="#e0e7ff">Inventory, billing and GST in one place.</text>
+  <rect x="96" y="435" width="340" height="58" rx="16" fill="#fff" opacity=".14"/><text x="126" y="473" font-family="Arial,sans-serif" font-size="22" fill="#fff">Know your stock. Bill faster.</text>
+</svg>
