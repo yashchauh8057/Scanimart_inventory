@@ -26,3 +26,12 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .whatsapp-float,.mobile-trial{z-index:90;bottom:calc(18px + env(safe-area-inset-bottom))}
 .footer{position:relative;z-index:1}
 @media(max-width:600px){body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}.comparison{overflow:visible}.comparison-table-wrap{max-width:100%}.mobile-trial{bottom:calc(15px + env(safe-area-inset-bottom))}.whatsapp-float{bottom:calc(15px + env(safe-area-inset-bottom))}}
+
+/* Premium ScaniMarts landing treatment */
+:root{--violet:#0071e3;--ink:#1d1d1f;--muted:#86868b;--line:#e5e5e7;--soft:#f5f5f7}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:#fff;color:var(--ink)}
+.announcement-bar{min-height:34px;display:flex;align-items:center;justify-content:center;gap:8px;background:#111;color:#f5f5f7;font-size:12px;letter-spacing:.01em}.announcement-bar span{font-weight:800;color:#fff}.announcement-bar a{color:#8ecbff;margin-left:6px}.announcement-bar i{font-size:10px;margin-left:3px}
+.header{border-bottom:1px solid rgba(229,229,231,.9);background:rgba(255,255,255,.84)}.navbar{min-height:70px}.logo{font-size:19px;letter-spacing:-.04em}.logo img{width:34px;height:34px}.nav-links{gap:27px}.nav-links a{color:#515154;font-size:13px;font-weight:600}.nav-links a:hover{color:#0071e3}.login-btn{color:#0071e3}.secondary-btn{border-color:#d2e7fb;background:#fff;color:#0071e3}.primary-btn{background:#0071e3;box-shadow:0 10px 22px rgba(0,113,227,.18)}.primary-btn:hover{background:#005bb5}
+.hero{background:radial-gradient(circle at 84% 15%,#eaf4ff 0,#f8fbff 33%,#fff 70%);padding:110px 0 92px}.hero h1{color:#1d1d1f;letter-spacing:-.06em}.hero p{color:#6e6e73}.hero-badge,.eyebrow{color:#0071e3}.dashboard-preview{border-color:#dbeeff;box-shadow:0 30px 70px rgba(29,29,31,.13)}.brand-dot,.bars i{background:#0071e3}.preview-chart{background:#f7fbff;border-color:#e5f1fb}.feature-card:hover{box-shadow:0 18px 34px rgba(0,113,227,.12)}
+.section-title h2,.split-grid h2,.contact-grid h2{letter-spacing:-.05em}.section-pad{padding:104px 0}.feature-card,.steps article,.price-card,.faq-grid details,.contact-form,.comparison,.integration-grid>div{border-color:#e5e5e7;box-shadow:0 8px 24px rgba(29,29,31,.035)}.how,.product-previews,.pricing,.contact{background:#f5f5f7}.footer{background:#111}.footer-grid .logo{color:#fff}
+@media(max-width:600px){.announcement-bar{padding:8px 14px;text-align:center;flex-wrap:wrap;line-height:1.25}.announcement-bar a{width:100%;margin:0}.hero{padding-top:66px}.section-pad{padding:72px 0}}

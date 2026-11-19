@@ -4,12 +4,12 @@
     left:0;
     width:260px;
     height:100vh;
-    background:#111827;
+    background:#111111;
     color:#fff;
     overflow-y:auto;
     transition:.3s;
     z-index:1000;
-    box-shadow:4px 0 20px rgba(0,0,0,.15);
+    box-shadow:1px 0 0 rgba(255,255,255,.06);
     }
     
     .sidebar::-webkit-scrollbar{
@@ -40,12 +40,12 @@
     }
     
     .sidebar .logo{
-    height:80px;
+    height:82px;
     display:flex;
     align-items:center;
     justify-content:center;
     gap:12px;
-    font-size:24px;
+    font-size:19px;
     font-weight:700;
     color:#fff;
     border-bottom:1px solid rgba(255,255,255,.08);
@@ -57,15 +57,15 @@
     }
 
     .sidebar .logo img{
-    width:42px;
-    height:42px;
+    width:36px;
+    height:36px;
     object-fit:cover;
     border-radius:10px;
     background:#fff;
     }
     
     .menu{
-    padding:20px 15px;
+    padding:20px 13px;
     }
     
     .menu-title{
@@ -90,11 +90,11 @@
     .menu li a{
     display:flex;
     align-items:center;
-    gap:15px;
-    padding:14px 16px;
-    border-radius:12px;
-    color:#cbd5e1;
-    font-size:15px;
+    gap:12px;
+    padding:12px 14px;
+    border-radius:9px;
+    color:#a1a1a6;
+    font-size:13px;
     font-weight:500;
     transition:.3s;
     text-decoration:none;
@@ -108,15 +108,15 @@
     }
     
     .menu li a:hover{
-    background:#4f46e5;
+    background:#1d1d1f;
     color:#fff;
-    transform:translateX(5px);
+    transform:translateX(3px);
     }
     
     .menu li.active a{
-    background:#4f46e5;
+    background:#0071e3;
     color:#fff;
-    box-shadow:0 10px 25px rgba(79,70,229,.35);
+    box-shadow:0 8px 20px rgba(0,113,227,.25);
     }
     
     .menu li.active a::before{
