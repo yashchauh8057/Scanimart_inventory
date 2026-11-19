@@ -46,7 +46,7 @@
 
             <h2>Welcome</h2>
 
-            <p>Sign in to your panel</p>
+            <p>Access your account and enjoy a seamless shopping experience.</p>
 
             <div id="signedInBar" class="signed-in-bar" hidden>
 
@@ -76,8 +76,11 @@
                         <i class="fa-solid fa-lock"></i>
                         <input type="password" id="loginPassword" name="password" placeholder="Enter your password"
                             autocomplete="current-password" required>
+                        <button class="password-toggle" type="button" data-password-toggle="loginPassword" aria-label="Show password"><i class="fa-regular fa-eye"></i></button>
                     </div>
                 </div>
+
+                <div class="login-options"><label class="remember-option"><input type="checkbox" name="remember"> <span>Remember me</span></label><a href="forgot-password.html">Forgot password?</a></div>
 
                 <button class="login-btn" type="submit" id="signInBtn">
                     <i class="fa-solid fa-right-to-bracket"></i>
@@ -110,7 +113,7 @@
 
             <div class="bottom-text">
 
-                <p>New to Scanimart? <a href="signup.html">Start a free trial</a></p>
+                <p>New to ScaniMarts? <a href="signup.html">Create an account</a></p>
 
                 <p>
 
@@ -242,6 +245,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }).catch(() => {
     googleBtnText.textContent = 'Google sign-in unavailable';
   });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('[data-password-toggle]').forEach(toggle => toggle.addEventListener('click', () => {
+    const field = document.getElementById(toggle.dataset.passwordToggle);
+    if (!field) return;
+    const shown = field.type === 'text';
+    field.type = shown ? 'password' : 'text';
+    toggle.setAttribute('aria-label', shown ? 'Show password' : 'Hide password');
+    toggle.innerHTML = shown ? '<i class="fa-regular fa-eye"></i>' : '<i class="fa-regular fa-eye-slash"></i>';
+  }));
 });
 </script>
 

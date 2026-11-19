@@ -15,6 +15,7 @@
     { "source": "/expenses.html", "destination": "/frontend/expenses.html" },
     { "source": "/exit-check.html", "destination": "/frontend/exit-check.html" },
     { "source": "/login.html", "destination": "/frontend/login.html" },
+    { "source": "/forgot-password.html", "destination": "/frontend/forgot-password.html" },
     { "source": "/signup.html", "destination": "/frontend/signup.html" },
     { "source": "/privacy.html", "destination": "/frontend/privacy.html" },
     { "source": "/terms.html", "destination": "/frontend/terms.html" },
